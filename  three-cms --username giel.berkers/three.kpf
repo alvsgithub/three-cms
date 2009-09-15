@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Komodo Project File - DO NOT EDIT -->
+<project id="7c0771e4-ffae-4b29-be53-10b8d907ce9c" kpf_version="4" name="three.kpf">
+<preference-set idref="7c0771e4-ffae-4b29-be53-10b8d907ce9c">
+  <string id="import_exclude_matches">*.*~;*.bak;*.tmp;CVS;.#*;*.pyo;*.pyc;.svn;_svn;*%*;tmp*.html;.DS_Store</string>
+  <string id="import_include_matches"></string>
+  <boolean id="import_live">1</boolean>
+  <boolean id="import_recursive">1</boolean>
+  <string id="import_type">useFolders</string>
+  <string id="javascriptExtraPaths"></string>
+  <string id="mappedPaths"></string>
+  <string id="perlExtraPaths"></string>
+</preference-set>
+<preference-set idref="7c0771e4-ffae-4b29-be53-10b8d907ce9c/system/application">
+  <string id="import_exclude_matches">*.*~;*.bak;*.tmp;CVS;.#*;*.pyo;*.pyc;.svn;_svn;*%*;tmp*.html;.DS_Store</string>
+  <string id="import_include_matches"></string>
+  <boolean id="import_live">1</boolean>
+  <boolean id="import_recursive">1</boolean>
+  <string id="import_type">useFolders</string>
+</preference-set>
+</project>
