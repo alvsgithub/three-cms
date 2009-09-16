@@ -15,10 +15,13 @@ html { font-family: arial, helvetica, sans-serif; font-size: 62.5%; cursor: defa
 #tree { float: left; width: 25%; height: 100px; }
 
 #content { float: left; width: 75%; }
+#innerContent { padding: 10px; }
 
 h1, h2, h3 { font-size: 3em; font-weight: normal; color: #999; font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif; margin-bottom: .5em; }
 h2 { font-size: 2em; }
 h3 { font-size: 1.6em; color: #000; }
+
+p.description { font-size: 1.6em; color: #999; font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif; margin-bottom: .5em; line-height: 1.6em; font-style: italic; }
 
 table.items { width: 100%; border-collapse: collapse; font-size: 1.4em; margin-bottom: 1em; }
 table.items th { text-align: left; font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif; color: #fff; background: #359; border: 1px solid #026; padding: 5px; }
@@ -27,5 +30,7 @@ table.items a { display: inline-block; width: 16px; height: 16px; text-indent: -
 table.items a.edit      { background: url(../images/icons/icon-edit.png); }
 table.items a.duplicate { background: url(../images/icons/icon-copy.png); }
 table.items a.delete    { background: url(../images/icons/icon-delete.png); }
+
+a.add { margin: auto; display: block; width: 200px; height: 20px; outline: none; background: #359 url(../images/icons/icon-new.png) 7px 7px no-repeat; font-size: 1.6em; color: #fff; text-decoration: none; padding: 5px; padding-left: 30px; margin-bottom: 1em; font-weight: bold; text-shadow: #000000 0 0 5px; }
 
 #footer { float: left; clear: both; height: 30px; border-top: 1px solid #666; width: 100%; }
