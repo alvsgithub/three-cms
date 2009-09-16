@@ -6,6 +6,11 @@ class AdminModel extends Model
         parent::Model();
     }
     
-    
+    function getTableData($tableName, $fields)
+    {
+        $this->db->select($fields);
+        $query = $this->db->get($tableName);
+        return $query;
+    }
 }
 ?>
