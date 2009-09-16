@@ -42,8 +42,10 @@
 
 $route['default_controller'] = "page";
 $route['scaffolding_trigger'] = "";
+// Only the admin should header to the admin page, all other requests should header to the page controller
 $route['admin'] = "admin";
-$route[':any'] = "page";                    // Traffic should be redirected to the page controller
+$route['admin/(:any)'] = "admin/$1";
+$route[':any'] = "page";
 
 /* End of file routes.php */
 /* Location: ./system/application/config/routes.php */

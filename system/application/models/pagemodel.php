@@ -49,16 +49,16 @@ class PageModel extends Model
 		// if the object isn't multilanguage, it returns it's defaults language value.
 		$sql = 'SELECT C.`name`, D.`value` FROM
 			`content` A,
-			`objects_options` B,
+			`dataobjects_options` B,
 			`options` C,
 			`values` D
 				WHERE
-			A.`id_content`  = '.$idContent.' AND
-			A.`id_object`   = B.`id_object` AND
-			C.`id`          = B.`id_option` AND
-			D.`id_content`  = '.$idContent.' AND
-			D.`id_option`   = B.`id_option` AND
-			D.`id_language` = IF(C.`multilanguage` = 1, '.$idLanguage.', '.DEFAULT_LANGUAGE_ID.')
+			A.`id_content`      = '.$idContent.' AND
+			A.`id_dataobject`   = B.`id_dataobject` AND
+			C.`id`              = B.`id_option` AND
+			D.`id_content`      = '.$idContent.' AND
+			D.`id_option`       = B.`id_option` AND
+			D.`id_language`     = IF(C.`multilanguage` = 1, '.$idLanguage.', '.DEFAULT_LANGUAGE_ID.')
 			;';
 		$query = $this->db->query($sql);
 		

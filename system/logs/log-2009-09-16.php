@@ -1751,3 +1751,68 @@ DEBUG - 2009-09-16 17:13:11 --> File loaded: D:\wamp\www\three/system/applicatio
 DEBUG - 2009-09-16 17:13:11 --> File loaded: D:\wamp\www\three/system/application/views/admin/footer.php
 DEBUG - 2009-09-16 17:13:11 --> Final output sent to browser
 DEBUG - 2009-09-16 17:13:11 --> Total execution time: 1.2839
+DEBUG - 2009-09-16 17:00:30 --> Config Class Initialized
+DEBUG - 2009-09-16 17:00:30 --> Hooks Class Initialized
+DEBUG - 2009-09-16 17:00:30 --> URI Class Initialized
+DEBUG - 2009-09-16 17:00:30 --> No URI present. Default controller set.
+DEBUG - 2009-09-16 17:00:30 --> Router Class Initialized
+DEBUG - 2009-09-16 17:00:30 --> Output Class Initialized
+DEBUG - 2009-09-16 17:00:31 --> Input Class Initialized
+DEBUG - 2009-09-16 17:00:31 --> Global POST and COOKIE data sanitized
+DEBUG - 2009-09-16 17:00:31 --> Language Class Initialized
+DEBUG - 2009-09-16 17:00:31 --> Loader Class Initialized
+DEBUG - 2009-09-16 17:00:31 --> Controller Class Initialized
+DEBUG - 2009-09-16 17:00:31 --> Database Driver Class Initialized
+DEBUG - 2009-09-16 17:00:31 --> Model Class Initialized
+DEBUG - 2009-09-16 17:00:31 --> DB Transaction Failure
+ERROR - 2009-09-16 17:00:31 --> Query error: Table 'three.content' doesn't exist
+DEBUG - 2009-09-16 17:00:31 --> Language file loaded: language/english/db_lang.php
+DEBUG - 2009-09-16 17:03:27 --> Config Class Initialized
+DEBUG - 2009-09-16 17:03:27 --> Hooks Class Initialized
+DEBUG - 2009-09-16 17:03:27 --> URI Class Initialized
+DEBUG - 2009-09-16 17:03:27 --> No URI present. Default controller set.
+DEBUG - 2009-09-16 17:03:27 --> Router Class Initialized
+DEBUG - 2009-09-16 17:03:27 --> Output Class Initialized
+DEBUG - 2009-09-16 17:03:27 --> Input Class Initialized
+DEBUG - 2009-09-16 17:03:27 --> Global POST and COOKIE data sanitized
+DEBUG - 2009-09-16 17:03:27 --> Language Class Initialized
+DEBUG - 2009-09-16 17:03:27 --> Loader Class Initialized
+DEBUG - 2009-09-16 17:03:27 --> Controller Class Initialized
+DEBUG - 2009-09-16 17:03:27 --> Database Driver Class Initialized
+DEBUG - 2009-09-16 17:03:28 --> Model Class Initialized
+DEBUG - 2009-09-16 17:03:28 --> Final output sent to browser
+DEBUG - 2009-09-16 17:03:28 --> Total execution time: 0.9314
+DEBUG - 2009-09-16 17:03:32 --> Config Class Initialized
+DEBUG - 2009-09-16 17:03:32 --> Hooks Class Initialized
+DEBUG - 2009-09-16 17:03:32 --> URI Class Initialized
+DEBUG - 2009-09-16 17:03:32 --> No URI present. Default controller set.
+DEBUG - 2009-09-16 17:03:32 --> Router Class Initialized
+DEBUG - 2009-09-16 17:03:32 --> Output Class Initialized
+DEBUG - 2009-09-16 17:03:32 --> Input Class Initialized
+DEBUG - 2009-09-16 17:03:32 --> Global POST and COOKIE data sanitized
+DEBUG - 2009-09-16 17:03:32 --> Language Class Initialized
+DEBUG - 2009-09-16 17:03:32 --> Loader Class Initialized
+DEBUG - 2009-09-16 17:03:33 --> Controller Class Initialized
+DEBUG - 2009-09-16 17:03:33 --> Database Driver Class Initialized
+DEBUG - 2009-09-16 17:03:33 --> Model Class Initialized
+DEBUG - 2009-09-16 17:03:33 --> Final output sent to browser
+DEBUG - 2009-09-16 17:03:33 --> Total execution time: 0.8790
+DEBUG - 2009-09-16 17:03:47 --> Config Class Initialized
+DEBUG - 2009-09-16 17:03:47 --> Hooks Class Initialized
+DEBUG - 2009-09-16 17:03:47 --> URI Class Initialized
+DEBUG - 2009-09-16 17:03:47 --> Router Class Initialized
+DEBUG - 2009-09-16 17:03:47 --> Output Class Initialized
+DEBUG - 2009-09-16 17:03:47 --> Input Class Initialized
+DEBUG - 2009-09-16 17:03:47 --> Global POST and COOKIE data sanitized
+DEBUG - 2009-09-16 17:03:47 --> Language Class Initialized
+DEBUG - 2009-09-16 17:03:47 --> Loader Class Initialized
+DEBUG - 2009-09-16 17:03:47 --> Controller Class Initialized
+DEBUG - 2009-09-16 17:03:48 --> Session Class Initialized
+DEBUG - 2009-09-16 17:03:48 --> Helper loaded: string_helper
+DEBUG - 2009-09-16 17:03:48 --> A session cookie was not found.
+DEBUG - 2009-09-16 17:03:48 --> Session routines successfully run
+DEBUG - 2009-09-16 17:03:48 --> Helper loaded: url_helper
+DEBUG - 2009-09-16 17:03:48 --> File loaded: E:\wwwroot\three/system/application/views/admin/header.php
+DEBUG - 2009-09-16 17:03:48 --> File loaded: E:\wwwroot\three/system/application/views/admin/footer.php
+DEBUG - 2009-09-16 17:03:48 --> Final output sent to browser
+DEBUG - 2009-09-16 17:03:48 --> Total execution time: 1.2131
