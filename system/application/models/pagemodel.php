@@ -36,31 +36,53 @@ class PageModel extends Model
 	
 	/**
 	 * Get a data object
-	 * @param	$idPage		int	the ID of the page
+	 * @param	$idContent	int	the ID of the content
 	 * @param	$idLanguage	int	the ID of the language
 	 */
-	function getDataObject($idPage, $idLanguage)
+	function getDataObject($idContent, $idLanguage)
 	{
-		// TODO: Create a data object according to database content
 		$dataObject = new stdClass();
 		
-		// TODO: Get the id's of the options according to database content
-		$dataObject->title		= $this->getValue(1, $idLanguage);
-		$dataObject->header		= $this->getValue(2, $idLanguage);
-		$dataObject->content	= $this->getValue(3, $idLanguage);
+		// Killer Query to do the magic:
+		// What it does: It selects the options that belong to the object of this content,
+		// and it retrieves the objects correct values according to the given language, or
+		// if the object isn't multilanguage, it returns it's defaults language value.
+		$sql = 'SELECT C.`name`, D.`value` FROM
+			`content` A,
+			`objects_options` B,
+			`options` C,
+			`values` D
+				WHERE
+			A.`id_content`  = '.$idContent.' AND
+			A.`id_object`   = B.`id_object` AND
+			C.`id`          = B.`id_option` AND
+			D.`id_content`  = '.$idContent.' AND
+			D.`id_option`   = B.`id_option` AND
+			D.`id_language` = IF(C.`multilanguage` = 1, '.$idLanguage.', '.DEFAULT_LANGUAGE_ID.')
+			;';
+		$query = $this->db->query($sql);
 		
+		// Fill the dataObject with the values:
+		foreach($query->result() as $result) {
+			$dataObject->{$result->name} = $result->value;
+		}
+		
+		// Return the dataObject:
 		return $dataObject;
 	}
 	
 	/**
 	 * Get the value of an option
+	 * @param	$idContent	int	the ID of the content
 	 * @param	$idOption	int	the ID of the option
 	 * @param	$idLanguage	int the ID of the language
 	 * @return	String
 	 */
-	function getValue($idOption, $idLanguage) {
-		$query = $this->db->query('SELECT `value` FROM `values`
-			WHERE `id_option` = '.$idOption.' AND `id_language` = '.$idLanguage.';');
+	function getValue($idContent, $idOption, $idLanguage) {
+		$query = $this->db->query('SELECT `value` FROM `values`	WHERE
+			`id_content` = '.$idContent.' AND
+			`id_option` = '.$idOption.' AND
+			`id_language` = '.$idLanguage.';');
 		return $query->row()->value;
 	}
 }

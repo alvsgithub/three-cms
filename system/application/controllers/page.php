@@ -32,8 +32,6 @@ class Page extends Controller
 		
 		// Load the page model:
 		$this->load->model('PageModel', '', true);
-		
-		// Set the languageID:
 	}
 	
 	function index()
@@ -47,10 +45,11 @@ class Page extends Controller
 				$this->idLanguage = $this->PageModel->getLanguageId($parameters[1]);
 				// Shift the remaining parameters (since parameter[1] is the language code:
 				array_shift($parameters);
-			}
-		}
+			}			
+		} 
 		
-		// TODO: Get the correct ID of the page to load according to the parameters:
+		// TODO: Get the correct ID of the content to load according to the parameters:
+		
 		
 		// Create the data object:
 		$dataObject = $this->PageModel->getDataObject(1, $this->idLanguage);
@@ -62,26 +61,7 @@ class Page extends Controller
 		
 		// Display the page:
 		// TODO: Load the correct template according to the database:
-		$this->smarty->display('index.tpl');
-		
-		// Assign the variables:
-		/*
-		$this->smarty->assign("Name","Fred Irving Johnathan Bradley Peppergill");
-		$this->smarty->assign("FirstName",array("John","Mary","James","Henry"));
-		$this->smarty->assign("LastName",array("Doe","Smith","Johnson","Case"));
-		$this->smarty->assign("Class",array(array("A","B","C","D"), array("E", "F", "G", "H"),
-			array("I", "J", "K", "L"), array("M", "N", "O", "P")));		
-		$this->smarty->assign("contacts", array(array("phone" => "1", "fax" => "2", "cell" => "3"),
-			array("phone" => "555-4444", "fax" => "555-3333", "cell" => "760-1234")));
-		$this->smarty->assign("option_values", array("NY","NE","KS","IA","OK","TX"));
-		$this->smarty->assign("option_output", array("New York","Nebraska","Kansas","Iowa","Oklahoma","Texas"));
-		$this->smarty->assign("option_selected", "NE");
-		*/
-		
-		// Display the page:
-		/*
-		$this->smarty->display('index.tpl');
-		*/
+		$this->smarty->display('index.tpl');		
 	}
 	
 }

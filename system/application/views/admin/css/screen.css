@@ -1,0 +1,12 @@
+* { margin: 0; padding: 0; }
+
+html { font-family: arial, helvetica, sans-serif; font-size: 62.5%; cursor: default; }
+
+#top { height: 30px; border-bottom: 1px solid #666; }
+#navigation { background: #ccc; border-bottom: 1px solid #666; height: 30px; font-size: 1.6em; }
+#navigation ul { list-style-type: none; }
+#navigation ul li { padding: 5px; border-right: 1px solid #666; border-left: 1px solid #666; float: left; background: #359; height: 20px; color: #fff; }
+
+#navigation ul ul { position: absolute; margin-top: 6px; margin-left: -6px; display: none; border-bottom: 1px solid #666; }
+#navigation ul ul li { display: block; width: 100px; border: 1px solid #666; background: #ccc; clear: left; border-bottom: none; }
+#navigation ul ul li a { color: #000; text-decoration: none; }
