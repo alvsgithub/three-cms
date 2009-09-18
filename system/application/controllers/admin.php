@@ -41,35 +41,6 @@ class Admin extends Controller
         $this->showFooter();
     }
     
-    /*
-    function dataobjects()
-    {
-        $this->showHeader();
-        $this->load->view('admin/dataobjects.php');
-        $this->showFooter();
-    }
-    
-    function options()
-    {
-        $this->showHeader();
-        $this->load->view('admin/options.php');
-        $this->showFooter();
-    }
-    
-    function languages()
-    {
-        $this->showHeader();
-        $this->load->view('admin/languages.php');
-        $tableData = $this->AdminModel->getTableData('languages', 'id,name,code,active');
-        $data = array(
-            'tableData'=>$tableData,
-            'tableHeaders'=>array('id', 'name', 'code', 'active'),
-            'action'=>'languages'
-        );
-        $this->load->view('admin/default/table.php', $data);
-        $this->showFooter();
-    }
-    */
     function manage()
     {
         $this->showHeader();
@@ -174,14 +145,6 @@ class Admin extends Controller
         $this->showFooter();
     }
     
-    /*
-    function locales()
-    {
-        $this->showHeader();
-        $this->load->view('admin/locales.php');
-        $this->showFooter();
-    }
-    */
     function showHeader()
     {
 		// Show the header:

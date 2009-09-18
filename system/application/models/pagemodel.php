@@ -41,8 +41,12 @@ class PageModel extends Model
 	 */
 	function getDataObject($idContent, $idLanguage)
 	{
+		$dataObject = new DataModel();
+		$dataObject->load($idContent, $idLanguage);
+		return $dataObject;
+	
+		/*
 		$dataObject = new stdClass();
-		
 		// Killer Query to do the magic:
 		// What it does: It selects the options that belong to the object of this content,
 		// and it retrieves the objects correct values according to the given language, or
@@ -51,15 +55,17 @@ class PageModel extends Model
 			`content` A,
 			`dataobjects_options` B,
 			`options` C,
-			`values` D
+			`values` D,
+			`templates` E
 				WHERE
 			A.`id_content`      = '.$idContent.' AND
-			A.`id_dataobject`   = B.`id_dataobject` AND
+			A.`id_template`		= E.`id` AND
+			E.`id_dataobject`   = B.`id_dataobject` AND
 			C.`id`              = B.`id_option` AND
 			D.`id_content`      = '.$idContent.' AND
 			D.`id_option`       = B.`id_option` AND
-			D.`id_language`     = IF(C.`multilanguage` = 1, '.$idLanguage.', '.DEFAULT_LANGUAGE_ID.')
-			;';
+			D.`id_language`     = IF(C.`multilanguage` = 1, '.$idLanguage.', '.DEFAULT_LANGUAGE_ID.');
+		';
 		$query = $this->db->query($sql);
 		
 		// Fill the dataObject with the values:
@@ -69,6 +75,7 @@ class PageModel extends Model
 		
 		// Return the dataObject:
 		return $dataObject;
+		*/
 	}
 	
 	/**

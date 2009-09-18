@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Sep 16, 2009 at 05:27 PM
+-- Generation Time: Sep 18, 2009 at 09:30 AM
 -- Server version: 5.1.33
 -- PHP Version: 5.2.9-2
 
@@ -28,18 +28,61 @@ SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 CREATE TABLE IF NOT EXISTS `content` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `id_content` int(11) NOT NULL,
-  `id_object` int(11) NOT NULL,
+  `id_template` int(11) NOT NULL,
   `name` tinytext NOT NULL,
   `alias` tinytext NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
 
 --
 -- Dumping data for table `content`
 --
 
-INSERT INTO `content` (`id`, `id_content`, `id_object`, `name`, `alias`) VALUES
-(1, 1, 1, 'Test pagina', 'test');
+INSERT INTO `content` (`id`, `id_content`, `id_template`, `name`, `alias`) VALUES
+(1, 0, 1, 'Test pagina', 'test'),
+(2, 1, 2, 'Blok 1', 'blok1'),
+(3, 1, 2, 'Blok 2', 'blok2');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `dataobjects`
+--
+
+CREATE TABLE IF NOT EXISTS `dataobjects` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` tinytext NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
+
+--
+-- Dumping data for table `dataobjects`
+--
+
+INSERT INTO `dataobjects` (`id`, `name`) VALUES
+(1, 'Default Page');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `dataobjects_options`
+--
+
+CREATE TABLE IF NOT EXISTS `dataobjects_options` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id_dataobject` int(11) NOT NULL,
+  `id_option` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
+
+--
+-- Dumping data for table `dataobjects_options`
+--
+
+INSERT INTO `dataobjects_options` (`id`, `id_dataobject`, `id_option`) VALUES
+(1, 1, 1),
+(2, 1, 2),
+(3, 1, 3);
 
 -- --------------------------------------------------------
 
@@ -67,43 +110,38 @@ INSERT INTO `languages` (`id`, `name`, `code`, `active`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `objects`
+-- Table structure for table `locales`
 --
 
-CREATE TABLE IF NOT EXISTS `objects` (
+CREATE TABLE IF NOT EXISTS `locales` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` tinytext NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 --
--- Dumping data for table `objects`
+-- Dumping data for table `locales`
 --
 
-INSERT INTO `objects` (`id`, `name`) VALUES
-(1, 'Default Page');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `objects_options`
+-- Table structure for table `locales_values`
 --
 
-CREATE TABLE IF NOT EXISTS `objects_options` (
+CREATE TABLE IF NOT EXISTS `locales_values` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `id_object` int(11) NOT NULL,
-  `id_option` int(11) NOT NULL,
+  `id_locale` int(11) NOT NULL,
+  `id_language` int(11) NOT NULL,
+  `value` text NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 --
--- Dumping data for table `objects_options`
+-- Dumping data for table `locales_values`
 --
 
-INSERT INTO `objects_options` (`id`, `id_object`, `id_option`) VALUES
-(1, 1, 1),
-(2, 1, 2),
-(3, 1, 3);
 
 -- --------------------------------------------------------
 
@@ -114,6 +152,8 @@ INSERT INTO `objects_options` (`id`, `id_object`, `id_option`) VALUES
 CREATE TABLE IF NOT EXISTS `options` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` tinytext NOT NULL,
+  `type` enum('small_text','large_text','rich_text','url','image','file','boolean','dropdown','selectbox','date','time','content','content_of_type') NOT NULL,
+  `default_value` text NOT NULL,
   `multilanguage` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
@@ -122,10 +162,32 @@ CREATE TABLE IF NOT EXISTS `options` (
 -- Dumping data for table `options`
 --
 
-INSERT INTO `options` (`id`, `name`, `multilanguage`) VALUES
-(1, 'title', 0),
-(2, 'header', 1),
-(3, 'content', 1);
+INSERT INTO `options` (`id`, `name`, `type`, `default_value`, `multilanguage`) VALUES
+(1, 'title', 'small_text', '', 0),
+(2, 'header', 'small_text', '', 1),
+(3, 'content', 'small_text', '', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `templates`
+--
+
+CREATE TABLE IF NOT EXISTS `templates` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` tinytext NOT NULL,
+  `id_dataobject` int(11) NOT NULL,
+  `templatefile` tinytext NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
+
+--
+-- Dumping data for table `templates`
+--
+
+INSERT INTO `templates` (`id`, `name`, `id_dataobject`, `templatefile`) VALUES
+(1, 'Default template', 1, 'index.tpl'),
+(2, 'Block', 1, 'block.tpl');
 
 -- --------------------------------------------------------
 
@@ -140,7 +202,7 @@ CREATE TABLE IF NOT EXISTS `values` (
   `id_language` int(11) NOT NULL,
   `value` text NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=10 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=22 ;
 
 --
 -- Dumping data for table `values`
@@ -155,4 +217,16 @@ INSERT INTO `values` (`id`, `id_content`, `id_option`, `id_language`, `value`) V
 (6, 1, 2, 3, 'Header (DE)'),
 (7, 1, 3, 1, 'Content (NL)'),
 (8, 1, 3, 2, 'Content (EN)'),
-(9, 1, 3, 3, 'Content (DE)');
+(9, 1, 3, 3, 'Content (DE)'),
+(10, 2, 2, 1, 'Koptekst'),
+(11, 2, 3, 1, 'Inhoud'),
+(12, 2, 2, 2, 'Small header'),
+(13, 2, 3, 2, 'content'),
+(14, 2, 2, 3, 'Eine kopf'),
+(15, 2, 3, 3, 'Inhalt'),
+(16, 3, 2, 1, 'Nog een koptekst'),
+(17, 3, 3, 1, 'Nog wat inhoud'),
+(18, 3, 2, 2, 'Another header'),
+(19, 3, 3, 2, 'Yet some other content'),
+(20, 3, 2, 3, 'Eine header wieder'),
+(21, 3, 3, 3, 'Und nog wat tekscht');
