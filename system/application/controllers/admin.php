@@ -33,6 +33,7 @@ class Admin extends Controller
 		*/
 		
         $this->showHeader();
+		$this->showTree();
         // By default, load the dashboard:
         $data = array(
             'lang'=>$this->lang
@@ -41,9 +42,13 @@ class Admin extends Controller
         $this->showFooter();
     }
     
+	/**
+	 * The default manager. This manages the data
+	 */
     function manage()
     {
         $this->showHeader();
+		$this->showTree();
         // Get the item to manage:
         $action = $this->uri->segment(3);
         $todo   = $this->uri->segment(4);
@@ -53,21 +58,27 @@ class Admin extends Controller
                 case 'add' :
                     {
                         // TODO: Add functionality
+						$this->addModify($action);
                         break;
                     }
                 case 'edit' :
                     {
                         // TODO: Edit functionality
+						$id = $this->uri->segment(5);
+						$id = $id != false ? $id : 0;
+						$this->addModify($action, $id);
                         break;
                     }
                 case 'delete' :
                     {
                         // TODO: Delete functionality
+						$this->delete($action);
                         break;
                     }
                 case 'duplicate' :
                     {
                         // TODO: Duplicate functionality
+						$this->duplicate($action);
                         break;
                     }                    
             }
@@ -145,7 +156,93 @@ class Admin extends Controller
         $this->showFooter();
     }
     
-    function showHeader()
+	function addModify($tableName, $id=0)
+	{
+		switch($tableName) {
+			case 'templates' :
+				{
+					
+					break;
+				}
+			case 'dataobjects' :
+				{
+					
+					break;
+				}
+			case 'options' :
+				{
+					
+					break;
+				}
+			case 'languages' :
+				{
+                    $this->AdminModel->createScaffoldTable('languages','name,code,active', $id);
+					break;
+				}
+			case 'locales' :
+				{
+					
+					break;
+				}
+		}
+	}
+	
+	/*
+	function modify($tableName)
+	{
+		
+	}
+	*/
+	
+	function duplicate($tableName)
+	{
+		
+	}
+	
+	function delete($tableName)
+	{
+		
+	}
+	
+	/**
+	 * AJAX Calls are done here
+	 */
+	function ajax()
+	{
+		// Get the requisted action:
+		$action = $this->uri->segment(3);
+		switch($action) {
+			case 'tree' :
+				{
+					// Show the tree:
+					$id   = $this->uri->segment(4);					
+					$data = array(
+						'lang'=>$this->lang,
+						'tree'=>$this->AdminModel->getTree($id)
+					);
+					$this->load->view('admin/ajax/tree.php', $data);
+					break;
+				}
+		}
+	}
+	
+	/**
+	 * Show the initial tree
+	 */
+    function showTree()
+	{
+		// Show the tree
+		$data = array(
+			'lang'=>$this->lang,
+			'tree'=>$this->AdminModel->getTree()
+		);
+		$this->load->view('admin/tree.php', $data);
+	}
+	
+	/**
+	 * Show the header
+	 */
+	function showHeader()
     {
 		// Show the header:
         $data = array(
@@ -154,6 +251,9 @@ class Admin extends Controller
 		$this->load->view('admin/header.php', $data);
     }
     
+	/**
+	 * Show the footer
+	 */
     function showFooter()
     {
         // Show the footer:

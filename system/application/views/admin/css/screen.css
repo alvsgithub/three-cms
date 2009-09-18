@@ -12,7 +12,18 @@ html { font-family: arial, helvetica, sans-serif; font-size: 62.5%; cursor: defa
 #navigation ul ul li a { color: #000; text-decoration: none; padding: 5px; display: block; }
 #navigation ul ul li a:hover { color: #fff; background: #aaa; }
 
-#tree { float: left; width: 25%; height: 100px; }
+#tree { float: left; width: 25%; font-size: 1.6em; }
+#innerTree { padding: 10px; }
+#tree ul { list-style-type: none; }
+#tree li { padding: 5px 0; background: url(../images/icons/icon-content.png) 0 5px no-repeat; }
+#tree li.hasChildren { background-image: url(../images/icons/icon-content-open.png); }
+#tree li.hasChildren.open { background-image: url(../images/icons/icon-content-close.png); }
+#tree li span.name { padding-left: 26px; cursor: pointer; color: #359; }
+#tree li span.name:hover { color: #000; }
+#tree li span.id { font-style: italic; color: #aaa; font-size: 0.8em;  }
+#tree ul ul { margin-left: 1em; }
+.innerTree { margin-top: 5px; }
+.innerTree img { margin-left: 30px; }
 
 #content { float: left; width: 75%; }
 #innerContent { padding: 10px; }
