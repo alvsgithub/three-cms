@@ -4,6 +4,9 @@
         <title>Three CMS :: <?php echo $lang->line('default_admin_panel'); ?></title>
         <link rel="stylesheet" type="text/css" media="screen,tv,projection" href="<?php echo base_url(); ?>system/application/views/admin/css/screen.css" />
         <script type="text/javascript" src="<?php echo base_url(); ?>system/application/views/admin/js/jquery-1.3.2.min.js"></script>
+        <script type="text/javascript">
+            var baseURL = '<?php echo base_url(); ?>';
+        </script>
         <script type="text/javascript" src="<?php echo base_url(); ?>system/application/views/admin/js/global.js"></script>
     </head>
     <body>
@@ -18,7 +21,15 @@
                             <li><a href="#"><?php echo $lang->line('menu_site_settings'); ?></a></li>
                         </ul>
                     </li>
-                    <li>System
+                    <li><?php echo $lang->line('menu_users'); ?>
+                        <ul>
+                            <li><a href="#"><?php echo $lang->line('menu_users'); ?></a></li>
+                            <li><a href="#"><?php echo $lang->line('menu_ranks'); ?></a></li>
+                            <li><a href="#"><?php echo $lang->line('menu_web_users'); ?></a></li>
+                            <li><a href="#"><?php echo $lang->line('menu_web_ranks'); ?></a></li>
+                        </ul>
+                    </li>
+                    <li><?php echo $lang->line('menu_system'); ?>
                         <ul>
                             <li><a href="<?php echo site_url(array('admin', 'manage', 'templates')); ?>"><?php echo $lang->line('menu_templates'); ?></a></li>
                             <li><a href="<?php echo site_url(array('admin', 'manage', 'dataobjects')); ?>"><?php echo $lang->line('menu_data_objects'); ?></a></li>
@@ -29,9 +40,4 @@
                     </li>
                 </ul>
             </div>
-            <div id="tree">
-                <!-- TODO: Build a tree of all the content -->
-            </div>
-            <div id="content">
-                <div id="innerContent">
 

@@ -2,7 +2,11 @@
     // English Language file for the admin
     
     // Menu items:
-    $lang['menu_configuration']     = 'Configuration';
+    $lang['menu_users']				= 'Users';
+	$lang['menu_ranks']				= 'Ranks';
+	$lang['menu_web_users']			= 'Web users';
+	$lang['menu_web_ranks']			= 'Web ranks';
+	$lang['menu_configuration']     = 'Configuration';
     $lang['menu_site_settings']     = 'Site Settings';
     $lang['menu_system']            = 'System';
     $lang['menu_templates']         = 'Templates';
