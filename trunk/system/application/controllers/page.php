@@ -2,7 +2,7 @@
 
 class Page extends Controller
 {
-	private $smarty;
+	// private $smarty;
 	private $idLanguage;
 	
 	function Page()
@@ -14,8 +14,8 @@ class Page extends Controller
 		
 		// Load Smarty Template Engine:
 		include_once(SMARTY_DIR.'Smarty.class.php');
-		$this->smarty = new Smarty();
-		
+		// $this->smarty = new Smarty();
+		/*
 		// Set the correct directories:
 		$this->smarty->template_dir 	= 'site/templates';					// Location of the Smarty-templates
 		$this->smarty->compile_dir  	= 'system/smarty/templates_c';		// Location where to put the compiled templates
@@ -28,10 +28,12 @@ class Page extends Controller
 		$this->smarty->debugging 		= SMARTY_DEBUG;
 		$this->smarty->caching			= SMARTY_CACHE;
 		$this->smarty->cache_lifetime	= SMARTY_CACHE_LIFETIME;
+		*/
 		$this->idLanguage 				= DEFAULT_LANGUAGE_ID;
-		
 		// Load the page model:
 		$this->load->model('PageModel', '', true);
+		// Load DataModel Class:
+		$this->load->model('DataModel', '', true);
 	}
 	
 	function index()
@@ -53,15 +55,18 @@ class Page extends Controller
 		
 		// Create the data object:
 		$dataObject = $this->PageModel->getDataObject(1, $this->idLanguage);
+		$dataObject->render();
 		
 		// Set each entry in the dataObject as a Smarty parameter:
+		/*
 		foreach($dataObject as $key=>$value) {
 			$this->smarty->assign($key, $value);
 		}
 		
 		// Display the page:
 		// TODO: Load the correct template according to the database:
-		$this->smarty->display('index.tpl');		
+		$this->smarty->display('index.tpl');
+		*/
 	}
 	
 }

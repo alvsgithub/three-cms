@@ -6,5 +6,11 @@
 	<body>
 		<h1>{$header}</h1>
 		<p>{$content}</p>
+		{* DataObject aanroepen: *}
+		<hr />
+		{foreach from=$dataObject->children() item=obj}
+			{$obj->render()}
+		{/foreach}
+		<hr />
 	</body>
 </html>
