@@ -63,90 +63,74 @@ class AdminModel extends Model
         $scaffold            = array();
         $showFields          = explode(',', $fields);
         $scaffold['table']   = $tableName;
+        $scaffold['id']      = $id;
         
         $sql = 'DESCRIBE `'.$tableName.'`;';
         $query = $this->db->query($sql);
+        
+        if($id!=0) {
+            $sql = 'SELECT * FROM `'.$tableName.'` WHERE `id` = '.$id;
+            $resultQuery = $this->db->query($sql);
+            $values = $resultQuery->result_array();
+            $scaffold['action'] = 'edit';
+        } else {
+            $values = array(array());
+            $scaffold['action'] = 'add';
+        }        
+        $items = array();
         
         foreach($query->result() as $result) {
             $item = array(
                 'name'=>$result->Field,
                 'value'=>$result->Default,
                 'type'=>$result->Type
-            )
-            $typeArray = explode('(', str_replace(')', '', $item['type']));            
-        }
-        
-        /*
-stdClass Object
-(
-    [Field] => id
-    [Type] => int(11)
-    [Null] => NO
-    [Key] => PRI
-    [Default] => 
-    [Extra] => auto_increment
-)
-stdClass Object
-(
-    [Field] => name
-    [Type] => tinytext
-    [Null] => NO
-    [Key] => 
-    [Default] => 
-    [Extra] => 
-)
-stdClass Object
-(
-    [Field] => code
-    [Type] => varchar(2)
-    [Null] => NO
-    [Key] => 
-    [Default] => 
-    [Extra] => 
-)
-stdClass Object
-(
-    [Field] => active
-    [Type] => tinyint(1)
-    [Null] => NO
-    [Key] => 
-    [Default] => 
-    [Extra] => 
-)
-        */
-        
-        /*
-        $fieldData   = $this->db->field_data($tableName);
-        if($id==0) {            
-            $tableFields = array();
-            $fieldArray  = $this->db->list_fields($tableName);
-            foreach($fieldArray as $fieldName) {
-                $tableFields[$fieldName] = '';
+            );
+            if(array_key_exists($item['name'], $values[0])) {
+                $item['value'] = $values[0][$item['name']];                
             }
-            $scaffold['todo'] = 'new';
-        } else {
-            $sql         = 'SELECT * FROM `'.$tableName.'` WHERE `id` = '.$id.';';
-            $query       = $this->db->query($sql);
-            $tableFields = $query->first_row('array');
-            $scaffold['todo'] = 'edit';
+            $typeArray = explode('(', str_replace(')', '', $item['type']));
+            $item['type']        = $typeArray[0];
+            $item['type_length'] = isset($typeArray[1]) ? $typeArray[1] : 0;
+            switch($item['type']) {
+                case 'int' :
+                case 'tinytext' :
+                case 'varchar' :
+                    {
+                        $inputType = 'text';
+                        break;
+                    }
+                case 'tinyint' :
+                    {
+                        if($item['type_length']==1) {
+                            // Bool
+                            $inputType = 'checkbox';
+                        } else {
+                            $inputType = 'text'; 
+                        }
+                        break;
+                    }
+                default :
+                    {
+                        $inputType = 'text';
+                        break;
+                    }
+            }
+            if(!in_array($item['name'], $showFields)) {
+                $inputType = 'hidden';
+            }
+            $item['input_type'] = $inputType;
+            array_push($items, $item);
         }
         
-        $scaffold['table']   = $tableName;
-        $scaffold['values']  = $tableFields;        
-        
-        $types = array();
-        foreach($fieldData as $field) {
-            $types[$field->name] = array("type"=>$field->type, "default"=>$field->default, "maxLength"=>$field->max_length);
-        }
-        $scaffold['types'] = $types;
-        
-        print_r($scaffold);
-        */
-        /*
-        foreach($tableFields as $fieldName) {
-            
-        }
-        */
+        $scaffold['items'] = $items;        
+        return($scaffold);
+    }
+    
+    function scaffoldSave()
+    {
+        // See if the table and the action are set
+        $tableName = $this->input->post('three_table');
+        $action    = $this->input->post('three_action');
     }
 }
 ?>
