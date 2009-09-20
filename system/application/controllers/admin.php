@@ -51,39 +51,6 @@ class Admin extends Controller
 		$this->showTree();
         // Get the item to manage:
         $action = $this->uri->segment(3);
-        $todo   = $this->uri->segment(4);
-        
-        if($todo!=false) {
-            switch($todo) {
-                case 'add' :
-                    {
-                        // TODO: Add functionality
-						$this->addModify($action);
-                        break;
-                    }
-                case 'edit' :
-                    {
-                        // TODO: Edit functionality
-						$id = $this->uri->segment(5);
-						$id = $id != false ? $id : 0;
-						$this->addModify($action, $id);
-                        break;
-                    }
-                case 'delete' :
-                    {
-                        // TODO: Delete functionality
-						$this->delete($action);
-                        break;
-                    }
-                case 'duplicate' :
-                    {
-                        // TODO: Duplicate functionality
-						$this->duplicate($action);
-                        break;
-                    }                    
-            }
-        }
-        
         // Show the data:
         switch($action) {
             case 'templates':
@@ -156,6 +123,66 @@ class Admin extends Controller
         $this->showFooter();
     }
     
+    /**
+     * Default scaffolding functionality
+     */
+    function scaffold()
+    {
+        $this->showHeader();
+		$this->showTree();
+        // Get the item to scffold:
+        $tableName = $this->uri->segment(3);
+        $action    = $this->uri->segment(4);
+        // See if there is a POST done:
+        if(!empty($_POST)) {
+            $this->AdminModel->scaffoldSave();
+        } else {
+            if($action!=false) {
+                switch($action) {
+                    case 'add' :
+                        {
+                            // TODO: Add functionality
+                            $this->addModify($tableName);
+                            break;
+                        }
+                    case 'edit' :
+                        {
+                            // TODO: Edit functionality
+                            $id = $this->uri->segment(5);
+                            $id = $id != false ? $id : 0;
+                            $this->addModify($tableName, $id);
+                            break;
+                        }
+                    /*
+                    case 'delete' :
+                        {
+                            // TODO: Delete functionality
+                            $this->delete($tableName);
+                            break;
+                        }
+                    case 'duplicate' :
+                        {
+                            // TODO: Duplicate functionality
+                            $this->duplicate($tableName);
+                            break;
+                        }
+                    */
+                }
+            } else {
+                $data = array(
+                    'lang'=>$this->lang
+                );
+                $this->load->view('admin/manage/notfound.php', $data);
+            }
+        }
+        $this->showFooter();
+    }
+    
+    /**
+     * Show the add- or modify form, based on scaffolding technique
+     * @param   $tableName  string  The name of the table
+     * @param   $id         int     The id (in case of modify)
+     */
 	function addModify($tableName, $id=0)
 	{
 		switch($tableName) {
@@ -176,7 +203,13 @@ class Admin extends Controller
 				}
 			case 'languages' :
 				{
-                    $this->AdminModel->createScaffoldTable('languages','name,code,active', $id);
+                    $scaffoldData = $this->AdminModel->createScaffoldTable('languages','name,code,active', $id);
+                    $name  = $this->lang->line('name_language');
+                    if($id==0) {
+                        $title = str_replace('%s', $name, $this->lang->line('title_add_new_item'));
+                    } else {
+                        $title = str_replace('%s', $name, $this->lang->line('title_modify_item'));
+                    }
 					break;
 				}
 			case 'locales' :
@@ -185,6 +218,13 @@ class Admin extends Controller
 					break;
 				}
 		}
+        // Add language:
+        $scaffoldData['lang']  = $this->lang;
+        $scaffoldData['title'] = $title;
+        // Load the scaffolding view:
+        if(isset($scaffoldData)) {
+            $this->load->view('admin/manage/scaffold.php', $scaffoldData);
+        }
 	}
 	
 	/*
@@ -194,12 +234,12 @@ class Admin extends Controller
 	}
 	*/
 	
-	function duplicate($tableName)
+	function duplicate()
 	{
 		
 	}
 	
-	function delete($tableName)
+	function delete()
 	{
 		
 	}

@@ -22,6 +22,8 @@
     $lang['title_languages']        = 'Languages';
     $lang['title_locales']          = 'Locales';
     $lang['title_notfound']         = 'Not found';
+    $lang['title_add_new_item']     = 'Add a new %s';
+    $lang['title_modify_item']      = 'Modify %s';
     
     // Names:
     $lang['name_template']          = 'template';
@@ -45,7 +47,8 @@
     $lang['action_delete']          = 'Delete';
     
     // Button titles:
-    $lang['button_add_new_item']    = 'Add a new %s...';
+    $lang['button_add_new_item']    = 'Add a new %s...';    
+    $lang['button_save']            = 'Save';
     
     // Default text chunks:
     $lang['default_actions']        = 'Actions';
