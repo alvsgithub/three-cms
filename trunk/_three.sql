@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Sep 18, 2009 at 09:30 AM
+-- Generation Time: Sep 21, 2009 at 05:28 PM
 -- Server version: 5.1.33
 -- PHP Version: 5.2.9-2
 
@@ -53,14 +53,15 @@ CREATE TABLE IF NOT EXISTS `dataobjects` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` tinytext NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
 
 --
 -- Dumping data for table `dataobjects`
 --
 
 INSERT INTO `dataobjects` (`id`, `name`) VALUES
-(1, 'Default Page');
+(1, 'Default Page'),
+(2, 'Content 2');
 
 -- --------------------------------------------------------
 
@@ -72,17 +73,20 @@ CREATE TABLE IF NOT EXISTS `dataobjects_options` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `id_dataobject` int(11) NOT NULL,
   `id_option` int(11) NOT NULL,
+  `order` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=43 ;
 
 --
 -- Dumping data for table `dataobjects_options`
 --
 
-INSERT INTO `dataobjects_options` (`id`, `id_dataobject`, `id_option`) VALUES
-(1, 1, 1),
-(2, 1, 2),
-(3, 1, 3);
+INSERT INTO `dataobjects_options` (`id`, `id_dataobject`, `id_option`, `order`) VALUES
+(39, 2, 2, 1),
+(38, 2, 1, 0),
+(42, 1, 3, 2),
+(41, 1, 2, 1),
+(40, 1, 1, 0);
 
 -- --------------------------------------------------------
 
@@ -96,7 +100,7 @@ CREATE TABLE IF NOT EXISTS `languages` (
   `code` varchar(2) NOT NULL,
   `active` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=10 ;
 
 --
 -- Dumping data for table `languages`
@@ -105,7 +109,8 @@ CREATE TABLE IF NOT EXISTS `languages` (
 INSERT INTO `languages` (`id`, `name`, `code`, `active`) VALUES
 (1, 'Nederlands', 'nl', 1),
 (2, 'English', 'en', 1),
-(3, 'Deutsch', 'de', 1);
+(3, 'Deutsch', 'de', 1),
+(6, 'French', 'fr', 0);
 
 -- --------------------------------------------------------
 
@@ -117,12 +122,16 @@ CREATE TABLE IF NOT EXISTS `locales` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` tinytext NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=10 ;
 
 --
 -- Dumping data for table `locales`
 --
 
+INSERT INTO `locales` (`id`, `name`) VALUES
+(1, 'Hallo'),
+(8, 'Ja'),
+(7, 'Nieuw');
 
 -- --------------------------------------------------------
 
@@ -136,12 +145,25 @@ CREATE TABLE IF NOT EXISTS `locales_values` (
   `id_language` int(11) NOT NULL,
   `value` text NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=48 ;
 
 --
 -- Dumping data for table `locales_values`
 --
 
+INSERT INTO `locales_values` (`id`, `id_locale`, `id_language`, `value`) VALUES
+(8, 1, 1, 'Hallo'),
+(9, 1, 2, 'Hello'),
+(10, 1, 3, 'Guten tag'),
+(11, 1, 6, 'Bonjour'),
+(43, 8, 6, 'Oui'),
+(42, 8, 3, 'Jawohl'),
+(41, 8, 2, 'Yes'),
+(40, 8, 1, 'Ja'),
+(32, 7, 1, 'Nieuw'),
+(33, 7, 2, 'New'),
+(34, 7, 3, 'Neu'),
+(35, 7, 6, 'Nouveau');
 
 -- --------------------------------------------------------
 
@@ -156,7 +178,7 @@ CREATE TABLE IF NOT EXISTS `options` (
   `default_value` text NOT NULL,
   `multilanguage` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=6 ;
 
 --
 -- Dumping data for table `options`
