@@ -49,9 +49,11 @@
     // Button titles:
     $lang['button_add_new_item']    = 'Add a new %s...';    
     $lang['button_save']            = 'Save';
+	$lang['button_add_option']		= 'Add option';
     
 	// Dialogs:
 	$lang['dialog_delete']			= 'Are you sure you want to delete this item? This action cannot be undone!';
+	$lang['dialog_option_exists']	= 'This option already exists in this data object. An option can only appear once in a data object!';
 	
 	// Options:
 	$lang['option_small_text']		= 'Small Text';
@@ -72,11 +74,16 @@
 	$lang['system_language_name']	= 'Name';
 	$lang['system_language_code']	= 'Code';
 	$lang['system_language_active']	= 'Active';
+	$lang['system_locale_name']		= 'Name';
 	$lang['system_options_name']	= 'Name';
 	$lang['system_options_type']	= 'Type';
 	$lang['system_options_default']	= 'Default Value';
 	$lang['system_options_multi']	= 'Multilingual';
-	
+	$lang['system_template_name']	= 'Name';
+	$lang['system_template_dataobject'] = 'Data Object';
+	$lang['system_template_file']	= 'Template File';
+	$lang['system_dataobject_name']	= 'Name';
+	$lang['system_dataobject_linked']	= 'Linked Options';
 
     // Default text chunks:
     $lang['default_actions']        = 'Actions';

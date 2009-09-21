@@ -124,127 +124,335 @@ class Admin extends Controller
         $this->showFooter();
     }
     
+	/**
+	 * Template functions
+	 */
 	function templates()
 	{
-		
+		$action = $this->uri->segment(3);
+		$id     = $this->uri->segment(4);
+		// Check for the action:
+		switch($action) {
+			case 'save' :
+				{
+					// Save the data (POST-action)
+					$data = array(
+						'name'=>$this->input->post('name'),
+						'id_dataobject'=>$this->input->post('id_dataobject'),
+						'templatefile'=>$this->input->post('templatefile')
+					);
+					$this->AdminModel->saveData('templates', $data, $this->input->post('id'));
+					redirect(site_url(array('admin', 'manage', 'templates')));
+					break;
+				}
+			case 'delete' :
+				{
+					// Delete
+					if($id!=false) {
+						$this->AdminModel->deleteData(array('templates'=>'id', 'content'=>'id_template'), $id);
+						redirect(site_url(array('admin', 'manage', 'templates')));
+					}
+					break;
+				}
+			case 'duplicate' :
+				{
+					// Duplicate
+					if($id!=false) {
+						$this->AdminModel->duplicateTemplate($id);
+						redirect(site_url(array('admin', 'manage', 'templates')));
+					}
+					break;
+				}
+			case 'add' :
+			case 'edit' :
+				{
+					// Add or edit
+					$name  = $this->lang->line('name_template');
+					if($action=='add') {
+						$title = str_replace('%s', $name, $this->lang->line('title_add_new_item'));
+					} else {
+						$title = str_replace('%s', $name, $this->lang->line('title_modify_item'));
+					}
+					$data = array(
+						'lang'=>$this->lang,
+						'title'=>$title,
+						'values'=>$this->AdminModel->getData('templates', $id),
+						'dataObjects'=>$this->AdminModel->getDataObjects()
+					);
+					$this->showHeader();
+					$this->showTree();
+					$this->load->view('admin/templates/add_edit.php', $data);
+			        $this->showFooter();
+					break;
+				}
+		}
 	}
 	
+	
+	/**
+	 * Data object functions
+	 */
 	function dataobjects()
 	{
-		
+		$action = $this->uri->segment(3);
+		$id     = $this->uri->segment(4);
+		// Check for the action:
+		switch($action) {
+			case 'save' :
+				{
+					// Save the data (POST-action)
+					$data = array(						
+						'name'=>$this->input->post('name'),
+					);
+					$id = $this->AdminModel->saveData('dataobjects', $data, $this->input->post('id'));
+					// Save the options:
+					$options = explode('-', $this->input->post('optionString'));
+					$this->AdminModel->saveDataObjectOptions($options, $id);
+					redirect(site_url(array('admin', 'manage', 'dataobjects')));
+					break;
+				}
+			case 'delete' :
+				{
+					// Delete
+					if($id!=false) {
+						$this->AdminModel->deleteData(array('dataobjects'=>'id', 'dataobjects_options'=>'id_dataobject', 'templates'=>'id_dataobject'), $id);
+						redirect(site_url(array('admin', 'manage', 'dataobjects')));
+					}
+					break;
+				}
+			case 'duplicate' :
+				{
+					// Duplicate
+					if($id!=false) {
+						$this->AdminModel->duplicateDataObject($id);
+						redirect(site_url(array('admin', 'manage', 'dataobjects')));
+					}
+					break;
+				}
+			case 'add' :
+			case 'edit' :
+				{
+					// Add or edit
+					$name  = $this->lang->line('name_data_object');
+					if($action=='add') {
+						$title = str_replace('%s', $name, $this->lang->line('title_add_new_item'));
+					} else {
+						$title = str_replace('%s', $name, $this->lang->line('title_modify_item'));
+					}
+					$data = array(
+						'lang'=>$this->lang,
+						'title'=>$title,
+						'values'=>$this->AdminModel->getData('dataobjects', $id),
+						'options'=>$this->AdminModel->getDataObjectOptions($id),
+						'optionList'=>$this->AdminModel->getOptions()
+					);
+					$this->showHeader();
+					$this->showTree();
+					$this->load->view('admin/dataobjects/add_edit.php', $data);
+			        $this->showFooter();
+					break;
+				}
+		}
 	}
 	
+	/**
+	 * Options functions
+	 */
 	function options()
 	{
-        $this->showHeader();
-		$this->showTree();
 		$action = $this->uri->segment(3);
 		$id     = $this->uri->segment(4);
-		
-		// Language part
-		// See if there should be something saved:
-		if($this->input->post('id')!==false) {			
-			$data = array(
-				'id'=>$this->input->post('id'),
-				'name'=>$this->input->post('name'),
-				'type'=>$this->input->post('type'),
-				'default_value'=>$this->input->post('default_value'),
-				'multilanguage'=>isset($_POST['multilanguage']) ? 1 : 0
-			);
-			$this->AdminModel->saveOption($data);
-			redirect(site_url(array('admin', 'manage', 'options')));
+		// Check for the action:
+		switch($action) {
+			case 'save':
+				{
+					$data = array(
+						'name'=>$this->input->post('name'),
+						'type'=>$this->input->post('type'),
+						'default_value'=>$this->input->post('default_value'),
+						'multilanguage'=>isset($_POST['multilanguage']) ? 1 : 0
+					);
+					$this->AdminModel->saveData('options', $data, $this->input->post('id'));
+					redirect(site_url(array('admin', 'manage', 'options')));
+					break;
+				}
+			case 'delete' :
+				{
+					if($id!=false) {
+						$this->AdminModel->deleteData(array('options'=>'id', 'values'=>'id_option', 'dataobjects_options'=>'id_option'), $id);
+						redirect(site_url(array('admin', 'manage', 'options')));
+					}
+					break;
+				}
+			case 'duplicate' :
+				{
+					if($id!=false) {
+						$this->AdminModel->duplicateOption($id);
+						redirect(site_url(array('admin', 'manage', 'options')));
+					}
+					break;
+				}
+			case 'add' :
+			case 'edit' :
+				{
+					$name = $this->lang->line('name_option');
+					if($action=='add') {
+						$title = str_replace('%s', $name, $this->lang->line('title_add_new_item'));
+					} else {
+						$title = str_replace('%s', $name, $this->lang->line('title_modify_item'));
+					}
+					$data = array(
+						'lang'=>$this->lang,
+						'title'=>$title,
+						'values'=>$this->AdminModel->getData('options', $id)
+					);
+					$this->showHeader();
+					$this->showTree();
+					$this->load->view('admin/options/add_edit.php', $data);
+			        $this->showFooter();
+					break;
+				}
 		}
-		// See if there should be something deleted:
-		if($action=='delete') {
-			if($id!=false) {
-				$this->AdminModel->deleteOption($id);
-				redirect(site_url(array('admin', 'manage', 'options')));
-			}
-		}
-		// See if there should be something duplicated:
-		if($action=='duplicate') {
-			if($id!=false) {
-				$this->AdminModel->duplicateOption($id);
-				redirect(site_url(array('admin', 'manage', 'options')));
-			}
-		}
-		// Show the languages form:
-		$name = $this->lang->line('name_option');
-		$data = array(
-			'lang'=>$this->lang
-		);
-		if($id==false) {
-			$title = str_replace('%s', $name, $this->lang->line('title_add_new_item'));
-		} else {
-			$title = str_replace('%s', $name, $this->lang->line('title_modify_item'));
-		}
-		$data['title']  = $title;
-		$data['values'] = $this->AdminModel->getOption($id);
-		$this->load->view('admin/options/add_edit.php', $data);
-		// End languages part
-		
-        $this->showFooter();
 	}
 	
+	
+	/**
+	 * Languages functions
+	 */
 	function languages()
 	{
-        $this->showHeader();
-		$this->showTree();
 		$action = $this->uri->segment(3);
 		$id     = $this->uri->segment(4);
-		
-		// Language part
-		// See if there should be something saved:
-		if($this->input->post('id')!==false) {			
-			$data = array(
-				'id'=>$this->input->post('id'),
-				'name'=>$this->input->post('name'),
-				'code'=>$this->input->post('code'),
-				'active'=>isset($_POST['active']) ? 1 : 0
-			);
-			$this->AdminModel->saveLanguage($data);
-			redirect(site_url(array('admin', 'manage', 'languages')));
+		// Check for the action:
+		switch($action) {
+			case 'save' :
+				{
+					// Save the data (POST-action)
+					$data = array(						
+						'name'=>$this->input->post('name'),
+						'code'=>$this->input->post('code'),
+						'active'=>isset($_POST['active']) ? 1 : 0
+					);
+					$this->AdminModel->saveData('languages', $data, $this->input->post('id'));
+					redirect(site_url(array('admin', 'manage', 'languages')));
+					break;
+				}
+			case 'delete' :
+				{
+					// Delete
+					if($id!=false) {
+						$this->AdminModel->deleteData(array('languages'=>'id', 'values'=>'id_language', 'locales_values'=>'id_language'), $id);
+						redirect(site_url(array('admin', 'manage', 'languages')));
+					}
+					break;
+				}
+			case 'duplicate' :
+				{
+					// Duplicate
+					if($id!=false) {
+						$this->AdminModel->duplicateLanguage($id);
+						redirect(site_url(array('admin', 'manage', 'languages')));
+					}
+					break;
+				}
+			case 'add' :
+			case 'edit' :
+				{
+					// Add or edit
+					$name  = $this->lang->line('name_language');
+					if($action=='add') {
+						$title = str_replace('%s', $name, $this->lang->line('title_add_new_item'));
+					} else {
+						$title = str_replace('%s', $name, $this->lang->line('title_modify_item'));
+					}
+					$data = array(
+						'lang'=>$this->lang,
+						'title'=>$title,
+						'values'=>$this->AdminModel->getData('languages', $id)
+					);
+					$this->showHeader();
+					$this->showTree();
+					$this->load->view('admin/languages/add_edit.php', $data);
+			        $this->showFooter();
+					break;
+				}
 		}
-		// See if there should be something deleted:
-		if($action=='delete') {
-			if($id!=false) {
-				$this->AdminModel->deleteLanguage($id);
-				redirect(site_url(array('admin', 'manage', 'languages')));
-			}
-		}
-		// See if there should be something duplicated:
-		if($action=='duplicate') {
-			if($id!=false) {
-				$this->AdminModel->duplicateLanguage($id);
-				redirect(site_url(array('admin', 'manage', 'languages')));
-			}
-		}
-		// Show the languages form:
-		$name = $this->lang->line('name_language');
-		$data = array(
-			'lang'=>$this->lang
-		);
-		if($id==false) {
-			$title = str_replace('%s', $name, $this->lang->line('title_add_new_item'));
-		} else {
-			$title = str_replace('%s', $name, $this->lang->line('title_modify_item'));
-		}
-		$data['title']  = $title;
-		$data['values'] = $this->AdminModel->getLanguage($id);
-		$this->load->view('admin/languages/add_edit.php', $data);
-		// End languages part
-		
-        $this->showFooter();
 	}
 	
+	
+	/**
+	 * Locales functions
+	 */
 	function locales()
 	{
-		
+		$action = $this->uri->segment(3);
+		$id     = $this->uri->segment(4);
+		// Check for the action:
+		switch($action) {
+			case 'save' :
+				{
+					// Save the data (POST-action)
+					$data = array(						
+						'name'=>$this->input->post('name')
+					);
+					$id = $this->AdminModel->saveData('locales', $data, $this->input->post('id'));
+					echo $id;					
+					// Save the language-entries:
+					$locales = $this->AdminModel->getLocaleValues($id);
+					for($i=0; $i < count($locales); $i++) {
+						$locales[$i]['value'] = $this->input->post('language_'.$locales[$i]['id']);
+					}
+					$this->AdminModel->saveLocaleValues($id, $locales);
+					redirect(site_url(array('admin', 'manage', 'locales')));					
+					break;
+				}
+			case 'delete' :
+				{
+					// Delete
+					if($id!=false) {
+						$this->AdminModel->deleteData(array('locales'=>'id', 'locales_values'=>'id_locale'), $id);
+						redirect(site_url(array('admin', 'manage', 'locales')));
+					}
+					break;
+				}
+			case 'duplicate' :
+				{
+					// Duplicate
+					if($id!=false) {
+						$this->AdminModel->duplicateLocale($id);
+						redirect(site_url(array('admin', 'manage', 'locales')));
+					}
+					break;
+				}
+			case 'add' :
+			case 'edit' :
+				{
+					// Add or edit
+					$name  = $this->lang->line('name_locale');
+					if($action=='add') {
+						$title = str_replace('%s', $name, $this->lang->line('title_add_new_item'));
+					} else {
+						$title = str_replace('%s', $name, $this->lang->line('title_modify_item'));
+					}
+					$data = array(
+						'lang'=>$this->lang,
+						'title'=>$title,
+						'values'=>$this->AdminModel->getData('locales', $id),
+						'locales'=>$this->AdminModel->getLocaleValues($id)
+					);
+					$this->showHeader();
+					$this->showTree();
+					$this->load->view('admin/locales/add_edit.php', $data);
+			        $this->showFooter();
+					break;
+				}
+		}
 	}
 	
     /**
      * Default scaffolding functionality
      */
+	/*
     function scaffold()
     {
         $this->showHeader();
@@ -290,6 +498,7 @@ class Admin extends Controller
                             break;
                         }
                     */
+					/*
                 }
             } else {
                 $data = array(
@@ -300,12 +509,13 @@ class Admin extends Controller
         }
         $this->showFooter();
     }
-    
+					*/
     /**
      * Show the add- or modify form, based on scaffolding technique
      * @param   $tableName  string  The name of the table
      * @param   $id         int     The id (in case of modify)
      */
+	/*
 	function addModify($tableName, $id=0)
 	{
 		switch($tableName) {
@@ -360,14 +570,14 @@ class Admin extends Controller
             $this->load->view('admin/manage/scaffold.php', $scaffoldData);
         }
 	}
-	
+	*/
 	/*
 	function modify($tableName)
 	{
 		
 	}
 	*/
-	
+	/*
 	function duplicate()
 	{
 		
@@ -377,7 +587,7 @@ class Admin extends Controller
 	{
 		
 	}
-	
+	*/
 	/**
 	 * AJAX Calls are done here
 	 */
@@ -396,6 +606,19 @@ class Admin extends Controller
 					);
 					$this->load->view('admin/ajax/tree.php', $data);
 					break;
+				}
+			case 'show_options' :
+				{
+					$options = $this->uri->segment(4);
+					if($options!=false) {
+						$optionList = explode('-', $options);
+						$optionData = array();
+						foreach($optionList as $optionID) {
+							$option = $this->AdminModel->getData('options', $optionID);
+							array_push($optionData, $option);
+						}
+						$this->load->view('admin/ajax/show_options.php', array('optionData'=>$optionData));
+					}
 				}
 		}
 	}

@@ -258,30 +258,62 @@ class AdminModel extends Model
         }
     }
     
-    function getLocaleTable($id=0)
+    
+    /**
+     * Generic getData function
+     * @param   $tableName  string  The name of the table to retrieve the data from
+     * @param   $id         int     The ID of the data, or 0 for an empty dataset
+     * @return  array               An array, holding the data
+     */
+    function getData($tableName, $id=0)
     {
-        $sql     = 'SELECT `id`,`name` FROM `languages`;';
-        $query   = $this->db->query($sql);
-        $locales = array();
-        foreach($query->result() as $result) {
-            $value = '';
-            if($id!=0) {
-                $sql = 'SELECT `value` FROM `locales_values` WHERE `id_language`='.$result->id.' AND `id_locale`='.$id.';';
-                $valueQuery = $this->db->query($sql);
-                $value      = $this->result()->value;
+        if($id==false || $id==0) {
+            $fieldArray = $this->db->list_fields($tableName);
+            $fields = array();
+            foreach($fieldArray as $fieldName) {
+                $fields[$fieldName] = '';
             }
-            array_push($locales, array(
-                'id'=>$result->id,
-                'name'=>$result->name,
-                'value'=>$value,
-                'input_name'=>'language_'.$result->id
-            ));
+            return $fields;
+        } else {
+            $this->db->where('id', $id);
+            $query = $this->db->get($tableName);
+            $array = $query->result_array();
+            return $array[0];
         }
-        $return = array(
-            'linkTable'=>'locales_values',
-            'items'=>$locales
-        );
-        return $return;
+    }
+    
+    /**
+     * Generic saveData function
+     * @param   $tableName  string  The name of the table to save the data to
+     * @param   $data       array   An array holding the data to save
+     * @param   $id         int     In case of an update, the ID of the data, otherwise 0
+     * @return  int                 The ID of the saved data.
+     */
+    function saveData($tableName, $data, $id=0)
+    {
+        unset($data['id']);
+        if($id==0) {
+            // Insert
+            $this->db->insert($tableName, $data);
+            $id = $this->db->insert_id();
+        } else {
+            // Update            
+            $this->db->where('id', $id);
+            $this->db->update($tableName, $data);
+        }
+        return $id;
+    }
+    
+    /**
+     * Generic deleteData function
+     * @param   $tableInformation   array   An associated array with 'tableName'=>'IDFieldName'
+     * @param   $id                 int     The ID of the data to delete
+     */
+    function deleteData($tableInformation, $id)
+    {
+        foreach($tableInformation as $tableName=>$idField) {
+            $this->db->delete($tableName, array($idField=>$id));
+        }
     }
     
     /**
@@ -289,6 +321,7 @@ class AdminModel extends Model
      * @param $id   int The ID of the language
      * @return array
      */
+    /*
     function getLanguage($id) {
         // If ID is empty or 0, return an empty result set:
         if($id==false || $id==0) {
@@ -304,34 +337,44 @@ class AdminModel extends Model
         $array = $query->result_array();
         return $array[0];
     }
+    */
     
     /**
      * Save a language by using the post-vars
      * @param   $data   An array holding the data
+     * @return  int     The ID of the inserted value;
      */
+    /*
     function saveLanguage($data)
     {
         if($data['id']==0) {
             // Insert
+            unset($data['id']);
             $this->db->insert('languages', $data);
+            $id = $this->db->insert_id();
         } else {
             // Update
-            $this->db->where('id', $data['id']);
+            $id = $data['id'];
+            $this->db->where('id', $id);
             unset($data['id']);
             $this->db->update('languages', $data);
         }
+        return $id;
     }
+    */
     
     /**
      * Delete a language
      * @param   $id int The ID of the language to delete
      */
+    /*
     function deleteLanguage($id)
     {
         $this->db->delete('languages', array('id'=>$id));
         $this->db->delete('values', array('id_language'=>$id));
         $this->db->delete('locales_values', array('id_language'=>$id));
     }
+    */
     
     /**
      * Duplicate a language
@@ -343,10 +386,11 @@ class AdminModel extends Model
     }
     
     /**
-     * Get a language
-     * @param $id   int The ID of the language
+     * Get an option
+     * @param $id   int The ID of the option
      * @return array
      */
+    /*
     function getOption($id) {
         // If ID is empty or 0, return an empty result set:
         if($id==false || $id==0) {
@@ -363,40 +407,269 @@ class AdminModel extends Model
         $array = $query->result_array();
         return $array[0];
     }
+    */
     
     /**
-     * Save a language by using the post-vars
+     * Save an option by using the post-vars
      * @param   $data   An array holding the data
+     * @return  int     The ID of the inserted value;
      */
+    /*
     function saveOption($data)
     {
         if($data['id']==0) {
             // Insert
+            unset($data['id']);
             $this->db->insert('options', $data);
+            $id = $this->db->insert_id();
         } else {
             // Update
-            $this->db->where('id', $data['id']);
+            $id = $data['id'];
+            $this->db->where('id', $id);
             unset($data['id']);
             $this->db->update('options', $data);
         }
+        return $id;
     }
+    */
     
     /**
-     * Delete a language
-     * @param   $id int The ID of the language to delete
+     * Delete an option
+     * @param   $id int The ID of the option to delete
      */
+    /*
     function deleteOption($id)
     {
         $this->db->delete('options', array('id'=>$id));
         $this->db->delete('values', array('id_option'=>$id));
         $this->db->delete('dataobject_options', array('id_option'=>$id));
     }
+    */
     
     /**
-     * Duplicate a language
-     * @param   $id int The ID of the language to duplicate
+     * Duplicate an option
+     * @param   $id int The ID of the option to duplicate
      */
     function duplicateOption($id)
+    {
+        // TODO
+    }
+    
+    /**
+     * Get a locale
+     * @param   $id int The ID of the locale
+     * @return  array   An array with data
+     */
+    /*
+    function getLocale($id) {
+        // If ID is empty or 0, return an empty result set:
+        if($id==false || $id==0) {
+            return array(
+                'name'=>'',
+                'id'=>0
+            );
+        }
+        $this->db->where('id', $id);
+        $query = $this->db->get('locales');
+        $array = $query->result_array();
+        return $array[0];
+    }
+    */
+    
+    /**
+     * Save a locale by using the post-vars
+     * @param   $data   An array holding the data
+     * @return  int     The ID of the inserted value;
+     */
+    /*
+    function saveLocale($data)
+    {
+        if($data['id']==0) {
+            // Insert
+            unset($data['id']);
+            $this->db->insert('locales', $data);
+            $id = $this->db->insert_id();            
+        } else {
+            // Update
+            $id = $data['id'];
+            $this->db->where('id', $id);
+            unset($data['id']);
+            $this->db->update('locales', $data);
+        }
+        return $id;
+    }
+    */
+    
+    /**
+     * Delete a locale
+     * @param   $id int The ID of the locale to delete
+     */
+    /*
+    function deleteLocale($id)
+    {
+        $this->db->delete('locales', array('id'=>$id));
+        $this->db->delete('locales_values', array('id_locale'=>$id));
+    }
+    */
+    
+    /**
+     * Duplicate a locale
+     * @param   $id int The ID of the locale to duplicate
+     */
+    function duplicateLocale($id)
+    {
+        // TODO
+    }
+    
+    /**
+     * Get an array holding all the locale values (for each language)
+     * @param   $id int The ID of the locale
+     * @return  array   An array holding all the locale values
+     */
+    function getLocaleValues($id=0)
+    {
+        $query   = $this->db->get('languages');
+        $locales = array();
+        foreach($query->result() as $result) {
+            $value = '';
+            if($id!=0) {
+                // $sql = 'SELECT `value` FROM `locales_values` WHERE `id_language`='.$result->id.' AND `id_locale`='.$id.';';
+                $this->db->select('value');
+                $this->db->where('id_language', $result->id);
+                $this->db->where('id_locale', $id);
+                $valueQuery = $this->db->get('locales_values');
+                if($valueQuery->num_rows!=0) {                    
+                    $value = $valueQuery->row()->value;
+                } else {
+                    $value = '';
+                }
+            }
+            array_push($locales, array(
+                'id'=>$result->id,
+                'name'=>$result->name,
+                'value'=>$value
+            ));
+        }
+        return $locales;
+    }
+    
+    /**
+     * Save locale values
+     * @param   $id         int     The ID of the locale
+     * @param   $locales    array   An Array holding the locale values
+     */
+    function saveLocaleValues($id, $locales)
+    {
+        // First delete the current values:
+        $this->db->where('id_locale', $id);
+        $this->db->delete('locales_values');
+        // Then add the new values:
+        foreach($locales as $locale)
+        {
+            $this->db->insert('locales_values', array(
+                'id_locale'=>$id,
+                'id_language'=>$locale['id'],
+                'value'=>$locale['value']
+            ));
+        }
+    }
+    
+    /**
+     * Duplicate a template
+     * @param   $id int The ID of the template to duplicate
+     */
+    function duplicateTemplate($id)
+    {
+        // TODO
+    }
+    
+    /**
+     * Get a list of all available data objects
+     * @return  array   An array with all the available data objects
+     */
+    function getDataObjects()
+    {
+        $dataObjects = array();
+        $query = $this->db->get('dataobjects');
+        foreach($query->result() as $result) {
+            $dataObject = array(
+                'id'=>$result->id,
+                'name'=>$result->name
+            );
+            array_push($dataObjects, $dataObject);
+        }
+        return $dataObjects;
+    }
+    
+    /**
+     * Get the options that are linked to this dataobject
+     * @param   $id int The ID of the data object
+     * @return  array   An array with all the options linked to this dataobject
+     */
+    function getDataObjectOptions($id)
+    {
+        $options = array();
+        $this->db->where('id_dataobject', $id);
+        $this->db->select('id_option,name');
+        $this->db->order_by('order');
+        $this->db->join('options', 'options.id = dataobjects_options.id_option');
+        $query = $this->db->get('dataobjects_options');
+        foreach($query->result() as $result) {
+            $option = array(
+                'id'=>$result->id_option,
+                'name'=>$result->name
+            );
+            array_push($options, $option);
+        }        
+        return $options;
+    }
+    
+    /**
+     * Save the data object options
+     * @param   $options    array   An array holding the ID's of the options
+     * @param   $id         int     the ID of the dataobject where the options belong to
+     */
+    function saveDataObjectOptions($options, $id)
+    {
+        // First, delete all the links that are already made:
+        $this->db->where('id_dataobject', $id);
+        $this->db->delete('dataobjects_options');
+        // Then store the data:
+        $order = 0;
+        foreach($options as $id_option) {
+            $data = array(
+                'id_option'=>$id_option,
+                'id_dataobject'=>$id,
+                'order'=>$order
+            );
+            $this->db->insert('dataobjects_options', $data);
+            $order++;
+        }
+    }
+    
+    /**
+     * Get a list of all available options
+     * @return  array   An array with all the available options
+     */
+    function getOptions()
+    {
+        $options = array();
+        $query = $this->db->get('options');
+        foreach($query->result() as $result) {
+            $option = array(
+                'id'=>$result->id,
+                'name'=>$result->name
+            );
+            array_push($options, $option);
+        }
+        return $options;
+    }
+    
+    /**
+     * Duplicate a data object
+     * @param   $id int The ID of the dataobject to duplicate
+     */
+    function duplicateDataObject($id)
     {
         // TODO
     }
