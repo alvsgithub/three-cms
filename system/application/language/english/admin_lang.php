@@ -50,6 +50,24 @@
     $lang['button_add_new_item']    = 'Add a new %s...';    
     $lang['button_save']            = 'Save';
     
+	// Dialogs:
+	$lang['dialog_delete']			= 'Are you sure you want to delete this item? This action cannot be undone!';
+	
+	// Options:
+	$lang['option_small_text']		= 'Small Text';
+	$lang['option_large_text']		= 'Large Text';
+	$lang['option_rich_text']		= 'Rich Text';
+	$lang['option_url']				= 'URL';
+	$lang['option_image']			= 'Image';
+	$lang['option_file']			= 'File';
+	$lang['option_boolean']			= 'Boolean (yes/no)';
+	$lang['option_dropdown']		= 'Dropdown list';
+	$lang['option_selectbox']		= 'Select box (multiple values)';
+	$lang['option_date']			= 'Date';
+	$lang['option_time']			= 'Time';
+	$lang['option_content']			= 'Content';
+	$lang['option_content_of_type']	= 'Content of a specific type';
+
     // Default text chunks:
     $lang['default_actions']        = 'Actions';
     $lang['default_admin_panel']    = 'Admin Panel';

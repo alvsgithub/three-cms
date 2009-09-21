@@ -5,7 +5,8 @@
         <link rel="stylesheet" type="text/css" media="screen,tv,projection" href="<?php echo base_url(); ?>system/application/views/admin/css/screen.css" />
         <script type="text/javascript" src="<?php echo base_url(); ?>system/application/views/admin/js/jquery-1.3.2.min.js"></script>
         <script type="text/javascript">
-            var baseURL = '<?php echo base_url(); ?>';
+            var baseURL       = '<?php echo base_url(); ?>';
+            var dialog_delete = '<?php echo $lang->line('dialog_delete'); ?>';
         </script>
         <script type="text/javascript" src="<?php echo base_url(); ?>system/application/views/admin/js/global.js"></script>
     </head>
