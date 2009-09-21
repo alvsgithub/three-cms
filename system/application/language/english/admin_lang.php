@@ -67,6 +67,16 @@
 	$lang['option_time']			= 'Time';
 	$lang['option_content']			= 'Content';
 	$lang['option_content_of_type']	= 'Content of a specific type';
+	
+	// System settings:
+	$lang['system_language_name']	= 'Name';
+	$lang['system_language_code']	= 'Code';
+	$lang['system_language_active']	= 'Active';
+	$lang['system_options_name']	= 'Name';
+	$lang['system_options_type']	= 'Type';
+	$lang['system_options_default']	= 'Default Value';
+	$lang['system_options_multi']	= 'Multilingual';
+	
 
     // Default text chunks:
     $lang['default_actions']        = 'Actions';

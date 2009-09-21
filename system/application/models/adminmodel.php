@@ -283,5 +283,122 @@ class AdminModel extends Model
         );
         return $return;
     }
+    
+    /**
+     * Get a language
+     * @param $id   int The ID of the language
+     * @return array
+     */
+    function getLanguage($id) {
+        // If ID is empty or 0, return an empty result set:
+        if($id==false || $id==0) {
+            return array(
+                'name'=>'',
+                'code'=>'',
+                'active'=>'',
+                'id'=>0
+            );
+        }
+        $this->db->where('id', $id);
+        $query = $this->db->get('languages');
+        $array = $query->result_array();
+        return $array[0];
+    }
+    
+    /**
+     * Save a language by using the post-vars
+     * @param   $data   An array holding the data
+     */
+    function saveLanguage($data)
+    {
+        if($data['id']==0) {
+            // Insert
+            $this->db->insert('languages', $data);
+        } else {
+            // Update
+            $this->db->where('id', $data['id']);
+            unset($data['id']);
+            $this->db->update('languages', $data);
+        }
+    }
+    
+    /**
+     * Delete a language
+     * @param   $id int The ID of the language to delete
+     */
+    function deleteLanguage($id)
+    {
+        $this->db->delete('languages', array('id'=>$id));
+        $this->db->delete('values', array('id_language'=>$id));
+        $this->db->delete('locales_values', array('id_language'=>$id));
+    }
+    
+    /**
+     * Duplicate a language
+     * @param   $id int The ID of the language to duplicate
+     */
+    function duplicateLanguage($id)
+    {
+        // TODO
+    }
+    
+    /**
+     * Get a language
+     * @param $id   int The ID of the language
+     * @return array
+     */
+    function getOption($id) {
+        // If ID is empty or 0, return an empty result set:
+        if($id==false || $id==0) {
+            return array(
+                'name'=>'',
+                'type'=>'',
+                'default_value'=>'',
+                'multilanguage'=>'',
+                'id'=>0
+            );
+        }
+        $this->db->where('id', $id);
+        $query = $this->db->get('options');
+        $array = $query->result_array();
+        return $array[0];
+    }
+    
+    /**
+     * Save a language by using the post-vars
+     * @param   $data   An array holding the data
+     */
+    function saveOption($data)
+    {
+        if($data['id']==0) {
+            // Insert
+            $this->db->insert('options', $data);
+        } else {
+            // Update
+            $this->db->where('id', $data['id']);
+            unset($data['id']);
+            $this->db->update('options', $data);
+        }
+    }
+    
+    /**
+     * Delete a language
+     * @param   $id int The ID of the language to delete
+     */
+    function deleteOption($id)
+    {
+        $this->db->delete('options', array('id'=>$id));
+        $this->db->delete('values', array('id_option'=>$id));
+        $this->db->delete('dataobject_options', array('id_option'=>$id));
+    }
+    
+    /**
+     * Duplicate a language
+     * @param   $id int The ID of the language to duplicate
+     */
+    function duplicateOption($id)
+    {
+        // TODO
+    }
 }
 ?>
