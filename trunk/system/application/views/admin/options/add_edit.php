@@ -1,7 +1,7 @@
 <div id="content">
 	<div id="innerContent">
         <h1><?php echo $title; ?></h1>
-		<form method="post" action="<?php echo site_url(array('admin', 'options')); ?>">
+		<form method="post" action="<?php echo site_url(array('admin', 'options', 'save')); ?>">
 			<table>
 				<tr>
 					<th><?php echo $lang->line('system_options_name'); ?></th>

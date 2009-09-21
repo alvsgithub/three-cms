@@ -1,23 +1,21 @@
 <div id="content">
 	<div id="innerContent">
         <h1><?php echo $title; ?></h1>
-		<form method="post" action="<?php echo site_url(array('admin', 'languages', 'save')); ?>">
+		<form method="post" action="<?php echo site_url(array('admin', 'locales', 'save')); ?>">
 			<table>
 				<tr>
-					<th><?php echo $lang->line('system_language_name'); ?></th>
+					<th><?php echo $lang->line('system_locale_name'); ?></th>
 					<td><input type="text" name="name" value="<?php echo $values['name']; ?>" /></td>
 				</tr>
-				<tr>
-					<th><?php echo $lang->line('system_language_code'); ?></th>
-					<td><input type="text" name="code" value="<?php echo $values['code']; ?>" maxlength="2" /></td>
+				<tr class="delimiter">
+					<td colspan="2">&nbsp;</td>
 				</tr>
+				<?php foreach($locales as $locale) { ?>
 				<tr>
-					<th><?php echo $lang->line('system_language_active'); ?></th>
-					<td>
-						<?php $checked = $values['active']==1 ? 'checked="checked"' : ''; ?>
-						<input type="checkbox" name="active" <?php echo $checked; ?> />
-					</td>
+					<th><?php echo ucfirst($locale['name']); ?>:</th>
+					<td><input type="text" name="language_<?php echo $locale['id']; ?>" value="<?php echo $locale['value']; ?>" /></td>
 				</tr>
+				<?php } ?>
 				<tr class="delimiter">
 					<td colspan="2">&nbsp;</td>
 				</tr>
