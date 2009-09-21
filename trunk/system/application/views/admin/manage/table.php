@@ -7,12 +7,15 @@
                 <?php foreach($tableHeaders as $header) { ?>
                 <th><?php echo ucfirst($header); ?></th> 
                 <?php } ?>
-                <th><?php echo $lang->line('default_actions'); ?></th>
+                <th class="actions"><?php echo $lang->line('default_actions'); ?></th>
             </tr>
             <?php foreach($tableData->result_array() as $data) { ?>
             <tr>
                 <?php foreach($data as $value) { ?>
-                <td><?php echo $value; ?></td>
+                <td><?php
+                    // TODO: With options, set language support for the options' type-field:
+                    echo $value;                    
+                    ?></td>
                 <?php } ?>
                 <td>
                     <?php

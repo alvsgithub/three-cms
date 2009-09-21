@@ -52,6 +52,7 @@ class Admin extends Controller
         // Get the item to manage:
         $action = $this->uri->segment(3);
         // Show the data:
+		// SubForm is used to show secondary data (linked tables for instance)
         switch($action) {
             case 'templates':
                 {
@@ -135,6 +136,10 @@ class Admin extends Controller
         $action    = $this->uri->segment(4);
         // See if there is a POST done:
         if(!empty($_POST)) {
+			// See if there was a subForm:
+			if($this->input->post('subForm')!=false) {
+				
+			}
             $this->AdminModel->scaffoldSave();
         } else {
             if($action!=false) {
@@ -188,39 +193,50 @@ class Admin extends Controller
 		switch($tableName) {
 			case 'templates' :
 				{
-					
+                    $scaffoldData = $this->AdminModel->createScaffoldTable('templates', 'name,id_dataobject,templatefile', 'templates', $id);
+                    $name         = $this->lang->line('name_template');
+					$subForm      = false;
 					break;
 				}
 			case 'dataobjects' :
 				{
-					
+                    $scaffoldData = $this->AdminModel->createScaffoldTable('dataobjects', 'name', 'dataobjects', $id);
+                    $name         = $this->lang->line('name_data_object');
+					$subForm      = false;
 					break;
 				}
 			case 'options' :
 				{
-					
+                    $scaffoldData = $this->AdminModel->createScaffoldTable('options', 'name,type,multilanguage', 'options', $id);
+                    $name         = $this->lang->line('name_option');
+					$subForm      = false;
 					break;
 				}
 			case 'languages' :
 				{
-                    $scaffoldData = $this->AdminModel->createScaffoldTable('languages','name,code,active', $id);
-                    $name  = $this->lang->line('name_language');
-                    if($id==0) {
-                        $title = str_replace('%s', $name, $this->lang->line('title_add_new_item'));
-                    } else {
-                        $title = str_replace('%s', $name, $this->lang->line('title_modify_item'));
-                    }
+                    $scaffoldData = $this->AdminModel->createScaffoldTable('languages', 'name,code,active', 'languages', $id);
+                    $name         = $this->lang->line('name_language');
+					$subForm      = false;
 					break;
 				}
 			case 'locales' :
 				{
-					
+					$scaffoldData = $this->AdminModel->createScaffoldTable('locales', 'name', 'locales', $id);
+					$name         = $this->lang->line('name_locale');
+					$subForm      = $this->AdminModel->getLocaleTable($id);
 					break;
 				}
 		}
+		if($id==0) {
+			$title = str_replace('%s', $name, $this->lang->line('title_add_new_item'));
+		} else {
+			$title = str_replace('%s', $name, $this->lang->line('title_modify_item'));
+		}
         // Add language:
-        $scaffoldData['lang']  = $this->lang;
-        $scaffoldData['title'] = $title;
+        $scaffoldData['lang']    = $this->lang;
+        $scaffoldData['title']   = $title;
+		$scaffoldData['subForm'] = $subForm;
+
         // Load the scaffolding view:
         if(isset($scaffoldData)) {
             $this->load->view('admin/manage/scaffold.php', $scaffoldData);

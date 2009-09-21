@@ -10,6 +10,11 @@ $(function(){
 	
 	// Tree:
 	initializeTree();
+	
+	// Delete link:
+	$("a.delete").click(function(){
+		return confirm(dialog_delete);
+	});
 });
 
 function initializeTree()
