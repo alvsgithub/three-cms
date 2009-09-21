@@ -124,6 +124,124 @@ class Admin extends Controller
         $this->showFooter();
     }
     
+	function templates()
+	{
+		
+	}
+	
+	function dataobjects()
+	{
+		
+	}
+	
+	function options()
+	{
+        $this->showHeader();
+		$this->showTree();
+		$action = $this->uri->segment(3);
+		$id     = $this->uri->segment(4);
+		
+		// Language part
+		// See if there should be something saved:
+		if($this->input->post('id')!==false) {			
+			$data = array(
+				'id'=>$this->input->post('id'),
+				'name'=>$this->input->post('name'),
+				'type'=>$this->input->post('type'),
+				'default_value'=>$this->input->post('default_value'),
+				'multilanguage'=>isset($_POST['multilanguage']) ? 1 : 0
+			);
+			$this->AdminModel->saveOption($data);
+			redirect(site_url(array('admin', 'manage', 'options')));
+		}
+		// See if there should be something deleted:
+		if($action=='delete') {
+			if($id!=false) {
+				$this->AdminModel->deleteOption($id);
+				redirect(site_url(array('admin', 'manage', 'options')));
+			}
+		}
+		// See if there should be something duplicated:
+		if($action=='duplicate') {
+			if($id!=false) {
+				$this->AdminModel->duplicateOption($id);
+				redirect(site_url(array('admin', 'manage', 'options')));
+			}
+		}
+		// Show the languages form:
+		$name = $this->lang->line('name_option');
+		$data = array(
+			'lang'=>$this->lang
+		);
+		if($id==false) {
+			$title = str_replace('%s', $name, $this->lang->line('title_add_new_item'));
+		} else {
+			$title = str_replace('%s', $name, $this->lang->line('title_modify_item'));
+		}
+		$data['title']  = $title;
+		$data['values'] = $this->AdminModel->getOption($id);
+		$this->load->view('admin/options/add_edit.php', $data);
+		// End languages part
+		
+        $this->showFooter();
+	}
+	
+	function languages()
+	{
+        $this->showHeader();
+		$this->showTree();
+		$action = $this->uri->segment(3);
+		$id     = $this->uri->segment(4);
+		
+		// Language part
+		// See if there should be something saved:
+		if($this->input->post('id')!==false) {			
+			$data = array(
+				'id'=>$this->input->post('id'),
+				'name'=>$this->input->post('name'),
+				'code'=>$this->input->post('code'),
+				'active'=>isset($_POST['active']) ? 1 : 0
+			);
+			$this->AdminModel->saveLanguage($data);
+			redirect(site_url(array('admin', 'manage', 'languages')));
+		}
+		// See if there should be something deleted:
+		if($action=='delete') {
+			if($id!=false) {
+				$this->AdminModel->deleteLanguage($id);
+				redirect(site_url(array('admin', 'manage', 'languages')));
+			}
+		}
+		// See if there should be something duplicated:
+		if($action=='duplicate') {
+			if($id!=false) {
+				$this->AdminModel->duplicateLanguage($id);
+				redirect(site_url(array('admin', 'manage', 'languages')));
+			}
+		}
+		// Show the languages form:
+		$name = $this->lang->line('name_language');
+		$data = array(
+			'lang'=>$this->lang
+		);
+		if($id==false) {
+			$title = str_replace('%s', $name, $this->lang->line('title_add_new_item'));
+		} else {
+			$title = str_replace('%s', $name, $this->lang->line('title_modify_item'));
+		}
+		$data['title']  = $title;
+		$data['values'] = $this->AdminModel->getLanguage($id);
+		$this->load->view('admin/languages/add_edit.php', $data);
+		// End languages part
+		
+        $this->showFooter();
+	}
+	
+	function locales()
+	{
+		
+	}
+	
     /**
      * Default scaffolding functionality
      */
