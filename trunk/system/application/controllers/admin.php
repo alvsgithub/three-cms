@@ -449,145 +449,6 @@ class Admin extends Controller
 		}
 	}
 	
-    /**
-     * Default scaffolding functionality
-     */
-	/*
-    function scaffold()
-    {
-        $this->showHeader();
-		$this->showTree();
-        // Get the item to scffold:
-        $tableName = $this->uri->segment(3);
-        $action    = $this->uri->segment(4);
-        // See if there is a POST done:
-        if(!empty($_POST)) {
-			// See if there was a subForm:
-			if($this->input->post('subForm')!=false) {
-				
-			}
-            $this->AdminModel->scaffoldSave();
-        } else {
-            if($action!=false) {
-                switch($action) {
-                    case 'add' :
-                        {
-                            // TODO: Add functionality
-                            $this->addModify($tableName);
-                            break;
-                        }
-                    case 'edit' :
-                        {
-                            // TODO: Edit functionality
-                            $id = $this->uri->segment(5);
-                            $id = $id != false ? $id : 0;
-                            $this->addModify($tableName, $id);
-                            break;
-                        }
-                    /*
-                    case 'delete' :
-                        {
-                            // TODO: Delete functionality
-                            $this->delete($tableName);
-                            break;
-                        }
-                    case 'duplicate' :
-                        {
-                            // TODO: Duplicate functionality
-                            $this->duplicate($tableName);
-                            break;
-                        }
-                    */
-					/*
-                }
-            } else {
-                $data = array(
-                    'lang'=>$this->lang
-                );
-                $this->load->view('admin/manage/notfound.php', $data);
-            }
-        }
-        $this->showFooter();
-    }
-					*/
-    /**
-     * Show the add- or modify form, based on scaffolding technique
-     * @param   $tableName  string  The name of the table
-     * @param   $id         int     The id (in case of modify)
-     */
-	/*
-	function addModify($tableName, $id=0)
-	{
-		switch($tableName) {
-			case 'templates' :
-				{
-                    $scaffoldData = $this->AdminModel->createScaffoldTable('templates', 'name,id_dataobject,templatefile', 'templates', $id);
-                    $name         = $this->lang->line('name_template');
-					$subForm      = false;
-					break;
-				}
-			case 'dataobjects' :
-				{
-                    $scaffoldData = $this->AdminModel->createScaffoldTable('dataobjects', 'name', 'dataobjects', $id);
-                    $name         = $this->lang->line('name_data_object');
-					$subForm      = false;
-					break;
-				}
-			case 'options' :
-				{
-                    $scaffoldData = $this->AdminModel->createScaffoldTable('options', 'name,type,multilanguage', 'options', $id);
-                    $name         = $this->lang->line('name_option');
-					$subForm      = false;
-					break;
-				}
-			case 'languages' :
-				{
-                    $scaffoldData = $this->AdminModel->createScaffoldTable('languages', 'name,code,active', 'languages', $id);
-                    $name         = $this->lang->line('name_language');
-					$subForm      = false;
-					break;
-				}
-			case 'locales' :
-				{
-					$scaffoldData = $this->AdminModel->createScaffoldTable('locales', 'name', 'locales', $id);
-					$name         = $this->lang->line('name_locale');
-					$subForm      = $this->AdminModel->getLocaleTable($id);
-					break;
-				}
-		}
-		if($id==0) {
-			$title = str_replace('%s', $name, $this->lang->line('title_add_new_item'));
-		} else {
-			$title = str_replace('%s', $name, $this->lang->line('title_modify_item'));
-		}
-        // Add language:
-        $scaffoldData['lang']    = $this->lang;
-        $scaffoldData['title']   = $title;
-		$scaffoldData['subForm'] = $subForm;
-
-        // Load the scaffolding view:
-        if(isset($scaffoldData)) {
-            $this->load->view('admin/manage/scaffold.php', $scaffoldData);
-        }
-	}
-	*/
-	/*
-	function modify($tableName)
-	{
-		
-	}
-	*/
-	/*
-	function duplicate()
-	{
-		
-	}
-	
-	function delete()
-	{
-		
-	}
-	*/
 	/**
 	 * AJAX Calls are done here
 	 */
@@ -619,6 +480,20 @@ class Admin extends Controller
 						}
 						$this->load->view('admin/ajax/show_options.php', array('optionData'=>$optionData));
 					}
+					break;
+				}
+			case 'page_summary' :
+				{
+					$id = $this->uri->segment(4);
+					if($id!=false) {
+						$content = $this->AdminModel->getContent($id);
+						$data = array(
+							'content'=>$content,
+							'lang'=>$this->lang							
+						);
+						$this->load->view('admin/ajax/page_summary.php', $data);
+					}
+					break;
 				}
 		}
 	}

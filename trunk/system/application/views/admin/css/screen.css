@@ -43,6 +43,8 @@ table a { display: inline-block; width: 16px; height: 16px; text-indent: -1000em
 table a.edit      { background: url(../images/icons/icon-edit.png); }
 table a.duplicate { background: url(../images/icons/icon-copy.png); }
 table a.delete    { background: url(../images/icons/icon-delete.png); }
+table a.move      { background: url(../images/icons/icon-move.png); }
+td.content_actions a { text-indent: 0; padding: 5px; padding-left: 26px; width: auto; background-position: 5px 5px; background-repeat: no-repeat; margin-right: 5px; background-color: #ccc; color: #fff; font-weight: bold; text-shadow: #000000 0 0 3px; text-decoration: none; border: 1px solid #999; }
 
 table input[type=text] { width: 300px; }
 textarea { width: 400px; height: 100px; }
