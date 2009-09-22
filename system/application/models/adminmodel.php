@@ -59,6 +59,7 @@ class AdminModel extends Model
      * @param   $id         int     The ID of the item to retrieve
      * @param   $return     string  The name of the item to return to
      */
+    /*
     function createScaffoldTable($tableName, $fields, $return='', $id=0)
     {
         $scaffold            = array();
@@ -135,10 +136,11 @@ class AdminModel extends Model
         $scaffold['items'] = $items;        
         return($scaffold);
     }
-    
+    */
     /**
      * Default scaffolding save-function
      */
+    /*
     function scaffoldSave()
     {
         // See if the table and the action are set
@@ -257,7 +259,7 @@ class AdminModel extends Model
             
         }
     }
-    
+    */
     
     /**
      * Generic getData function
@@ -672,6 +674,27 @@ class AdminModel extends Model
     function duplicateDataObject($id)
     {
         // TODO
+    }
+    
+    /**
+     * Get information about the content object
+     * @param   $id int The ID of the content object
+     * @return  array   An array with information
+     */
+    function getContent($id)
+    {
+        $this->db->select('
+            content.id     as id,
+            content.name   as name,
+            content.alias  as alias,
+            templates.name as templateName
+        ');
+        $this->db->where('content.id', $id);
+        $this->db->join('templates', 'content.id_template = templates.id');
+        $query = $this->db->get('content');
+        
+        $result = $query->result_array();
+        return $result[0];
     }
 }
 ?>

@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Sep 21, 2009 at 05:28 PM
+-- Generation Time: Sep 22, 2009 at 02:13 PM
 -- Server version: 5.1.33
 -- PHP Version: 5.2.9-2
 
@@ -32,7 +32,7 @@ CREATE TABLE IF NOT EXISTS `content` (
   `name` tinytext NOT NULL,
   `alias` tinytext NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=6 ;
 
 --
 -- Dumping data for table `content`
@@ -41,7 +41,9 @@ CREATE TABLE IF NOT EXISTS `content` (
 INSERT INTO `content` (`id`, `id_content`, `id_template`, `name`, `alias`) VALUES
 (1, 0, 1, 'Test pagina', 'test'),
 (2, 1, 2, 'Blok 1', 'blok1'),
-(3, 1, 2, 'Blok 2', 'blok2');
+(3, 1, 2, 'Blok 2', 'blok2'),
+(4, 2, 2, 'Blok 1.1', 'blok-1-1'),
+(5, 2, 2, 'Blok 1.2', 'blok-1-2');
 
 -- --------------------------------------------------------
 
@@ -75,18 +77,19 @@ CREATE TABLE IF NOT EXISTS `dataobjects_options` (
   `id_option` int(11) NOT NULL,
   `order` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=43 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=47 ;
 
 --
 -- Dumping data for table `dataobjects_options`
 --
 
 INSERT INTO `dataobjects_options` (`id`, `id_dataobject`, `id_option`, `order`) VALUES
+(46, 1, 6, 3),
 (39, 2, 2, 1),
 (38, 2, 1, 0),
-(42, 1, 3, 2),
-(41, 1, 2, 1),
-(40, 1, 1, 0);
+(45, 1, 3, 2),
+(44, 1, 2, 1),
+(43, 1, 1, 0);
 
 -- --------------------------------------------------------
 
@@ -178,16 +181,17 @@ CREATE TABLE IF NOT EXISTS `options` (
   `default_value` text NOT NULL,
   `multilanguage` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=6 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=7 ;
 
 --
 -- Dumping data for table `options`
 --
 
 INSERT INTO `options` (`id`, `name`, `type`, `default_value`, `multilanguage`) VALUES
-(1, 'title', 'small_text', '', 0),
+(1, 'title', 'small_text', '', 1),
 (2, 'header', 'small_text', '', 1),
-(3, 'content', 'small_text', '', 1);
+(3, 'content', 'rich_text', '', 1),
+(6, 'headerImage', 'image', '', 0);
 
 -- --------------------------------------------------------
 

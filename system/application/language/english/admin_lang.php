@@ -45,6 +45,7 @@
     $lang['action_modify']          = 'Modify';
     $lang['action_duplicate']       = 'Duplicate';
     $lang['action_delete']          = 'Delete';
+	$lang['action_move']			= 'Move';
     
     // Button titles:
     $lang['button_add_new_item']    = 'Add a new %s...';    
@@ -84,6 +85,11 @@
 	$lang['system_template_file']	= 'Template File';
 	$lang['system_dataobject_name']	= 'Name';
 	$lang['system_dataobject_linked']	= 'Linked Options';
+
+	$lang['content_id']				= 'ID';
+	$lang['content_name']			= 'Name';
+	$lang['content_template']		= 'Template';
+	$lang['content_alias']			= 'Alias';
 
     // Default text chunks:
     $lang['default_actions']        = 'Actions';

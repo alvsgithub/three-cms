@@ -19,21 +19,26 @@ $(function(){
 
 function initializeTree()
 {
-	$("#tree li.hasChildren span.name").click(function(){
-		parent = $(this).parent();
-		// See if there is content:		
-		if($('div.innerTree', parent).length == 0) {
-			parent.append('<div class="innerTree">'+ajaxLoader+'</div>');
-			parent.addClass("open");
-			id = $('span.id var', parent).text();	// The ID of this content item
-			// Load the tree:
-			$.get(baseURL + 'index.php/admin/ajax/tree/'+id, function(data) {
-				$("div.innerTree").html(data);
-			});
-		} else {
-			// Close:
-			parent.removeClass("open");
-			$("div.innerTree", parent).remove();
+	$("#tree span.name").unbind("click");
+	$("#tree span.name").click(function(){
+		parent = $(this).parent();		
+		id     = $('span.id:first var', parent).text();	// The ID of this content item		
+		if(parent.hasClass("hasChildren")) {
+			// See if there is content:		
+			if($('div.innerTree', parent).length == 0) {
+				parent.append('<div class="innerTree">'+ajaxLoader+'</div>');
+				parent.addClass("open");
+				// Load the tree:
+				$.get(baseURL + 'index.php/admin/ajax/tree/'+id, function(data) {
+					$("div.innerTree", parent).html(data);
+					initializeTree();
+				});
+			} else {
+				// Close:
+				parent.removeClass("open");
+				$("div.innerTree", parent).remove();
+			}
 		}
+		$("#content").load(baseURL + 'index.php/admin/ajax/page_summary/'+id);
 	});
 }
