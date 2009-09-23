@@ -23,16 +23,23 @@ class AdminModel extends Model
             B.`id_content` = A.`id`;
         ';
         */
-        $sql = 'SELECT `id`,`name` FROM `content` WHERE `id_content` = '.$startID.';';        
-        $query = $this->db->query($sql);
+        // $sql = 'SELECT `id`,`name` FROM `content` WHERE `id_content` = '.$startID.';';
+        $this->db->where('id_content', $startID);
+        $this->db->select('id,name');
+        $query = $this->db->get('content');
+        // $query = $this->db->query($sql);
         foreach($query->result() as $result) {
-            $sql = 'SELECT COUNT(*) AS `numChildren` FROM `content` WHERE `id_content` = '.$result->id.';';
-            $innerQuery = $this->db->query($sql);
-            $innerResult = $innerQuery->result();
+            // $sql = 'SELECT COUNT(*) AS `numChildren` FROM `content` WHERE `id_content` = '.$result->id.';';
+            $this->db->where('id_content', $result->id);
+            $this->db->from('content');
+            $numChildren = $this->db->count_all_results();
+            // $innerQuery = $this->db->query($sql);
+            // $innerResult = $innerQuery->result();
             $item = array(
                 'id'=>$result->id,
                 'name'=>$result->name,
-                'numChildren'=>$innerResult[0]->numChildren
+                // 'numChildren'=>$innerResult[0]->numChildren
+                'numChildren'=>$numChildren
             );
             array_push($tree, $item);
         }
@@ -51,215 +58,6 @@ class AdminModel extends Model
         $query = $this->db->get($tableName);
         return $query;
     }
-    
-    /**
-     * Create a scaffold table
-     * @param   $tableName  string  The name of the table
-     * @param   $fields     string  The values to retrieve, comma-seperated
-     * @param   $id         int     The ID of the item to retrieve
-     * @param   $return     string  The name of the item to return to
-     */
-    /*
-    function createScaffoldTable($tableName, $fields, $return='', $id=0)
-    {
-        $scaffold            = array();
-        $showFields          = explode(',', $fields);
-        $scaffold['table']   = $tableName;
-        $scaffold['id']      = $id;
-        $scaffold['return']  = $return;
-        
-        $sql = 'DESCRIBE `'.$tableName.'`;';
-        $query = $this->db->query($sql);
-        
-        if($id!=0) {
-            $sql = 'SELECT * FROM `'.$tableName.'` WHERE `id` = '.$id;
-            $resultQuery = $this->db->query($sql);
-            $values = $resultQuery->result_array();
-            $scaffold['action'] = 'edit';
-        } else {
-            $values = array(array());
-            $scaffold['action'] = 'add';
-        }        
-        $items = array();
-        
-        foreach($query->result() as $result) {
-            $item = array(
-                'name'=>$result->Field,
-                'value'=>$result->Default,
-                'type'=>$result->Type
-            );
-            if(array_key_exists($item['name'], $values[0])) {
-                $item['value'] = $values[0][$item['name']];                
-            }
-            $typeArray = explode('(', str_replace(')', '', $item['type']));
-            $item['type']        = $typeArray[0];
-            $item['type_length'] = isset($typeArray[1]) ? $typeArray[1] : 0;
-            switch($item['type']) {
-                case 'int' :
-                case 'tinytext' :
-                case 'varchar' :
-                    {
-                        $inputType = 'text';
-                        break;
-                    }
-                case 'tinyint' :
-                    {
-                        if($item['type_length']==1) {
-                            // Bool
-                            $inputType = 'checkbox';                            
-                        } else {
-                            $inputType = 'text'; 
-                        }
-                        break;
-                    }
-                case 'enum' :
-                    {
-                        $options = explode(',', str_replace('\'', '', $item['type_length']));
-                        $item['type_length'] = count($options);
-                        $item['options'] = $options;
-                        $inputType = 'select';
-                        break;
-                    }
-                default :
-                    {
-                        $inputType = 'text';
-                        break;
-                    }
-            }
-            if(!in_array($item['name'], $showFields)) {
-                $inputType = 'hidden';
-            }
-            $item['input_type'] = $inputType;
-            array_push($items, $item);
-        }
-        
-        $scaffold['items'] = $items;        
-        return($scaffold);
-    }
-    */
-    /**
-     * Default scaffolding save-function
-     */
-    /*
-    function scaffoldSave()
-    {
-        // See if the table and the action are set
-        $tableName = $this->input->post('three_table');
-        $action    = $this->input->post('three_action');
-        $return    = $this->input->post('three_return');
-        // Only execute of tableName and action are set:
-        if($tableName!=false && $action!=false && $return!=false) {
-            // Save the data:
-            $sql   = 'DESCRIBE `'.$tableName.'`;';
-            $query = $this->db->query($sql);
-            // Create items-array:
-            $items = array();
-            foreach($query->result() as $result) {
-                // If the name of the field is 'id' then don't put it in the items-array, since it is a primary key:
-                if($result->Field!='id') {
-                    $item = array(
-                        'name'=>$result->Field,
-                        'value'=>$result->Default,
-                        'type'=>$result->Type
-                    );
-                    $typeArray = explode('(', str_replace(')', '', $item['type']));
-                    $item['type']        = $typeArray[0];
-                    $item['type_length'] = isset($typeArray[1]) ? $typeArray[1] : 0;
-                    // Set the values, according to the types:
-                    switch($item['type']) {
-                        case 'int' :
-                        case 'tinytext' :
-                        case 'varchar' :
-                            {
-                                if($this->input->post($item['name'])!=false) {
-                                    $item['value'] = $this->input->post($item['name']);
-                                }
-                                break;
-                            }
-                        case 'tinyint' :
-                            {
-                                if($item['type_length']==1) {
-                                    // Bool
-                                    $item['value'] = isset($_POST[$item['name']]) ? 1 : 0;
-                                } else {
-                                    if($this->input->post($item['name'])!=false) {
-                                        $item['value'] = $this->input->post($item['name']);
-                                    }
-                                }
-                                break;
-                            }
-                        default :
-                            {
-                                if($this->input->post($item['name'])!=false) {
-                                    $item['value'] = $this->input->post($item['name']);
-                                }
-                                break;
-                            }
-                    }
-                    // Add the item to the array with items
-                    array_push($items, $item);
-                }
-            }
-            // See if this is an add- or a edit-action
-            if($action=='add') {
-                // Insert new record in the database:
-                $sql = 'INSERT INTO `'.$tableName.'` (';
-                $first = true;
-                foreach($items as $item) {
-                    if($item['value']!=='') {
-                        if(!$first) {
-                            $sql .= ', ';
-                        }
-                        $sql .= '`'.$item['name'].'`';
-                        $first = false;
-                    }
-                }
-                $sql.= ') VALUES (';
-                $first = true;
-                foreach($items as $item) {
-                    if($item['value']!=='') {
-                        if(!$first) {
-                            $sql .= ', ';
-                        }
-                        $sql .= '\''.$item['value'].'\'';
-                        $first = false;
-                    }
-                }
-                $sql.= ');';
-            } elseif($action=='edit') {
-                // Update record:
-                $id  = $this->input->post('id');
-                if($id!=false) {
-                    $sql = 'UPDATE `'.$tableName.'` SET ';
-                    $first = true;
-                    foreach($items as $item) {
-                        // Cannot use empty() because '0' can also be a value
-                        if($item['value']!=='') {
-                            if(!$first) {
-                                $sql .= ', ';
-                            }
-                            $sql .= '`'.$item['name'].'`=\''.$item['value'].'\'';
-                            $first = false;
-                        }
-                    }                    
-                    $sql.= ' WHERE `id` = '.$id.';';
-                } else {
-                    // TODO Show error if no ID is sent
-                    
-                }
-            } else {
-                // TODO Show error if action is not add or edit
-                
-            }            
-            $this->db->query($sql);
-            // Redirect to the correct page:
-            redirect(site_url(array('admin', 'manage', $return)));
-        } else {
-            // TODO Show error if no tablename, action or return value are set
-            
-        }
-    }
-    */
     
     /**
      * Generic getData function
@@ -319,134 +117,14 @@ class AdminModel extends Model
     }
     
     /**
-     * Get a language
-     * @param $id   int The ID of the language
-     * @return array
-     */
-    /*
-    function getLanguage($id) {
-        // If ID is empty or 0, return an empty result set:
-        if($id==false || $id==0) {
-            return array(
-                'name'=>'',
-                'code'=>'',
-                'active'=>'',
-                'id'=>0
-            );
-        }
-        $this->db->where('id', $id);
-        $query = $this->db->get('languages');
-        $array = $query->result_array();
-        return $array[0];
-    }
-    */
-    
-    /**
-     * Save a language by using the post-vars
-     * @param   $data   An array holding the data
-     * @return  int     The ID of the inserted value;
-     */
-    /*
-    function saveLanguage($data)
-    {
-        if($data['id']==0) {
-            // Insert
-            unset($data['id']);
-            $this->db->insert('languages', $data);
-            $id = $this->db->insert_id();
-        } else {
-            // Update
-            $id = $data['id'];
-            $this->db->where('id', $id);
-            unset($data['id']);
-            $this->db->update('languages', $data);
-        }
-        return $id;
-    }
-    */
-    
-    /**
-     * Delete a language
-     * @param   $id int The ID of the language to delete
-     */
-    /*
-    function deleteLanguage($id)
-    {
-        $this->db->delete('languages', array('id'=>$id));
-        $this->db->delete('values', array('id_language'=>$id));
-        $this->db->delete('locales_values', array('id_language'=>$id));
-    }
-    */
-    
-    /**
      * Duplicate a language
      * @param   $id int The ID of the language to duplicate
      */
     function duplicateLanguage($id)
     {
         // TODO
+        
     }
-    
-    /**
-     * Get an option
-     * @param $id   int The ID of the option
-     * @return array
-     */
-    /*
-    function getOption($id) {
-        // If ID is empty or 0, return an empty result set:
-        if($id==false || $id==0) {
-            return array(
-                'name'=>'',
-                'type'=>'',
-                'default_value'=>'',
-                'multilanguage'=>'',
-                'id'=>0
-            );
-        }
-        $this->db->where('id', $id);
-        $query = $this->db->get('options');
-        $array = $query->result_array();
-        return $array[0];
-    }
-    */
-    
-    /**
-     * Save an option by using the post-vars
-     * @param   $data   An array holding the data
-     * @return  int     The ID of the inserted value;
-     */
-    /*
-    function saveOption($data)
-    {
-        if($data['id']==0) {
-            // Insert
-            unset($data['id']);
-            $this->db->insert('options', $data);
-            $id = $this->db->insert_id();
-        } else {
-            // Update
-            $id = $data['id'];
-            $this->db->where('id', $id);
-            unset($data['id']);
-            $this->db->update('options', $data);
-        }
-        return $id;
-    }
-    */
-    
-    /**
-     * Delete an option
-     * @param   $id int The ID of the option to delete
-     */
-    /*
-    function deleteOption($id)
-    {
-        $this->db->delete('options', array('id'=>$id));
-        $this->db->delete('values', array('id_option'=>$id));
-        $this->db->delete('dataobject_options', array('id_option'=>$id));
-    }
-    */
     
     /**
      * Duplicate an option
@@ -455,64 +133,8 @@ class AdminModel extends Model
     function duplicateOption($id)
     {
         // TODO
+        
     }
-    
-    /**
-     * Get a locale
-     * @param   $id int The ID of the locale
-     * @return  array   An array with data
-     */
-    /*
-    function getLocale($id) {
-        // If ID is empty or 0, return an empty result set:
-        if($id==false || $id==0) {
-            return array(
-                'name'=>'',
-                'id'=>0
-            );
-        }
-        $this->db->where('id', $id);
-        $query = $this->db->get('locales');
-        $array = $query->result_array();
-        return $array[0];
-    }
-    */
-    
-    /**
-     * Save a locale by using the post-vars
-     * @param   $data   An array holding the data
-     * @return  int     The ID of the inserted value;
-     */
-    /*
-    function saveLocale($data)
-    {
-        if($data['id']==0) {
-            // Insert
-            unset($data['id']);
-            $this->db->insert('locales', $data);
-            $id = $this->db->insert_id();            
-        } else {
-            // Update
-            $id = $data['id'];
-            $this->db->where('id', $id);
-            unset($data['id']);
-            $this->db->update('locales', $data);
-        }
-        return $id;
-    }
-    */
-    
-    /**
-     * Delete a locale
-     * @param   $id int The ID of the locale to delete
-     */
-    /*
-    function deleteLocale($id)
-    {
-        $this->db->delete('locales', array('id'=>$id));
-        $this->db->delete('locales_values', array('id_locale'=>$id));
-    }
-    */
     
     /**
      * Duplicate a locale
@@ -521,6 +143,7 @@ class AdminModel extends Model
     function duplicateLocale($id)
     {
         // TODO
+        
     }
     
     /**
@@ -583,6 +206,7 @@ class AdminModel extends Model
     function duplicateTemplate($id)
     {
         // TODO
+        
     }
     
     /**
@@ -674,6 +298,49 @@ class AdminModel extends Model
     function duplicateDataObject($id)
     {
         // TODO
+        
+    }
+    
+    /**
+     * Get a list of templates and if these are allowed to be a child of the current template
+     * @param   $id int The ID of the current template
+     * @return  array   A 2-dimensional array with the templates: [[id=int, allowed=bool], ...]
+     */
+    function getChildTemplates($id=0)
+    {
+        $templates = array();
+        $this->db->select('id,name');
+        $query = $this->db->get('templates');
+        foreach($query->result() as $result) {
+            if($id!=0 && $id!=false) {
+                $this->db->where('id_template', $id);
+                $this->db->where('id_child_template', $result->id);
+                $this->db->from('templates_allowed_children');
+                $allowed = $this->db->count_all_results()==1;
+            } else {
+                $allowed = false;
+            }
+            $item = array('id'=>$result->id, 'name'=>$result->name, 'allowed'=>$allowed);
+            array_push($templates, $item);
+        }
+        return $templates;
+    }
+    
+    /**
+     * Set the templates which are allowed to be a child of the current template
+     * @param   $id         int     The ID of the template
+     * @param   $templates  array   A 2-dimensional array with the templates: [[id=int, allowed=bool], ...]
+     */
+    function saveChildTemplates($id, $templates)
+    {
+        // First delete all links
+        $this->db->delete('templates_allowed_children', array('id_template'=>$id));
+        // Then add new ones:
+        foreach($templates as $item) {
+            if($item['allowed']) {
+                $this->db->insert('templates_allowed_children', array('id_template'=>$id, 'id_child_template'=>$item['id']));
+            }
+        }
     }
     
     /**
@@ -696,5 +363,89 @@ class AdminModel extends Model
         $result = $query->result_array();
         return $result[0];
     }
+    
+    /**
+     * Get the content data
+     * @param   $id int The ID of the content to retrieve. Give 0 or false to get a empty array
+     * @return  array   An array holding all the information of this content
+     */
+    function getContentData($id)
+    {
+        if($id!=0 && $id!=false) {
+            $this->db->where('id', $id);
+            $query = $this->db->get('content');
+            $resultArray = $query->result_array();
+            $contentData = $resultArray[0];
+        } else {
+            $contentData = $this->db->list_fields('content');
+        }
+        
+        // Get the languages:
+        $languages = array();
+        $query = $this->db->get('languages');
+        foreach($query->result_array() as $resultArray) {
+            array_push($languages, $resultArray);
+        }
+        $contentData['languages'] = $languages;
+        
+        // Get the options and their values associated with this content:
+        $content = array();
+        /*
+        $this->db->select('id_option');
+        $this->db->join('templates', 'content.id_template = templates.id');
+        $this->db->join('dataobjects_options', 'dataobjects_options.id_dataobject = templates.id_dataobject');
+        $query = $this->db->get('dataobjects_options');
+        */
+        
+        // TODO: Make this query Active Record Style:
+        $sql = 'SELECT A.`id_option`, C.`name`, C.`type`, C.`default_value`, C.`multilanguage` FROM
+            `dataobjects_options` A,
+            `templates` B,
+            `options` C
+                WHERE
+            B.`id` = '.$contentData['id_template'].' AND
+            A.`id_dataobject` = B.`id_dataobject` AND
+            C.`id` = A.`id_option`
+        ';
+        $query = $this->db->query($sql);
+        
+        foreach($query->result_array() as $result) {
+            // Get the values by this option. This is done with the multilanguage aspect:
+            /*
+            $this->db->select('id_language,value');
+            $this->db->where('id_option', $result['id_option']);
+            $this->db->where('id_content', $id);
+            $valueQuery = $this->db->get('values');
+            $valueArray = $valueQuery->result_array();
+            $result['value'] = $valueArray;
+            */
+            
+            $values = array();
+            foreach($languages as $language) {
+                $this->db->select('value');
+                $this->db->where('id_option', $result['id_option']);
+                $this->db->where('id_content', $id);
+                $this->db->where('id_language', $language['id']);
+                $valueQuery = $this->db->get('values');
+                $valueArray = $valueQuery->result_array();
+                $value      = isset($valueArray[0]) ? $valueArray[0]['value'] : '';                
+                array_push($values, array('id_language'=>$language['id'], 'value'=>$value));                
+            }
+            $result['value'] = $values;
+            
+            array_push($content, $result);
+        }
+        // Make one package:
+        $contentData['content'] = $content;
+        return $contentData;
+    }
+    
+    
+    
+    function saveContentData($id, $contentData)
+    {
+        
+    }
+    
 }
 ?>

@@ -29,6 +29,20 @@
 					<td colspan="2">&nbsp;</td>
 				</tr>
 				<tr>
+					<th><?php echo $lang->line('system_template_allowed'); ?>:</th>
+					<td>
+						<?php
+							foreach($childTemplates as $item) {
+								$checked = $item['allowed'] ? ' checked="checked"' : '';
+								echo '<label class="allowedTemplate"><input type="checkbox" name="allow_template_'.$item['id'].'" '.$checked.' /> '.$item['name'].'</label>';
+							}
+						?>
+					</td>
+				</tr>
+				<tr class="delimiter">
+					<td colspan="2">&nbsp;</td>
+				</tr>
+				<tr>
 					<th>&nbsp;</th>
 					<td>
 						<input type="hidden" name="id" value="<?php echo $values['id']; ?>" />

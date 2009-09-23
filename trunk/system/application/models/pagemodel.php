@@ -12,9 +12,14 @@ class PageModel extends Model
 	 */
 	function countLanguages()
 	{
-		$query = $this->db->query('SELECT COUNT(*) AS `total` FROM `languages` WHERE `active` = 1;');
-		$row = $query->row();
-		return $row->total;
+		// $query = $this->db->query('SELECT COUNT(*) AS `total` FROM `languages` WHERE `active` = 1;');
+		
+		$this->db->where('active', 1);
+		$this->db->from('languages');
+		return $this->db->count_all_results();
+		
+		// $row = $query->row();
+		// return $row->total;
 	}
 	
 	/**
@@ -24,7 +29,13 @@ class PageModel extends Model
 	 */
 	function getLanguageId($code)
 	{
-		$query = $this->db->query('SELECT `id` FROM `languages` WHERE `code` = \''.$code.'\' AND `active` = 1;');
+		// $query = $this->db->query('SELECT `id` FROM `languages` WHERE `code` = \''.$code.'\' AND `active` = 1;');
+		
+		$this->select('id');
+		$this->where('code', $code);
+		$this->where('active', 1);
+		$query = $this->get('languages');
+		
 		if($query->num_rows == 1) {
 			// Return the ID of this language
 			return $query->row()->id;
@@ -86,10 +97,19 @@ class PageModel extends Model
 	 * @return	String
 	 */
 	function getValue($idContent, $idOption, $idLanguage) {
+		/*
 		$query = $this->db->query('SELECT `value` FROM `values`	WHERE
 			`id_content` = '.$idContent.' AND
 			`id_option` = '.$idOption.' AND
 			`id_language` = '.$idLanguage.';');
+		*/
+		
+		$this->db->select('value');
+		$this->db->where('id_content', $idContent);
+		$this->db->where('id_option', $idOption);
+		$this->db->where('id_language', $idLanguage);
+		$query = $this->db->get('values');
+		
 		return $query->row()->value;
 	}
 }

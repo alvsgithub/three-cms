@@ -7,7 +7,8 @@
         <script type="text/javascript">
             var baseURL              = '<?php echo base_url(); ?>';
             var dialog_delete        = '<?php echo $lang->line('dialog_delete'); ?>';
-            var dialog_option_exists = '<?php echo $lang->line('dialog_option_exists'); ?>';
+            var dialog_delete_tree   = '<?php echo $lang->line('dialog_delete_tree'); ?>';
+            var dialog_option_exists = '<?php echo $lang->line('dialog_option_exists'); ?>';            
         </script>
         <script type="text/javascript" src="<?php echo base_url(); ?>system/application/views/admin/js/global.js"></script>
     </head>
