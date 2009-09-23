@@ -39,6 +39,10 @@ function initializeTree()
 				$("div.innerTree", parent).remove();
 			}
 		}
-		$("#content").load(baseURL + 'index.php/admin/ajax/page_summary/'+id);
+		$("#content").load(baseURL + 'index.php/admin/ajax/page_summary/'+id, function(){
+			$("td.content_actions a.delete").click(function(){
+				return confirm(dialog_delete_tree);
+			});
+		});
 	});
 }

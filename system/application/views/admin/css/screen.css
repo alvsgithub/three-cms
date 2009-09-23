@@ -50,6 +50,11 @@ table input[type=text] { width: 300px; }
 textarea { width: 400px; height: 100px; }
 
 a.add { margin: auto; display: block; width: 200px; height: 20px; outline: none; background: #359 url(../images/icons/icon-new.png) 7px 7px no-repeat; font-size: 1.6em; color: #fff; text-decoration: none; padding: 5px; padding-left: 30px; margin-bottom: 1em; font-weight: bold; text-shadow: #000000 0 0 5px; }
+a.addContent { display: block; width: auto; background: url(../images/icons/icon-add.png) no-repeat; color: #359; text-decoration: none; padding: 2px 0 2px 20px; text-indent: 0; }
+a.addContent:hover { color: #333; background-color: #eee; }
+a.switchLanguage { text-indent: 0; width: auto; color: #359; padding: 5px; margin: 0; margin-right: 5px; text-decoration: none; }
+a.switchLanguage:hover { background: #ccc; }
+a.switchLanguage.active { color: #fff; background: #359; }
 
 #footer { float: left; clear: both; height: 30px; border-top: 1px solid #666; width: 100%; }
 
@@ -62,3 +67,5 @@ a.add { margin: auto; display: block; width: 200px; height: 20px; outline: none;
 .options span.remove   { display: block; float: left; width: 22px; height: 22px; text-indent: -1000em; cursor: pointer; background: url(../images/icons/icon-remove.png) no-repeat; }
 .options span.placeHolder { display: block; float: left; width: 22px; height: 22px; }
 .addOption select { width: 300px; }
+
+label.allowedTemplate { margin-bottom: 5px; display: block; }

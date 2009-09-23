@@ -7,6 +7,9 @@ class Admin extends Controller
     {
         parent::Controller();
         
+		// Include default config:
+		include_once(BASEPATH.'application/config/page_config.php');
+		
 		// Load the Session library:
 		$this->load->library('session');
         
@@ -102,10 +105,7 @@ class Admin extends Controller
             default :
                 {
                     // Non existing action
-                    $data = array(
-                        'lang'=>$this->lang
-                    );
-                    $this->load->view('admin/manage/notfound.php', $data);
+                    $this->showNotFound();
                     $this->showFooter();
                     return;
                     break;
@@ -141,7 +141,14 @@ class Admin extends Controller
 						'id_dataobject'=>$this->input->post('id_dataobject'),
 						'templatefile'=>$this->input->post('templatefile')
 					);
-					$this->AdminModel->saveData('templates', $data, $this->input->post('id'));
+					$id = $this->AdminModel->saveData('templates', $data, $this->input->post('id'));
+					// Save the allowed templates:
+					$childTemplates = $this->AdminModel->getChildTemplates($id);
+					for($i=0; $i<count($childTemplates); $i++) {
+						$childTemplates[$i]['allowed'] = isset($_POST['allow_template_'.$childTemplates[$i]['id']]);
+					}
+					$this->AdminModel->saveChildTemplates($id, $childTemplates);
+					// Redirect away:
 					redirect(site_url(array('admin', 'manage', 'templates')));
 					break;
 				}
@@ -177,7 +184,8 @@ class Admin extends Controller
 						'lang'=>$this->lang,
 						'title'=>$title,
 						'values'=>$this->AdminModel->getData('templates', $id),
-						'dataObjects'=>$this->AdminModel->getDataObjects()
+						'dataObjects'=>$this->AdminModel->getDataObjects(),
+						'childTemplates'=>$this->AdminModel->getChildTemplates($id)
 					);
 					$this->showHeader();
 					$this->showTree();
@@ -489,7 +497,8 @@ class Admin extends Controller
 						$content = $this->AdminModel->getContent($id);
 						$data = array(
 							'content'=>$content,
-							'lang'=>$this->lang							
+							'lang'=>$this->lang,
+							'childTemplates'=>$this->AdminModel->getChildTemplates($id)
 						);
 						$this->load->view('admin/ajax/page_summary.php', $data);
 					}
@@ -499,11 +508,83 @@ class Admin extends Controller
 	}
 	
 	/**
+	 * Content editing is done here
+	 */
+	function content()
+	{
+		$this->showHeader();
+		$this->showTree();
+		$action = $this->uri->segment(3);
+		$id     = $this->uri->segment(4);
+		switch($action) {
+			case 'save' :
+				{
+					// TODO
+					
+				}
+			case 'add' :
+				{
+					// TODO
+					$id_template = $this->uri->segment(5);
+					if($id!=false && $id_template!=false) {
+						// In this case, $id is the parent.
+						
+					}
+					break;
+				}
+			case 'edit' :
+				{
+					// TODO					
+					if($id!=false) {
+						$contentData = $this->AdminModel->getContentData($id);
+						$data = array(
+							'lang'=>$this->lang,
+							'contentData'=>$contentData,
+							'title'=>$this->lang->line('title_modify_content')
+						);
+						$this->load->view('admin/content/add_edit.php', $data);
+					}
+					break;
+				}
+			case 'duplicate' :
+				{
+					// TODO
+					if($id!=false) {
+						
+					}
+					break;
+				}
+			case 'move' :
+				{
+					// TODO
+					if($id!=false) {
+						
+					}
+					break;
+				}
+			case 'delete' :
+				{
+					// TODO
+					if($id!=false) {
+						
+					}
+					break;
+				}
+			default :
+				{
+					// Not a valid action
+					$this->showNotFound();
+					break;
+				}
+		}
+		$this->showFooter();
+	}
+	
+	/**
 	 * Show the initial tree
 	 */
     function showTree()
 	{
-		// Show the tree
 		$data = array(
 			'lang'=>$this->lang,
 			'tree'=>$this->AdminModel->getTree()
@@ -516,7 +597,6 @@ class Admin extends Controller
 	 */
 	function showHeader()
     {
-		// Show the header:
         $data = array(
             'lang'=>$this->lang
         );
@@ -528,12 +608,22 @@ class Admin extends Controller
 	 */
     function showFooter()
     {
-        // Show the footer:
         $data = array(
             'lang'=>$this->lang
         );
 		$this->load->view('admin/footer.php', $data);
     }
     
+	/**
+	 * Show the not-found page
+	 */
+	function showNotFound()
+	{
+		$data = array(
+			'lang'=>$this->lang
+		);
+        $this->load->view('admin/manage/notfound.php', $data);
+	}
+	
 }
 ?>

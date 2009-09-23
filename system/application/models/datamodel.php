@@ -1,4 +1,7 @@
 <?php
+
+// TODO: Make queries with Active Record Class
+
 class DataModel extends Model
 {
 	var $options;		// An array holding the options of this data object and it's values
@@ -64,8 +67,11 @@ class DataModel extends Model
 	{
 		// Retrieve the children of this data object:
 		$children = array();
-		$sql      = 'SELECT `id` FROM `content` WHERE `id_content` = '.$this->idContent.';';
-		$query    = $this->db->query($sql);
+		// $sql      = 'SELECT `id` FROM `content` WHERE `id_content` = '.$this->idContent.';';
+		$this->db->select('id');
+		$this->db->where('id_content', $this->idContent);
+		$query = $this->db->get('content');
+		// $query    = $this->db->query($sql);
 		foreach($query->result() as $result) {
 			$dataObject = new DataModel();
 			$dataObject->load($result->id, $this->idLanguage);

@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Sep 22, 2009 at 02:13 PM
+-- Generation Time: Sep 23, 2009 at 04:54 PM
 -- Server version: 5.1.33
 -- PHP Version: 5.2.9-2
 
@@ -214,6 +214,27 @@ CREATE TABLE IF NOT EXISTS `templates` (
 INSERT INTO `templates` (`id`, `name`, `id_dataobject`, `templatefile`) VALUES
 (1, 'Default template', 1, 'index.tpl'),
 (2, 'Block', 1, 'block.tpl');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `templates_allowed_children`
+--
+
+CREATE TABLE IF NOT EXISTS `templates_allowed_children` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id_template` int(11) NOT NULL,
+  `id_child_template` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=7 ;
+
+--
+-- Dumping data for table `templates_allowed_children`
+--
+
+INSERT INTO `templates_allowed_children` (`id`, `id_template`, `id_child_template`) VALUES
+(6, 1, 2),
+(5, 1, 1);
 
 -- --------------------------------------------------------
 
