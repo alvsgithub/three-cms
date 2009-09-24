@@ -23,16 +23,19 @@
 					<td colspan="2">&nbsp;</td>
 				</tr>
 				<tr>
-					<th><?php echo $lang->line('content_languages'); ?></th>
+					<th><?php echo $lang->line('content_language'); ?>:</th>
 					<td>
-						<?php
-							// TODO: Add Language icons:
+						<?php							
 							$languagesString = '';
 							$first = true;
-							foreach($contentData['languages'] as $language) {
-						?>
-							<a href="#" class="switchLanguage l_<?php echo $language['id']; ?>"><?php echo $language['name']; ?></a>
-						<?php
+							foreach($contentData['languages'] as $language) {								
+								if(file_exists(BASEPATH.'application/views/admin/images/lang/'.$language['code'].'.png')) {
+									$style = 'style="background-image: url('.base_url().'system/application/views/admin/images/lang/'.$language['code'].'.png); padding-left: 25px;"';
+								} else {
+									$style = '';
+								}
+								// Show the language link:
+								echo '<a '.$style.' href="#" class="switchLanguage l_'.$language['id'].'">'.$language['name'].'</a>';
 								if(!$first) {
 									$languagesString .= ',';
 								}
@@ -84,62 +87,67 @@
 							case 'large_text' :
 								{
 									// TODO
+									echo '<textarea name="'.$name.'" class="'.$class.'">'.$value.'</textarea>';
 									break;
 								}
 							case 'rich_text' :
 								{
-									// TODO
+									// TODO: Add a CKEditor
 									break;
 								}
 							case 'url' :
 								{
-									// TODO
+									echo '<input type="text" name="'.$name.'" value="'.$value.'" class="'.$class.'" />';
 									break;
 								}
 							case 'image' :
 								{
-									// TODO
+									// TODO: Add a browse-button
 									echo '<input type="text" name="'.$name.'" value="'.$value.'" class="'.$class.'" />';
 									break;
 								}
 							case 'file' :
 								{
-									// TODO
+									// TODO: Add a browse-button
+									echo '<input type="text" name="'.$name.'" value="'.$value.'" class="'.$class.'" />';
 									break;
 								}
 							case 'boolean' :
 								{
-									// TODO
+									$checked = $value==1 ? 'checked="checked" ' : '';
+									echo '<input type="checkbox" name="'.$name.'" '.$checked.' class="'.$class.'" />';
 									break;
 								}
 							case 'dropdown' :
 								{
-									// TODO
+									// TODO: Add a dropdown where a single value can be selected
 									break;
 								}
 							case 'selectbox' :
 								{
-									// TODO
+									// TODO: Add a selectbox where multiple values can be selected
 									break;
 								}
 							case 'date' :
 								{
-									// TODO
+									// TODO: Add a datapicker
+									echo '<input type="text" name="'.$name.'" value="'.$value.'" class="'.$class.'" />';
 									break;
 								}
 							case 'time' :
 								{
-									// TODO
+									// TODO: Add a timepicker
+									echo '<input type="text" name="'.$name.'" value="'.$value.'" class="'.$class.'" />';
 									break;
 								}
 							case 'content' :
 								{
-									// TODO
+									// TODO: Add a dropdown where to select a content type
 									break;
 								}
 							case 'content_of_type' :
 								{
-									// TODO
+									// TODO: Add a dropdown where te select content of a specific dataObject
 									break;
 								}
 						}
@@ -163,33 +171,8 @@
 			<script type="text/javascript">
 				var language_ids        = [<?php echo $languagesString; ?>];
 				var default_language	= <?php echo DEFAULT_LANGUAGE_ID; ?>;
-				
-				$(function(){
-					// First hide all the languages:
-					for(i=0; i<language_ids.length; i++) {
-						$(".language_" + language_ids[i]).hide();
-					}
-					// Show the default languages:
-					$(".language_" + default_language).show();
-					$(".l_" + default_language).addClass("active");
-					
-					// Bind the functions:
-					$("a.switchLanguage").click(function(){
-						$("a.switchLanguage").removeClass("active");
-						$(this).addClass("active");
-						className = $(this).attr("class");
-						a = className.split(' ');
-						idName = a[1];
-						a = idName.split('_');
-						id = a[1];
-						for(i=0; i<language_ids.length; i++) {
-							$(".language_" + language_ids[i]).hide();
-						}
-						$(".language_" + id).show();
-						return false;
-					});
-				});
 			</script>
+			<script type="text/javascript" src="<?php echo base_url(); ?>system/application/views/admin/js/content.js"></script>
 		</form>
 	</div>
 </div>

@@ -1,5 +1,21 @@
 <?php
 
+/**
+ *  DataModel
+ *  ---------------------------------------------------------------------------
+ *  The DataModel is used by the website to load and format data that can be 
+ *  used by the website. *  
+ *  ---------------------------------------------------------------------------
+ *  Author:     Giel Berkers
+ *  E-mail:     giel.berkers@gmail.com
+ *  Revision:   1
+ *  ---------------------------------------------------------------------------
+ *  Changelog:
+ *
+ *
+ */
+
+
 // TODO: Make queries with Active Record Class
 
 class DataModel extends Model
@@ -66,12 +82,10 @@ class DataModel extends Model
 	function children()
 	{
 		// Retrieve the children of this data object:
-		$children = array();
-		// $sql      = 'SELECT `id` FROM `content` WHERE `id_content` = '.$this->idContent.';';
+		$children = array();		
 		$this->db->select('id');
 		$this->db->where('id_content', $this->idContent);
-		$query = $this->db->get('content');
-		// $query    = $this->db->query($sql);
+		$query = $this->db->get('content');		
 		foreach($query->result() as $result) {
 			$dataObject = new DataModel();
 			$dataObject->load($result->id, $this->idLanguage);
@@ -87,6 +101,19 @@ class DataModel extends Model
 	 */
 	function child($num)
 	{
+		// TODO
+		
+	}
+	
+	/**
+	 * Create a tree of this dataModel and all it's children (recursive)
+	 * @param	$startID			int		The ID to see as te root parent. Set to null to use the current dataModel's ID
+	 * @param	$templates			array	An array containing the ID's of the templates to allow in this tree. Set to null to allow all templates.
+	 * @param	$optionConditions	array	An associated array holding the name of the options and their value to which the content should be filterd. Set to null to allow all content
+	 */
+	function getTree($startID=null, $templates=null, $optionConditions=null)
+	{
+		// TODO
 		
 	}
 	
