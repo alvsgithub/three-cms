@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Sep 23, 2009 at 04:54 PM
+-- Generation Time: Sep 24, 2009 at 03:57 PM
 -- Server version: 5.1.33
 -- PHP Version: 5.2.9-2
 
@@ -77,19 +77,21 @@ CREATE TABLE IF NOT EXISTS `dataobjects_options` (
   `id_option` int(11) NOT NULL,
   `order` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=47 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=63 ;
 
 --
 -- Dumping data for table `dataobjects_options`
 --
 
 INSERT INTO `dataobjects_options` (`id`, `id_dataobject`, `id_option`, `order`) VALUES
-(46, 1, 6, 3),
+(61, 1, 6, 4),
 (39, 2, 2, 1),
 (38, 2, 1, 0),
-(45, 1, 3, 2),
-(44, 1, 2, 1),
-(43, 1, 1, 0);
+(60, 1, 2, 3),
+(59, 1, 8, 2),
+(58, 1, 7, 1),
+(57, 1, 1, 0),
+(62, 1, 3, 5);
 
 -- --------------------------------------------------------
 
@@ -181,7 +183,7 @@ CREATE TABLE IF NOT EXISTS `options` (
   `default_value` text NOT NULL,
   `multilanguage` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=7 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=9 ;
 
 --
 -- Dumping data for table `options`
@@ -191,7 +193,9 @@ INSERT INTO `options` (`id`, `name`, `type`, `default_value`, `multilanguage`) V
 (1, 'title', 'small_text', '', 1),
 (2, 'header', 'small_text', '', 1),
 (3, 'content', 'rich_text', '', 1),
-(6, 'headerImage', 'image', '', 0);
+(6, 'headerImage', 'image', '', 0),
+(7, 'Show in menu', 'boolean', '', 0),
+(8, 'summary', 'large_text', '', 1);
 
 -- --------------------------------------------------------
 

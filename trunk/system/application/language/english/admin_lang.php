@@ -98,6 +98,7 @@
 	$lang['content_parent']				= 'Parent';
 	$lang['content_alias']				= 'Alias';
 	$lang['content_languages']			= 'Languages';
+	$lang['content_language']			= 'Language';
 
     // Default text chunks:
     $lang['default_actions']        	= 'Actions';

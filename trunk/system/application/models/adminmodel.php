@@ -1,4 +1,21 @@
 <?php
+
+/**
+ *  AdminModel
+ *  ---------------------------------------------------------------------------
+ *  The AdminModel is used to store all the get- and storefunctions used by the
+ *  admin-part of the CMS. All actions that load, manipulate or store data are
+ *  located in this class.
+ *  ---------------------------------------------------------------------------
+ *  Author:     Giel Berkers
+ *  E-mail:     giel.berkers@gmail.com
+ *  Revision:   1
+ *  ---------------------------------------------------------------------------
+ *  Changelog:
+ *
+ *
+ */
+
 class AdminModel extends Model
 {
     function AdminModel()
@@ -14,31 +31,16 @@ class AdminModel extends Model
     function getTree($startID=0)
     {
         $tree  = array();
-        /*
-        $sql   = 'SELECT A.`id`, A.`name`, COUNT(B.`id`) AS `numChildren` FROM
-            `content` A,
-            `content` B
-                WHERE
-            A.`id_content` = '.$startID.' AND
-            B.`id_content` = A.`id`;
-        ';
-        */
-        // $sql = 'SELECT `id`,`name` FROM `content` WHERE `id_content` = '.$startID.';';
         $this->db->where('id_content', $startID);
         $this->db->select('id,name');
         $query = $this->db->get('content');
-        // $query = $this->db->query($sql);
         foreach($query->result() as $result) {
-            // $sql = 'SELECT COUNT(*) AS `numChildren` FROM `content` WHERE `id_content` = '.$result->id.';';
             $this->db->where('id_content', $result->id);
             $this->db->from('content');
             $numChildren = $this->db->count_all_results();
-            // $innerQuery = $this->db->query($sql);
-            // $innerResult = $innerQuery->result();
             $item = array(
                 'id'=>$result->id,
                 'name'=>$result->name,
-                // 'numChildren'=>$innerResult[0]->numChildren
                 'numChildren'=>$numChildren
             );
             array_push($tree, $item);
@@ -117,10 +119,20 @@ class AdminModel extends Model
     }
     
     /**
-     * Duplicate a language
-     * @param   $id int The ID of the language to duplicate
+     * Duplicate a template
+     * @param   $id int The ID of the template to duplicate
      */
-    function duplicateLanguage($id)
+    function duplicateTemplate($id)
+    {
+        // TODO
+        
+    }
+    
+    /**
+     * Duplicate a data object
+     * @param   $id int The ID of the dataobject to duplicate
+     */
+    function duplicateDataObject($id)
     {
         // TODO
         
@@ -131,6 +143,16 @@ class AdminModel extends Model
      * @param   $id int The ID of the option to duplicate
      */
     function duplicateOption($id)
+    {
+        // TODO
+        
+    }
+    
+    /**
+     * Duplicate a language
+     * @param   $id int The ID of the language to duplicate
+     */
+    function duplicateLanguage($id)
     {
         // TODO
         
@@ -197,16 +219,6 @@ class AdminModel extends Model
                 'value'=>$locale['value']
             ));
         }
-    }
-    
-    /**
-     * Duplicate a template
-     * @param   $id int The ID of the template to duplicate
-     */
-    function duplicateTemplate($id)
-    {
-        // TODO
-        
     }
     
     /**
@@ -289,16 +301,6 @@ class AdminModel extends Model
             array_push($options, $option);
         }
         return $options;
-    }
-    
-    /**
-     * Duplicate a data object
-     * @param   $id int The ID of the dataobject to duplicate
-     */
-    function duplicateDataObject($id)
-    {
-        // TODO
-        
     }
     
     /**
@@ -390,12 +392,6 @@ class AdminModel extends Model
         
         // Get the options and their values associated with this content:
         $content = array();
-        /*
-        $this->db->select('id_option');
-        $this->db->join('templates', 'content.id_template = templates.id');
-        $this->db->join('dataobjects_options', 'dataobjects_options.id_dataobject = templates.id_dataobject');
-        $query = $this->db->get('dataobjects_options');
-        */
         
         // TODO: Make this query Active Record Style:
         $sql = 'SELECT A.`id_option`, C.`name`, C.`type`, C.`default_value`, C.`multilanguage` FROM
@@ -406,20 +402,12 @@ class AdminModel extends Model
             B.`id` = '.$contentData['id_template'].' AND
             A.`id_dataobject` = B.`id_dataobject` AND
             C.`id` = A.`id_option`
+                ORDER BY A.`order`
         ';
         $query = $this->db->query($sql);
         
         foreach($query->result_array() as $result) {
             // Get the values by this option. This is done with the multilanguage aspect:
-            /*
-            $this->db->select('id_language,value');
-            $this->db->where('id_option', $result['id_option']);
-            $this->db->where('id_content', $id);
-            $valueQuery = $this->db->get('values');
-            $valueArray = $valueQuery->result_array();
-            $result['value'] = $valueArray;
-            */
-            
             $values = array();
             foreach($languages as $language) {
                 $this->db->select('value');
