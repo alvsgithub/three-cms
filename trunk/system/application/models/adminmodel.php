@@ -16,6 +16,10 @@
  *
  */
 
+// TODO: Add an order-index to the content
+// TODO: Changing of templates (what happens with the options?)
+// TODO: Changing of the parents (move)
+
 class AdminModel extends Model
 {
     function AdminModel()
@@ -353,10 +357,11 @@ class AdminModel extends Model
     function getContent($id)
     {
         $this->db->select('
-            content.id     as id,
-            content.name   as name,
-            content.alias  as alias,
-            templates.name as templateName
+            content.id          as id,
+            content.name        as name,
+            content.alias       as alias,
+            content.id_template as id_template,
+            templates.name      as templateName
         ');
         $this->db->where('content.id', $id);
         $this->db->join('templates', 'content.id_template = templates.id');
@@ -368,18 +373,30 @@ class AdminModel extends Model
     
     /**
      * Get the content data
-     * @param   $id int The ID of the content to retrieve. Give 0 or false to get a empty array
-     * @return  array   An array holding all the information of this content
+     * @param   $id         int     The ID of the content to retrieve. Give 0 or false to get a empty array
+     * @param   $idParent   int     The ID of the parent document. Only needed if id=0
+     * @param   $idTemplate int     The ID of the template to use. Only needed if id=0
+     * @return  array               An array holding all the information of this content
      */
-    function getContentData($id)
+    function getContentData($id, $idParent=null, $idTemplate=null)
     {
         if($id!=0 && $id!=false) {
+            /*
             $this->db->where('id', $id);
             $query = $this->db->get('content');
             $resultArray = $query->result_array();
             $contentData = $resultArray[0];
+            */
+            $contentData = $this->getData('content', $id);
         } else {
-            $contentData = $this->db->list_fields('content');
+            if($idTemplate!=null && $idParent!=null) {
+                $contentData = $this->getData('content');
+                $contentData['id_template'] = $idTemplate;
+                $contentData['id_content']  = $idParent;
+            } else {
+                show_error('Error: No parent and/or template supplied when creating new content.<br /><br />AdminModel :: getContentData()');
+                return false;
+            }
         }
         
         // Get the languages:
@@ -429,9 +446,77 @@ class AdminModel extends Model
     }
     
     
-    
-    function saveContentData($id, $contentData)
+    /**
+     * Save the contentData.
+     * @param   $id             int     The ID of the content to save. If this is set to 0, new content will be added
+     * @param   $contentData    array   A ContentData array
+     * @return  int The ID of the content
+     */
+    function saveContentData($idContent, $contentData)
     {
+        // TODO: Check if the alias already exists. If so, create a new alias with an increasing number.
+        // TODO: Auto-check / auto-generate alias.
+        // TODO: Check if the id of the parent is not the same as this contents own ID.
+        // TODO: Check if the id of the parent is not a child or deeper of this contents own ID.
+        // TODO: Check if the id of the parent is not an infinite loop of some sort.
+        // TODO: Also do these checks AJAX-wise when they get changed in the editing screen.
+        $content = array(
+            'id_content'=>$contentData['id_content'],
+            'id_template'=>$contentData['id_template'],
+            'name'=>$contentData['name'],
+            'alias'=>$contentData['alias']
+        );
+        // Insert/update base content information:
+        if($idContent==0) {
+            $this->db->insert('content', $content);
+            $idContent = $this->db->insert_id();
+        } else {
+            $this->db->where('id', $idContent);
+            $this->db->update('content', $content);
+        }
+        // Store the optionValues:
+        foreach($contentData['content'] as $item) {
+            $idOption = $item['id_option'];
+            foreach($item['value'] as $valueItem) {
+                $idLanguage = $valueItem['id_language'];
+                $value      = $valueItem['value'];
+                // Now we have idContent, idOption, idLanguage and the value. Enough to store this item in the database:
+                // See if this value already exists in the database. If so, update it, else insert a new value.
+                // Don't default delete all values and insert new ones, because if there would be an error when inserting
+                // new data, the original data will be lost. Although this is not bound to happen, it still feels safe to
+                // have a little extra safety... ;-)
+                $this->db->where('id_content', $idContent);
+                $this->db->where('id_option', $idOption);
+                $this->db->where('id_language', $idLanguage);
+                $this->db->from('values');                
+                if($this->db->count_all_results()==0) {
+                    // Insert:
+                    $valueArray = array(
+                        'id_content'=>$idContent,
+                        'id_option'=>$idOption,
+                        'id_language'=>$idLanguage,
+                        'value'=>$value
+                    );
+                    $this->db->insert('values', $valueArray);
+                } else {
+                    // Update:
+                    $this->db->where('id_content', $idContent);
+                    $this->db->where('id_option', $idOption);
+                    $this->db->where('id_language', $idLanguage);
+                    $this->db->update('values', array('value'=>$value));
+                }
+            }
+        }
+        return $idContent;
+    }
+    
+    /**
+     * Duplicate content including all it's children
+     * @param   $idContent  int The ID of the content to duplicate
+     */
+    function duplicateContent($idContent)
+    {
+        // TODO
         
     }
     

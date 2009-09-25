@@ -13,11 +13,11 @@
 				</tr>
 				<tr>
 					<th><?php echo $lang->line('content_template'); ?>:</th>
-					<td><input disabled="disabled" type="text" name="template" value="<?php echo $contentData['id_template']; ?>" /> // TODO</td>
+					<td><input readonly="readonly" type="text" name="template" value="<?php echo $contentData['id_template']; ?>" /> // TODO</td>
 				</tr>
 				<tr>
 					<th><?php echo $lang->line('content_parent'); ?>:</th>
-					<td><input disabled="disabled" type="text" name="parent" value="<?php echo $contentData['id_content']; ?>" /> // TODO</td>
+					<td><input readonly="readonly" type="text" name="parent" value="<?php echo $contentData['id_content']; ?>" /> // TODO</td>
 				</tr>
 				<tr class="delimiter">
 					<td colspan="2">&nbsp;</td>
@@ -72,12 +72,17 @@
 						$value      = '';
 						$class		= 'language_'.$languageID;
 						foreach($item['value'] as $valueItem) {
-							if($valueItem['id_language']==$languageID) {
+							if($languageID==0) {
+								if($valueItem['id_language']==DEFAULT_LANGUAGE_ID) {
+									$value = $valueItem['value'];
+									break;
+								}
+							} elseif($valueItem['id_language']==$languageID) {
 								$value = $valueItem['value'];
 								break;
 							}
 						}
-						// Show the correct input type, according to the option type:
+						// Show the correct input type, according to the option type:						
 						switch($item['type']) {
 							case 'small_text' :
 								{
@@ -114,7 +119,7 @@
 								}
 							case 'boolean' :
 								{
-									$checked = $value==1 ? 'checked="checked" ' : '';
+									$checked = $value=='1' ? 'checked="checked" ' : '';									
 									echo '<input type="checkbox" name="'.$name.'" '.$checked.' class="'.$class.'" />';
 									break;
 								}

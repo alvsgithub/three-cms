@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Sep 24, 2009 at 03:57 PM
+-- Generation Time: Sep 25, 2009 at 04:49 PM
 -- Server version: 5.1.33
 -- PHP Version: 5.2.9-2
 
@@ -32,7 +32,7 @@ CREATE TABLE IF NOT EXISTS `content` (
   `name` tinytext NOT NULL,
   `alias` tinytext NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=6 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=7 ;
 
 --
 -- Dumping data for table `content`
@@ -43,7 +43,8 @@ INSERT INTO `content` (`id`, `id_content`, `id_template`, `name`, `alias`) VALUE
 (2, 1, 2, 'Blok 1', 'blok1'),
 (3, 1, 2, 'Blok 2', 'blok2'),
 (4, 2, 2, 'Blok 1.1', 'blok-1-1'),
-(5, 2, 2, 'Blok 1.2', 'blok-1-2');
+(5, 2, 2, 'Blok 1.2', 'blok-1-2'),
+(6, 1, 3, 'TestBlok', 'testblok');
 
 -- --------------------------------------------------------
 
@@ -55,7 +56,7 @@ CREATE TABLE IF NOT EXISTS `dataobjects` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` tinytext NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
 
 --
 -- Dumping data for table `dataobjects`
@@ -63,7 +64,8 @@ CREATE TABLE IF NOT EXISTS `dataobjects` (
 
 INSERT INTO `dataobjects` (`id`, `name`) VALUES
 (1, 'Default Page'),
-(2, 'Content 2');
+(2, 'Content 2'),
+(3, 'Blok');
 
 -- --------------------------------------------------------
 
@@ -77,7 +79,7 @@ CREATE TABLE IF NOT EXISTS `dataobjects_options` (
   `id_option` int(11) NOT NULL,
   `order` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=63 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=65 ;
 
 --
 -- Dumping data for table `dataobjects_options`
@@ -91,7 +93,9 @@ INSERT INTO `dataobjects_options` (`id`, `id_dataobject`, `id_option`, `order`) 
 (59, 1, 8, 2),
 (58, 1, 7, 1),
 (57, 1, 1, 0),
-(62, 1, 3, 5);
+(62, 1, 3, 5),
+(63, 3, 2, 0),
+(64, 3, 3, 1);
 
 -- --------------------------------------------------------
 
@@ -209,7 +213,7 @@ CREATE TABLE IF NOT EXISTS `templates` (
   `id_dataobject` int(11) NOT NULL,
   `templatefile` tinytext NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
 
 --
 -- Dumping data for table `templates`
@@ -217,7 +221,8 @@ CREATE TABLE IF NOT EXISTS `templates` (
 
 INSERT INTO `templates` (`id`, `name`, `id_dataobject`, `templatefile`) VALUES
 (1, 'Default template', 1, 'index.tpl'),
-(2, 'Block', 1, 'block.tpl');
+(2, 'Block', 1, 'block.tpl'),
+(3, 'Blok', 3, 'block.tpl');
 
 -- --------------------------------------------------------
 
@@ -230,15 +235,17 @@ CREATE TABLE IF NOT EXISTS `templates_allowed_children` (
   `id_template` int(11) NOT NULL,
   `id_child_template` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=7 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=11 ;
 
 --
 -- Dumping data for table `templates_allowed_children`
 --
 
 INSERT INTO `templates_allowed_children` (`id`, `id_template`, `id_child_template`) VALUES
-(6, 1, 2),
-(5, 1, 1);
+(9, 1, 2),
+(8, 1, 1),
+(7, 2, 2),
+(10, 1, 3);
 
 -- --------------------------------------------------------
 
@@ -253,7 +260,7 @@ CREATE TABLE IF NOT EXISTS `values` (
   `id_language` int(11) NOT NULL,
   `value` text NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=22 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=45 ;
 
 --
 -- Dumping data for table `values`
@@ -261,14 +268,16 @@ CREATE TABLE IF NOT EXISTS `values` (
 
 INSERT INTO `values` (`id`, `id_content`, `id_option`, `id_language`, `value`) VALUES
 (1, 1, 1, 1, 'Titel (NL)'),
-(2, 1, 1, 2, 'Titel (EN)'),
+(2, 1, 1, 2, 'Titel (EN) Test'),
 (3, 1, 1, 3, 'Titel (DE)'),
 (4, 1, 2, 1, 'Header (NL)'),
 (5, 1, 2, 2, 'Header (EN)'),
 (6, 1, 2, 3, 'Header (DE)'),
-(7, 1, 3, 1, 'Content (NL)'),
-(8, 1, 3, 2, 'Content (EN)'),
-(9, 1, 3, 3, 'Content (DE)'),
+(7, 1, 3, 1, ''),
+(8, 1, 3, 2, ''),
+(9, 1, 3, 3, ''),
+(23, 1, 7, 1, '1'),
+(22, 1, 1, 6, ''),
 (10, 2, 2, 1, 'Koptekst'),
 (11, 2, 3, 1, 'Inhoud'),
 (12, 2, 2, 2, 'Small header'),
@@ -280,4 +289,25 @@ INSERT INTO `values` (`id`, `id_content`, `id_option`, `id_language`, `value`) V
 (18, 3, 2, 2, 'Another header'),
 (19, 3, 3, 2, 'Yet some other content'),
 (20, 3, 2, 3, 'Eine header wieder'),
-(21, 3, 3, 3, 'Und nog wat tekscht');
+(21, 3, 3, 3, 'Und nog wat tekscht'),
+(24, 1, 7, 2, '1'),
+(25, 1, 7, 3, '1'),
+(26, 1, 7, 6, '1'),
+(27, 1, 8, 1, 'Samenvatting'),
+(28, 1, 8, 2, 'Summary'),
+(29, 1, 8, 3, 'Die samenvattung'),
+(30, 1, 8, 6, 'Voulez vous un samenvatting'),
+(31, 1, 2, 6, ''),
+(32, 1, 6, 1, 'myImage.jpg'),
+(33, 1, 6, 2, 'myImage.jpg'),
+(34, 1, 6, 3, 'myImage.jpg'),
+(35, 1, 6, 6, 'myImage.jpg'),
+(36, 1, 3, 6, ''),
+(37, 6, 2, 1, 'Hallo'),
+(38, 6, 2, 2, 'Hello'),
+(39, 6, 2, 3, 'Guten Tag'),
+(40, 6, 2, 6, 'Bonjour'),
+(41, 6, 3, 1, ''),
+(42, 6, 3, 2, ''),
+(43, 6, 3, 3, ''),
+(44, 6, 3, 6, '');

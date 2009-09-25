@@ -12,5 +12,6 @@
 			{$obj->render()}
 		{/foreach}
 		<hr />
+		Children: {$dataObject->children()}		
 	</body>
 </html>
