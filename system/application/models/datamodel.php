@@ -25,6 +25,11 @@ class DataModel extends Model
 	var $idLanguage;	// The ID of the language
 	var $templateFile;	// The template file
 	
+	// The following parameters don't get set until a certain first function call
+	// This makes the dataModel load faster in case the parameter is not used.
+	var $parentsArray  = array();	// A 2-dimensional array holding the parents
+	var $childrenArray = array();	// A 2-dimensional array holding the children
+	
 	function DataModel()
 	{
 		parent::Model();
@@ -77,19 +82,24 @@ class DataModel extends Model
 	
 	/**
 	 * Get the children of this dataModel
-	 * @return	array	An array with dataModels
+	 * @param	$idContent	int	The ID of the parent to get the children from. If ID is set to null (default), the current dataobjects' ID is used
+	 * @return	array		An array with dataModels
 	 */
-	function children()
+	function children($idContent = null)
 	{
-		// Retrieve the children of this data object:
-		$children = array();		
-		$this->db->select('id');
-		$this->db->where('id_content', $this->idContent);
-		$query = $this->db->get('content');		
-		foreach($query->result() as $result) {
-			$dataObject = new DataModel();
-			$dataObject->load($result->id, $this->idLanguage);
-			array_push($children, $dataObject);
+		if(isset($this->childrenArray[$idContent])) {
+			$children = $this->childrenArray[$idContent];
+		} else {
+			// Retrieve the children of this data object:
+			$children = array();		
+			$this->db->select('id');
+			$this->db->where('id_content', $this->idContent);
+			$query = $this->db->get('content');		
+			foreach($query->result() as $result) {
+				$dataObject = new DataModel();
+				$dataObject->load($result->id, $this->idLanguage);
+				array_push($children, $dataObject);
+			}
 		}
 		return $children;
 	}
@@ -101,7 +111,7 @@ class DataModel extends Model
 	 */
 	function child($num)
 	{
-		// TODO
+		// TODO (what is this function supposed to do anyway?)
 		
 	}
 	
@@ -115,6 +125,72 @@ class DataModel extends Model
 	{
 		// TODO
 		
+	}
+	
+	/**
+	 * Get an array with all the parents
+	 * @param	$idContent	int	The ID of the child to get the parents from. If ID is set to null (default), the current dataobjects' ID is used
+	 * @return	array	An array with dataModels
+	 */
+	function parents($idContent = null)
+	{
+		$idContent = $idContent != null ? $idContent : $this->idContent;
+		if(!isset($this->parentsArray[$idContent])) {
+			// Create an array in which the first entry is the root parent:
+			$parents = array();
+			$idParent = $idContent;
+			// Add a safety counter, so this will not become an infinite loop:
+			$safetyCounter = 0;
+			$infiniteLoop  = false;
+			while($safetyCounter<100) {
+				$this->db->select('id_content');
+				$this->db->where('id', $idParent);
+				$query = $this->db->get('content');
+				$idParent = $query->row()->id_content;
+				$dataObject = new DataModel();
+				$dataObject->load($idParent, $this->idLanguage);				
+				array_unshift($parents, $dataObject);				
+				$safetyCounter++;
+				if($safetyCounter>=100) {
+					$infiniteLoop = true;
+					break;
+				}
+				if($idParent==0) {
+					break;
+				}
+			}
+			
+			if($infiniteLoop) {
+				// Error in loop
+				log_message('error', 'Infinite loop detected when determing the parent. Content ID: '.$idContent, true);				
+				return false;
+			} else {
+				$this->parentsArray[$idContent] = $parents;				
+			}
+		}
+		return $this->parentsArray[$idContent];
+	}
+	
+	/**
+	 * Get an array with all the parents
+	 * @param	$idContent	int	The ID of the child to get the first parent from. If ID is set to null (default), the current dataobjects' ID is used
+	 * @return	DataModel	A single datamodel
+	 */
+	function firstParent($idContent = null)
+	{
+		$parents = isset($this->parentsArray[$idContent]) ? $this->parentsArray[$idContent] : $this->parents($idContent);
+		return $parents[0];	// The first entry in the array is the first parent.
+	}
+	
+	/**
+	 * Get the parent
+	 * @param	$idContent	int	The ID of the child to get the parent from. If ID is set to null (default), the current dataobjects' ID is used
+	 * @return	DataModel	A single datamodel
+	 */
+	function getParent($idContent = null)
+	{
+		$parents = isset($this->parentsArray[$idContent]) ? $this->parentsArray[$idContent] : $this->parents($idContent);
+		return $parents[count($parents)-1];	// The last entry in the array is the parent.
 	}
 	
 	/**

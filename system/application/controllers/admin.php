@@ -498,7 +498,7 @@ class Admin extends Controller
 						$data = array(
 							'content'=>$content,
 							'lang'=>$this->lang,
-							'childTemplates'=>$this->AdminModel->getChildTemplates($id)
+							'childTemplates'=>$this->AdminModel->getChildTemplates($content['id_template'])
 						);
 						$this->load->view('admin/ajax/page_summary.php', $data);
 					}
@@ -519,8 +519,57 @@ class Admin extends Controller
 		switch($action) {
 			case 'save' :
 				{
-					// TODO
-					
+					// Default values:
+					$idContent  = $this->input->post('id');
+					$idParent   = $this->input->post('parent');
+					$idTemplate = $this->input->post('template');
+					$contentData = $this->AdminModel->getContentData($idContent, $idParent, $idTemplate);
+					// Adjust the contentData according to the parameters:
+					$contentData['id_template'] = $idTemplate;
+					$contentData['id_content']  = $idParent;		// id_content is the parent of this content
+					$contentData['name']        = $this->input->post('name');
+					$contentData['alias']       = $this->input->post('alias');
+					// Get the values:
+					for($item=0; $item<count($contentData['content']); $item++) {
+						if($contentData['content'][$item]['multilanguage']==1) {
+							$iterations = count($contentData['languages']);
+						} else {
+							$iterations = 1;
+						}						
+						for($i=0; $i<$iterations; $i++) {
+							$languageID = $contentData['content'][$item]['multilanguage']==1 ? $contentData['languages'][$i]['id'] : 0;	// 0 stands for non-multilanguage
+							$type       = $contentData['content'][$item]['type'];
+							// $name       = 'input_'.$contentData['content'][$item]['id_option'].'_'.$languageID;
+							// $value      = isset($_POST[$name]) ? $this->input->post($name) : '';
+							// Store the value in the array:
+							// $contentData['content'][$item]['values'] = $value;							
+							for($j=0; $j < count($contentData['content'][$item]['value']); $j++) {
+								// echo $contentData['content'][$item]['value'][$j]['id_language'].':'.$languageID.'/';
+								if($contentData['content'][$item]['value'][$j]['id_language']==$languageID || $languageID==0) {
+									$name       = 'input_'.$contentData['content'][$item]['id_option'].'_'.$languageID;
+									switch($type) {
+										case 'boolean' :
+										{
+											$value = isset($_POST[$name]) ? 1 : 0;
+											break;
+										}
+										default:
+										{
+											$value = isset($_POST[$name]) ? $this->input->post($name) : '';
+											break;
+										}
+									}
+									$contentData['content'][$item]['value'][$j]['value'] = $value;
+								}
+							}
+						}
+					}
+					// All the values are retreived, now save the data:
+					$idContent = $this->AdminModel->saveContentData($idContent, $contentData);
+					// print_r($contentData);
+					// die();
+					// Redirect to the editing-page:
+					redirect(site_url(array('admin', 'content', 'edit', $idContent)));
 				}
 			case 'add' :
 				{
@@ -528,13 +577,21 @@ class Admin extends Controller
 					$id_template = $this->uri->segment(5);
 					if($id!=false && $id_template!=false) {
 						// In this case, $id is the parent.
+						$contentData = $this->AdminModel->getContentData(0, $id, $id_template);
+						// print_r($contentData);
+						
+						$data = array(
+							'lang'=>$this->lang,
+							'contentData'=>$contentData,
+							'title'=>$this->lang->line('title_add_content')
+						);
+						$this->load->view('admin/content/add_edit.php', $data);
 						
 					}
 					break;
 				}
 			case 'edit' :
 				{
-					// TODO					
 					if($id!=false) {
 						$contentData = $this->AdminModel->getContentData($id);
 						$data = array(
