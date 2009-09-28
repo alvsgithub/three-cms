@@ -21,6 +21,7 @@ html { font-family: arial, helvetica, sans-serif; font-size: 62.5%; cursor: defa
 #tree li span.name { padding-left: 26px; cursor: pointer; color: #359; }
 #tree li span.name:hover { color: #000; }
 #tree li span.id { font-style: italic; color: #aaa; font-size: 0.8em;  }
+#tree li span.selected { font-weight: bold; color: #000; }
 #tree ul ul { margin-left: 1em; }
 .innerTree { margin-top: 5px; }
 .innerTree img { margin-left: 30px; }
@@ -39,7 +40,7 @@ th { text-align: left; font-family: "Palatino Linotype", "Book Antiqua", Palatin
 th.actions { width: 56px; }
 td { border: 1px outset #ccc; padding: 5px; vertical-align: top; }
 tr.delimiter td { height: 5px; padding: 0; font-size: 1px; border-left: none; border-right: none; }
-table a { display: inline-block; width: 16px; height: 16px; text-indent: -1000em; outline: none; }
+a.edit, a.duplicate, a.delete, a.move    { display: inline-block; width: 16px; height: 16px; text-indent: -1000em; outline: none; }
 table a.edit      { background: url(../images/icons/icon-edit.png); }
 table a.duplicate { background: url(../images/icons/icon-copy.png); }
 table a.delete    { background: url(../images/icons/icon-delete.png); }

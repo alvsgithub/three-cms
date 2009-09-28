@@ -638,6 +638,33 @@ class Admin extends Controller
 	}
 	
 	/**
+	 * Show the site settings
+	 */
+	function settings()
+	{
+		$action = $this->uri->segment(3);
+		if($action=='save') {
+			// Save the settings:
+			$settings = array();
+			foreach($_POST as $key=>$value) {
+				$settings[$key] = $this->input->post($key);
+			}
+			$this->AdminModel->saveSettings($settings);
+			redirect(site_url(array('admin')));
+		}
+		$this->showHeader();
+		$this->showTree();
+		$data = array(
+			'lang'=>$this->lang,
+			'tree'=>$this->AdminModel->getTree(),
+			'settings'=>$this->AdminModel->getSettings(),
+			'languages'=>$this->AdminModel->getLanguages()
+		);
+		$this->load->view('admin/settings.php', $data);
+		$this->showFooter();
+	}
+	
+	/**
 	 * Show the initial tree
 	 */
     function showTree()
@@ -682,5 +709,26 @@ class Admin extends Controller
         $this->load->view('admin/manage/notfound.php', $data);
 	}
 	
+	/**
+	 * Show the file browser:
+	 */
+	function browser()
+	{
+		$data = array(
+			'lang'=>$this->lang
+		);
+		$action = $this->uri->segment(3);
+		if($action!=false) {
+			switch($action) {
+				case 'files' :
+					{
+						$data['path'] = $this->uri->segment(4);
+						$this->load->view('admin/browser/files.php', $data);
+					}
+			}
+		} else {
+			$this->load->view('admin/browser/browser.php', $data);
+		}
+	}
 }
 ?>

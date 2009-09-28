@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Sep 25, 2009 at 04:49 PM
+-- Generation Time: Sep 28, 2009 at 04:57 PM
 -- Server version: 5.1.33
 -- PHP Version: 5.2.9-2
 
@@ -204,6 +204,27 @@ INSERT INTO `options` (`id`, `name`, `type`, `default_value`, `multilanguage`) V
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `settings`
+--
+
+CREATE TABLE IF NOT EXISTS `settings` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` tinytext NOT NULL,
+  `value` text NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
+
+--
+-- Dumping data for table `settings`
+--
+
+INSERT INTO `settings` (`id`, `name`, `value`) VALUES
+(1, 'default_language', '2'),
+(2, 'default_page_id', '1');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `templates`
 --
 
@@ -273,7 +294,7 @@ INSERT INTO `values` (`id`, `id_content`, `id_option`, `id_language`, `value`) V
 (4, 1, 2, 1, 'Header (NL)'),
 (5, 1, 2, 2, 'Header (EN)'),
 (6, 1, 2, 3, 'Header (DE)'),
-(7, 1, 3, 1, ''),
+(7, 1, 3, 1, '<p>\n	Dit is een tekst die hier <strong>geplaatst </strong>is door ckEditor.</p>\n'),
 (8, 1, 3, 2, ''),
 (9, 1, 3, 3, ''),
 (23, 1, 7, 1, '1'),

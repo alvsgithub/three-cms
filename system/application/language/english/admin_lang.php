@@ -26,7 +26,8 @@
     $lang['title_modify_item']      	= 'Modify %s';
 	$lang['title_add_content']			= 'Add new content';
 	$lang['title_modify_content']		= 'Edit content';
-    
+    $lang['title_settings']				= 'Settings';
+	
     // Names:
     $lang['name_template']          	= 'template';
     $lang['name_data_object']       	= 'data object';
@@ -103,4 +104,13 @@
     // Default text chunks:
     $lang['default_actions']        	= 'Actions';
     $lang['default_admin_panel']    	= 'Admin Panel';
+	
+	// File browser:
+	$lang['browser_previous']			= 'Previous';
+	$lang['browser_next']				= 'Next';
+	$lang['browser_up']					= 'Up';
+	$lang['browser_new_folder']			= 'New folder';
+	$lang['browser_new_file']			= 'New file';
+	$lang['browser_delete']				= 'Delete';
+	$lang['browser_search']				= 'Search';
 ?>

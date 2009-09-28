@@ -1,4 +1,5 @@
 var ajaxLoader = '<img src="'+baseURL+'system/application/views/admin/images/ajax-loader.gif" width="128" height="15" />';
+var inputField;
 
 $(function(){
 	// Simple dropdown:
@@ -15,13 +16,27 @@ $(function(){
 	$("a.delete").click(function(){
 		return confirm(dialog_delete);
 	});
+	
+	// TextArea's with the class 'richtext' should be ckeditors:
+	$("textarea.richtext").each(function(){
+		CKEDITOR.replace($(this).attr('name'));	
+	});
+	
+	$("input[name=browse]").click(function(){
+		inputField = $(this).prev();
+		var left = screen.width/2 - 400;
+		var top  = screen.height/2 - 300;
+		window.open(baseURL + 'index.php/admin/browser', 'File browser', 'toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width=800,height=600,left='+left+',top='+top);
+	});
 });
 
 function initializeTree()
 {
 	$("#tree span.name").unbind("click");
 	$("#tree span.name").click(function(){
-		parent = $(this).parent();		
+		parent = $(this).parent();
+		$("#tree span.name").removeClass("selected");
+		$(this).addClass("selected");
 		id     = $('span.id:first var', parent).text();	// The ID of this content item		
 		if(parent.hasClass("hasChildren")) {
 			// See if there is content:		
@@ -45,4 +60,9 @@ function initializeTree()
 			});
 		});
 	});
+}
+
+function setInputValue(val)
+{
+	inputField.val(val);
 }
