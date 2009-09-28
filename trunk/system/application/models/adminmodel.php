@@ -400,11 +400,7 @@ class AdminModel extends Model
         }
         
         // Get the languages:
-        $languages = array();
-        $query = $this->db->get('languages');
-        foreach($query->result_array() as $resultArray) {
-            array_push($languages, $resultArray);
-        }
+        $languages = $this->getLanguages();
         $contentData['languages'] = $languages;
         
         // Get the options and their values associated with this content:
@@ -520,5 +516,53 @@ class AdminModel extends Model
         
     }
     
+    /**
+     * Get the settings
+     * @return  array   Associated array with the settings
+     */
+    function getSettings()
+    {
+        $settings = array();
+        $this->db->select('name,value');
+        $query = $this->db->get('settings');
+        foreach($query->result() as $setting) {
+            $settings[$setting->name] = $setting->value;
+        }
+        return $settings;
+    }
+    
+    /**
+     * Save the settings
+     * @param   $settings   array   Associated array with the settings
+     */
+    function saveSettings($settings)
+    {
+        foreach($settings as $key=>$value) {
+            $this->db->where('name', $key);
+            $this->db->from('settings');
+            if($this->db->count_all_results()==0) {
+                // Insert
+                $this->db->insert('settings', array('name'=>$key, 'value'=>$value));
+            } else {
+                // Update
+                $this->db->where('name', $key);
+                $this->db->update('settings', array('name'=>$key, 'value'=>$value));                
+            }
+        }
+    }
+    
+    /**
+     * Get an array holding the languages
+     * @return  array   The languages
+     */
+    function getLanguages()
+    {
+        $languages = array();
+        $query = $this->db->get('languages');
+        foreach($query->result_array() as $resultArray) {
+            array_push($languages, $resultArray);
+        }
+        return $languages;
+    }
 }
 ?>

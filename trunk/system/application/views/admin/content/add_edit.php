@@ -91,13 +91,13 @@
 								}
 							case 'large_text' :
 								{
-									// TODO
 									echo '<textarea name="'.$name.'" class="'.$class.'">'.$value.'</textarea>';
 									break;
 								}
 							case 'rich_text' :
 								{
-									// TODO: Add a CKEditor
+									// TODO: Implement the image picker into CKEditor
+									echo '<div class="'.$class.'"><textarea name="'.$name.'" class="richtext">'.$value.'</textarea></div>';
 									break;
 								}
 							case 'url' :
@@ -107,14 +107,14 @@
 								}
 							case 'image' :
 								{
-									// TODO: Add a browse-button
 									echo '<input type="text" name="'.$name.'" value="'.$value.'" class="'.$class.'" />';
+									echo '<input type="button" name="browse" value="Browse server..." />';
 									break;
 								}
 							case 'file' :
 								{
-									// TODO: Add a browse-button
 									echo '<input type="text" name="'.$name.'" value="'.$value.'" class="'.$class.'" />';
+									echo '<input type="button" name="browse" value="Browse server..." />';
 									break;
 								}
 							case 'boolean' :

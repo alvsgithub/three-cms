@@ -4,6 +4,7 @@
         <title>Three CMS :: <?php echo $lang->line('default_admin_panel'); ?></title>
         <link rel="stylesheet" type="text/css" media="screen,tv,projection" href="<?php echo base_url(); ?>system/application/views/admin/css/screen.css" />
         <script type="text/javascript" src="<?php echo base_url(); ?>system/application/views/admin/js/jquery-1.3.2.min.js"></script>
+        <script type="text/javascript" src="<?php echo base_url(); ?>system/application/views/admin/ckeditor/ckeditor.js"></script>
         <script type="text/javascript">
             var baseURL              = '<?php echo base_url(); ?>';
             var dialog_delete        = '<?php echo $lang->line('dialog_delete'); ?>';
@@ -21,7 +22,7 @@
                 <ul>
                     <li><?php echo $lang->line('menu_configuration'); ?>
                         <ul>
-                            <li><a href="#"><?php echo $lang->line('menu_site_settings'); ?></a></li>
+                            <li><a href="<?php echo site_url(array('admin', 'settings')); ?>"><?php echo $lang->line('menu_site_settings'); ?></a></li>
                         </ul>
                     </li>
                     <li><?php echo $lang->line('menu_users'); ?>

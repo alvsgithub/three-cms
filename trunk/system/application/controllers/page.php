@@ -14,21 +14,7 @@ class Page extends Controller
 		
 		// Load Smarty Template Engine:
 		include_once(SMARTY_DIR.'Smarty.class.php');
-		// $this->smarty = new Smarty();
-		/*
-		// Set the correct directories:
-		$this->smarty->template_dir 	= 'site/templates';					// Location of the Smarty-templates
-		$this->smarty->compile_dir  	= 'system/smarty/templates_c';		// Location where to put the compiled templates
-		$this->smarty->cache_dir		= 'system/smarty/cache';			// Location of the cached files
-		$this->smarty->config_dir   	= 'site/configs';					// Location of the site config files
-		$this->smarty->debug_tpl		= '../../system/smarty/debug.tpl';	// Location of the debug template (for some reason this must be reset)
 		
-		// Default settings:
-		$this->smarty->compile_check 	= SMARTY_COMPILE;
-		$this->smarty->debugging 		= SMARTY_DEBUG;
-		$this->smarty->caching			= SMARTY_CACHE;
-		$this->smarty->cache_lifetime	= SMARTY_CACHE_LIFETIME;
-		*/
 		$this->idLanguage 				= DEFAULT_LANGUAGE_ID;
 		// Load the page model:
 		$this->load->model('PageModel', '', true);
