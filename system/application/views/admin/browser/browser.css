@@ -29,5 +29,7 @@ html { font-family: sans-serif; font-size: 12px; }
 #files .file:hover { border: 1px solid #359; }
 #files .thumb { width: 100px; height: 100px; background: #fff url(images/document.png) center center no-repeat; }
 #files p { font-size: 10px; text-align: center; }
-#files p.size { font-style: italic; color: #999; }
+#files p.size { font-style: italic; color: #999; text-align: left; float: left; position: absolute; width: 98px; margin-top: 38px; }
+#files p.size a { float: right; color: #800; }
+#files p.size a:hover { color: #f00; }
 

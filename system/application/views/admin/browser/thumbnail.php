@@ -8,7 +8,10 @@
 	$file      = isset($_GET['file']) ? $_GET['file'] : null;
 	$quality   = isset($_GET['quality']) ? $_GET['quality'] : 80;	
 	
-	$hash      = md5($file.':'.$width.':'.$height.':'.$quality);
+	$a         = explode('/', $file);
+	$fileName  = $a[count($a)-1];
+	
+	$hash      = $fileName.'.'.md5($file.':'.$width.':'.$height.':'.$quality);
 	
 	$file = '../../../../../'.$file;
 	if(file_exists($file)) {

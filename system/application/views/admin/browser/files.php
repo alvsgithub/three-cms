@@ -35,7 +35,7 @@
 						$thumbnail = base_url().'system/application/views/admin/browser/thumbnail.php?file='.$file;
 						$content = '
 							<div class="thumb">
-								<img src="'.$thumbnail.'" alt="Thumbnail" width="100" height="100" />
+								<img src="'.$thumbnail.'" alt="Thumbnail" width="100" height="100" />								
 							</div>
 						';
 						break;
@@ -48,11 +48,11 @@
 			}
 			
 			echo '
-				<div class="file">
+				<div class="file">					
 					'.$content.'
-					<p class="name">'.$fileName.'</p>
-					<p class="size">'.$fileSize.' kb</p>
-					<input type="hidden" name="filename" value="'.$file.'" />
+					<p class="size">'.$fileSize.' kb<a href="'.site_url(array('admin', 'browser', 'delete', encodeFileName($file))).'" class="delete">delete</a></p>
+					<p class="name">'.$fileName.'</p>					
+					<input type="hidden" name="filename" value="'.$file.'" />					
 				</div>
 			';
 		}
