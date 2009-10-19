@@ -14,15 +14,30 @@ $(function(){
 		parent.addClass("open");
 		$(this).next().show();
 		$("#files").load(baseURL + 'index.php/admin/browser/files/' + $(this).attr('rel'), function(){
+			// Bind the delete-function:
+			var deletion = false;
+			var ok       = false;
+			$("a.delete", this).click(function(){
+				deletion = true;
+				ok       = confirm(deleteFile);
+				return ok;
+			});			
 			$(".file", this).click(function(){
-				fileName = $("input[name=filename]", this).val();				
-				window.opener.setInputValue(fileName);
-				window.close();
+				// Check if it is not the delete-link which is clicked:
+				if(!deletion) {
+					fileName = $("input[name=filename]", this).val();				
+					window.opener.setInputValue(fileName);
+					window.close();
+				}
+				if(!ok) {
+					deletion = false;
+				}
 			});
 			
 		});
 	});
 	$("#tree ul ul").hide();
+	
 	
 	$(window).resize(resizeWindow);
 	resizeWindow();	

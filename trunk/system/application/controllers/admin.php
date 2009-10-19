@@ -16,6 +16,8 @@ class Admin extends Controller
 		// Load the URL helper:
 		$this->load->helper('url');
 		
+		$this->load->helper('stringencrypter');
+		
         // Load the Language Class:
         $this->lang->load('admin');
         
@@ -718,17 +720,33 @@ class Admin extends Controller
 			'lang'=>$this->lang
 		);
 		$action = $this->uri->segment(3);
-		if($action!=false) {
+		if($action!=false) {			
 			switch($action) {
 				case 'files' :
 					{
 						$data['path'] = $this->uri->segment(4);
 						$this->load->view('admin/browser/files.php', $data);
+						break;
+					}
+				case 'delete' :
+					{
+						$fileName = decodeFileName($this->uri->segment(4));
+						// Delete file:
+						unlink($fileName);
+						// Delete thumb:
+						$a         = explode('/', $fileName);
+						$file  	   = $a[count($a)-1];
+						$a         = glob('system/cache/thumbs/'.$file.'*.*');						
+						unlink($a[0]);
+						// Redirect back to the browser:
+						redirect(site_url(array('admin', 'browser')));
+						break;
 					}
 			}
 		} else {
 			$this->load->view('admin/browser/browser.php', $data);
 		}
 	}
+	
 }
 ?>

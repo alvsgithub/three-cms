@@ -6,12 +6,15 @@
         <script type="text/javascript" src="<?php echo base_url(); ?>system/application/views/admin/js/jquery-1.3.2.min.js"></script>
 		<script type="text/javascript">
             var baseURL              = '<?php echo base_url(); ?>';
+			var deleteFile  		 = '<?php echo $lang->line('dialog_delete'); ?>';
 		</script>
         <script type="text/javascript" src="<?php echo base_url(); ?>system/application/views/admin/browser/browser.js"></script>
     </head>
     <body>
         <div id="body">
 			<div id="top">
+				<?php
+				/*
 				<a href="#" class="prev" title="<?php echo $lang->line('browser_previous'); ?>"><?php echo $lang->line('browser_previous'); ?></a>
 				<a href="#" class="next" title="<?php echo $lang->line('browser_next'); ?>"><?php echo $lang->line('browser_next'); ?></a>
 				<span class="delimiter"></span>
@@ -20,9 +23,13 @@
 				<a href="#" class="search" title="<?php echo $lang->line('browser_search'); ?>"><?php echo $lang->line('browser_search'); ?></a>
 				<input type="text" name="searchField" />
 				<span class="delimiter"></span>
+				*/
+				?>
 				<a href="#" class="newFile" title="<?php echo $lang->line('browser_new_file'); ?>"><?php echo $lang->line('browser_new_file'); ?></a>
 				<a href="#" class="newFolder" title="<?php echo $lang->line('browser_new_folder'); ?>"><?php echo $lang->line('browser_new_folder'); ?></a>
-				<a href="#" class="delete" title="<?php echo $lang->line('browser_delete'); ?>"><?php echo $lang->line('browser_delete'); ?></a>				
+				<?php				
+					/* <a href="#" class="delete" title="<?php echo $lang->line('browser_delete'); ?>"><?php echo $lang->line('browser_delete'); ?></a> */
+				?>
 			</div>
 			<div id="tree">
 				<?php

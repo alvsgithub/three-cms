@@ -9,6 +9,10 @@ CKEDITOR.editorConfig = function( config )
 	// config.language = 'fr';
 	// config.uiColor = '#FFFFFF';
 	
+	config.dialog_backgroundCoverColor = '#666666';
+	config.dialog_backgroundCoverOpacity = 0.5;
+	config.baseHref = baseURL;
+	
 	config.toolbar = 'Full';
 
 	/*
