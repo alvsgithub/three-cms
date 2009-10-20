@@ -52,6 +52,7 @@ function initializeTree()
 				// Close:
 				parent.removeClass("open");
 				$("div.innerTree", parent).remove();
+				$.get(baseURL + 'index.php/admin/ajax/treeclose/'+id);
 			}
 		}
 		$("#content").load(baseURL + 'index.php/admin/ajax/page_summary/'+id, function(){

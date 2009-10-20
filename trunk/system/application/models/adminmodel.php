@@ -34,6 +34,11 @@ class AdminModel extends Model
      */
     function getTree($startID=0)
     {
+        // Add this id to the session of trees that are expanded:
+        $expandedTrees = $this->session->userdata('treeArray');
+        array_push($expandedTrees, $startID);
+        $this->session->set_userdata('treeArray', $expandedTrees);
+        // Create the tree:
         $tree  = array();
         $this->db->where('id_content', $startID);
         $this->db->select('id,name');
@@ -45,8 +50,13 @@ class AdminModel extends Model
             $item = array(
                 'id'=>$result->id,
                 'name'=>$result->name,
-                'numChildren'=>$numChildren
+                'numChildren'=>$numChildren,
+                'tree'=>null
             );
+            if(in_array($result->id, $expandedTrees)) {
+                $childTree = $this->getTree($result->id);
+                $item['tree'] = $childTree;
+            }
             array_push($tree, $item);
         }
         return $tree;
@@ -128,8 +138,21 @@ class AdminModel extends Model
      */
     function duplicateTemplate($id)
     {
-        // TODO
-        
+        $query  = $this->db->get_where('templates', array('id'=>$id));
+        $values = $query->result_array();
+        $values = $values[0];
+        $values['name'] = $this->lang->line('action_duplicate_prefix').$values['name'];
+        unset($values['id']);
+        $this->db->insert('templates', $values);
+        // Duplicate allowed child templates linked to this template:
+        $id_template = $this->db->insert_id();
+        $this->db->select('id_child_template');
+        $this->db->where('id_template', $id);
+        $query = $this->db->get('templates_allowed_children');
+        foreach($query->result_array() as $values) {
+            $values['id_template'] = $id_template;
+            $this->db->insert('templates_allowed_children', $values);
+        }        
     }
     
     /**
@@ -138,8 +161,21 @@ class AdminModel extends Model
      */
     function duplicateDataObject($id)
     {
-        // TODO
-        
+        $query  = $this->db->get_where('dataobjects', array('id'=>$id));
+        $values = $query->result_array();
+        $values = $values[0];
+        $values['name'] = $this->lang->line('action_duplicate_prefix').$values['name'];
+        unset($values['id']);
+        $this->db->insert('dataobjects', $values);
+        // Duplicate options linked to this dataobject:
+        $id_dataObject = $this->db->insert_id();
+        $this->db->select('id_option,order');
+        $this->db->where('id_dataobject', $id);
+        $query = $this->db->get('dataobjects_options');
+        foreach($query->result_array() as $values) {
+            $values['id_dataobject'] = $id_dataObject;
+            $this->db->insert('dataobjects_options', $values);
+        }
     }
     
     /**
@@ -148,8 +184,12 @@ class AdminModel extends Model
      */
     function duplicateOption($id)
     {
-        // TODO
-        
+        $query  = $this->db->get_where('options', array('id'=>$id));
+        $values = $query->result_array();
+        $values = $values[0];
+        $values['name'] = $this->lang->line('action_duplicate_prefix').$values['name'];
+        unset($values['id']);
+        $this->db->insert('options', $values);
     }
     
     /**
@@ -158,8 +198,12 @@ class AdminModel extends Model
      */
     function duplicateLanguage($id)
     {
-        // TODO
-        
+        $query  = $this->db->get_where('languages', array('id'=>$id));
+        $values = $query->result_array();
+        $values = $values[0];
+        $values['name'] = $this->lang->line('action_duplicate_prefix').$values['name'];
+        unset($values['id']);
+        $this->db->insert('languages', $values);
     }
     
     /**
@@ -168,8 +212,21 @@ class AdminModel extends Model
      */
     function duplicateLocale($id)
     {
-        // TODO
-        
+        $query  = $this->db->get_where('locales', array('id'=>$id));
+        $values = $query->result_array();
+        $values = $values[0];
+        $values['name'] = $this->lang->line('action_duplicate_prefix').$values['name'];
+        unset($values['id']);
+        $this->db->insert('locales', $values);
+        // Duplicatie the locales values:
+        $id_locale = $this->db->insert_id();
+        $this->db->select('id_language,value');
+        $this->db->where('id_locale', $id);
+        $query = $this->db->get('locales_values');
+        foreach($query->result_array() as $values) {
+            $values['id_locale'] = $id_locale;
+            $this->db->insert('locales_values', $values);
+        }
     }
     
     /**
@@ -381,12 +438,6 @@ class AdminModel extends Model
     function getContentData($id, $idParent=null, $idTemplate=null)
     {
         if($id!=0 && $id!=false) {
-            /*
-            $this->db->where('id', $id);
-            $query = $this->db->get('content');
-            $resultArray = $query->result_array();
-            $contentData = $resultArray[0];
-            */
             $contentData = $this->getData('content', $id);
         } else {
             if($idTemplate!=null && $idParent!=null) {
@@ -508,12 +559,62 @@ class AdminModel extends Model
     
     /**
      * Duplicate content including all it's children
-     * @param   $idContent  int The ID of the content to duplicate
+     * @param   $id         int     The ID of the content to duplicate
+     * @param   $parentId   int     The ID of the parent to set (leave null to leave original parent, which is the case for the first document)
      */
-    function duplicateContent($idContent)
+    function duplicateContent($id, $parentId=null)
     {
-        // TODO
-        
+        $query  = $this->db->get_where('content', array('id'=>$id));
+        $values = $query->result_array();
+        $values = $values[0];
+        if($parentId==null) {
+            // Only add the duplicate-prefix if there is nu parent-id set, which is the case for the first document:
+            $values['name'] = $this->lang->line('action_duplicate_prefix').$values['name'];
+        }
+        if($parentId!=null) {
+            $values['id_content'] = $parentId;
+        }
+        unset($values['id']);
+        $this->db->insert('content', $values);
+        // Duplicate the values that belong to this content:
+        $id_content = $this->db->insert_id();
+        $this->db->select('id_option,id_language,value');
+        $this->db->where('id_content', $id);
+        $query = $this->db->get('values');
+        foreach($query->result_array() as $values) {
+            $values['id_content'] = $id_content;
+            $this->db->insert('values', $values);
+        }
+        // Duplicate the subpages belonging to this content (recursive)
+        $this->db->select('id');
+        $this->db->where('id_content', $id);
+        $query = $this->db->get('content');
+        foreach($query->result() as $result) {
+            $this->duplicateContent($result->id, $id_content);
+        }
+    }
+    
+    /**
+     * Delete content including all it's children
+     * @param   $id     int     The ID of the content to delete
+     */
+    function deleteContent($id)
+    {
+        // Create an array of the children of this document:
+        $this->db->select('id');
+        $this->db->where('id_content', $id);
+        $query = $this->db->get('content');
+        $ids = array();
+        foreach($query->result() as $result) {
+            array_push($ids, $result->id);
+        }
+        // Delete this content:
+        $this->db->delete('content', array('id'=>$id));
+        $this->db->delete('values', array('id_content'=>$id));
+        // Delete this contents' children (recursive):
+        foreach($ids as $id_content) {
+            $this->deleteContent($id_content);
+        }
     }
     
     /**

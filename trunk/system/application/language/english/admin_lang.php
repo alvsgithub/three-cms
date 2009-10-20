@@ -47,6 +47,7 @@
     $lang['action_add']            		= 'Add';
     $lang['action_modify']         		= 'Modify';
     $lang['action_duplicate']      		= 'Duplicate';
+	$lang['action_duplicate_prefix']	= 'Duplicate of ';
     $lang['action_delete']         		= 'Delete';
 	$lang['action_move']				= 'Move';
 	$lang['action_add_type']			= 'Add new content of the type \'%s\'...';
