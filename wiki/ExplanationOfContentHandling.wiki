@@ -1,0 +1,15 @@
+#How does three-CMS handle it's content
+
+= Introduction =
+
+Three CMS handles content in it's own unique way. You'll read more about that in this article.
+
+= Details =
+
+In most content management systems out there, most of the way of how to fill in content is pre-defined. Each page has a name, a description, content, etc... Some CMS's also allow you to add some specific parameters that belong to a page, for instance: a news page also want to have an author-field, or a date-field.
+
+Three CMS handles content as induvidual pieces of information. For example: For your website you have default pages which all have the default items such as a header, a description, some content, a menutitle, etc. But at some point, you also have specific pages, such as job offerings, news, pictures, etc...
+
+In most CMS-es you can make a news page and add some other pages as subpages of the newspage to act as newsitems. Not in Three CMS: Three CMS will see the news item as it's own induvidual piece of content, which would only need it's own induvidual fields.
+
+more to follow soon...
