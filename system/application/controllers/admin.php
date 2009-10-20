@@ -12,7 +12,12 @@ class Admin extends Controller
 		
 		// Load the Session library:
 		$this->load->library('session');
-        
+		
+		// Set the tree Array, which makes sure the tree on the right is properly expanded on a page refresh:
+		if($this->session->userdata('treeArray')==false) {
+			$this->session->set_userdata('treeArray', array());
+		}
+		
 		// Load the URL helper:
 		$this->load->helper('url');
 		
@@ -40,10 +45,7 @@ class Admin extends Controller
         $this->showHeader();
 		$this->showTree();
         // By default, load the dashboard:
-        $data = array(
-            'lang'=>$this->lang
-        );
-        $this->load->view('admin/dashboard.php', $data);
+		$this->showDashBoard();
         $this->showFooter();
     }
     
@@ -469,7 +471,7 @@ class Admin extends Controller
 		switch($action) {
 			case 'tree' :
 				{
-					// Show the tree:
+					// Show the tree:					
 					$id   = $this->uri->segment(4);					
 					$data = array(
 						'lang'=>$this->lang,
@@ -477,6 +479,19 @@ class Admin extends Controller
 					);
 					$this->load->view('admin/ajax/tree.php', $data);
 					break;
+				}
+			case 'treeclose' :
+				{
+					// Remove this id from the treeArray:
+					$id   = $this->uri->segment(4);					
+					$treeArray = $this->session->userdata('treeArray');
+					$newArray  = array();
+					foreach($treeArray as $id_tree) {
+						if($id_tree != $id) {
+							array_push($newArray, $id_tree);
+						}
+					}
+					$this->session->set_userdata('treeArray', $newArray);
 				}
 			case 'show_options' :
 				{
@@ -515,12 +530,12 @@ class Admin extends Controller
 	function content()
 	{
 		$this->showHeader();
-		$this->showTree();
 		$action = $this->uri->segment(3);
 		$id     = $this->uri->segment(4);
 		switch($action) {
 			case 'save' :
 				{
+					$this->showTree();
 					// Default values:
 					$idContent  = $this->input->post('id');
 					$idParent   = $this->input->post('parent');
@@ -568,20 +583,16 @@ class Admin extends Controller
 					}
 					// All the values are retreived, now save the data:
 					$idContent = $this->AdminModel->saveContentData($idContent, $contentData);
-					// print_r($contentData);
-					// die();
 					// Redirect to the editing-page:
 					redirect(site_url(array('admin', 'content', 'edit', $idContent)));
 				}
 			case 'add' :
 				{
-					// TODO
+					$this->showTree();
 					$id_template = $this->uri->segment(5);
 					if($id!=false && $id_template!=false) {
 						// In this case, $id is the parent.
 						$contentData = $this->AdminModel->getContentData(0, $id, $id_template);
-						// print_r($contentData);
-						
 						$data = array(
 							'lang'=>$this->lang,
 							'contentData'=>$contentData,
@@ -594,6 +605,7 @@ class Admin extends Controller
 				}
 			case 'edit' :
 				{
+					$this->showTree();
 					if($id!=false) {
 						$contentData = $this->AdminModel->getContentData($id);
 						$data = array(
@@ -607,10 +619,11 @@ class Admin extends Controller
 				}
 			case 'duplicate' :
 				{
-					// TODO
 					if($id!=false) {
-						
+						$this->AdminModel->duplicateContent($id);
 					}
+					$this->showTree();
+					$this->showDashBoard();
 					break;
 				}
 			case 'move' :
@@ -623,10 +636,11 @@ class Admin extends Controller
 				}
 			case 'delete' :
 				{
-					// TODO
 					if($id!=false) {
-						
+						$this->AdminModel->deleteContent($id);
 					}
+					$this->showTree();
+					$this->showDashBoard();
 					break;
 				}
 			default :
@@ -689,6 +703,17 @@ class Admin extends Controller
 		$this->load->view('admin/header.php', $data);
     }
     
+	/**
+	 * Show the dashboard
+	 */
+	function showDashBoard()
+	{
+        $data = array(
+            'lang'=>$this->lang
+        );
+        $this->load->view('admin/dashboard.php', $data);
+	}
+	
 	/**
 	 * Show the footer
 	 */
