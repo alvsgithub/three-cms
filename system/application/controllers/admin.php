@@ -521,6 +521,18 @@ class Admin extends Controller
 					}
 					break;
 				}
+			case 'checkdescendant' :
+				{
+					$idParent  = $this->uri->segment(4);
+					$idContent = $this->uri->segment(5);
+					if($idParent!=false && $idParent!=false) {
+						$isDescendant = $this->AdminModel->checkDescendant($idContent, $idParent);
+						echo $isDescendant ? 'error' : 'ok';
+					} else {
+						echo 'error';
+					}
+					break;
+				}
 		}
 	}
 	
@@ -556,18 +568,29 @@ class Admin extends Controller
 						for($i=0; $i<$iterations; $i++) {
 							$languageID = $contentData['content'][$item]['multilanguage']==1 ? $contentData['languages'][$i]['id'] : 0;	// 0 stands for non-multilanguage
 							$type       = $contentData['content'][$item]['type'];
-							// $name       = 'input_'.$contentData['content'][$item]['id_option'].'_'.$languageID;
-							// $value      = isset($_POST[$name]) ? $this->input->post($name) : '';
 							// Store the value in the array:
-							// $contentData['content'][$item]['values'] = $value;							
 							for($j=0; $j < count($contentData['content'][$item]['value']); $j++) {
-								// echo $contentData['content'][$item]['value'][$j]['id_language'].':'.$languageID.'/';
 								if($contentData['content'][$item]['value'][$j]['id_language']==$languageID || $languageID==0) {
 									$name       = 'input_'.$contentData['content'][$item]['id_option'].'_'.$languageID;
 									switch($type) {
 										case 'boolean' :
 										{
 											$value = isset($_POST[$name]) ? 1 : 0;
+											break;
+										}
+										case 'selectbox' :
+										{
+											$values = explode('||', $contentData['content'][$item]['default_value']);
+											$valueArray = array();
+											foreach($values as $option) {
+												$optionArray = explode('==', $option);
+												$optionName  = $optionArray[0];
+												$optionValue = count($optionArray)==1 ? $optionArray[0] : $optionArray[1];
+												if(isset($_POST[$name.'_'.md5($optionValue)])) {
+													array_push($valueArray, $optionValue);
+												}
+											}
+											$value = implode(';', $valueArray);
 											break;
 										}
 										default:
@@ -585,6 +608,7 @@ class Admin extends Controller
 					$idContent = $this->AdminModel->saveContentData($idContent, $contentData);
 					// Redirect to the editing-page:
 					redirect(site_url(array('admin', 'content', 'edit', $idContent)));
+					break;
 				}
 			case 'add' :
 				{
@@ -611,6 +635,7 @@ class Admin extends Controller
 						$data = array(
 							'lang'=>$this->lang,
 							'contentData'=>$contentData,
+							'templates'=>$this->AdminModel->getTableData('templates', 'id,name,templatefile'),
 							'title'=>$this->lang->line('title_modify_content')
 						);
 						$this->load->view('admin/content/add_edit.php', $data);
