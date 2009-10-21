@@ -13,11 +13,20 @@
 				</tr>
 				<tr>
 					<th><?php echo $lang->line('content_template'); ?>:</th>
-					<td><input readonly="readonly" type="text" name="template" value="<?php echo $contentData['id_template']; ?>" /> // TODO</td>
+					<td>
+						<select name="template">
+						<?php
+							foreach($templates->result() as $result) {
+								$selected = $contentData['id_template']==$result->id ? ' selected="selected"' : '';
+								echo '<option value="'.$result->id.'"'.$selected.'>'.$result->name.'</option>';
+							}
+						?>
+						</select>
+					</td>
 				</tr>
 				<tr>
 					<th><?php echo $lang->line('content_parent'); ?>:</th>
-					<td><input readonly="readonly" type="text" name="parent" value="<?php echo $contentData['id_content']; ?>" /> // TODO</td>
+					<td><input readonly="readonly" class="small" type="text" name="parent" value="<?php echo $contentData['id_content']; ?>" /> <a href="#" class="selectParent">Select parent <span></span></a></td>
 				</tr>
 				<tr class="delimiter">
 					<td colspan="2">&nbsp;</td>
@@ -65,8 +74,7 @@
 					} else {
 						$iterations = 1;
 					}
-					for($i=0; $i<$iterations; $i++) {
-						// $contentData['languages'] as $language) {
+					for($i=0; $i<$iterations; $i++) {						
 						$languageID = $item['multilanguage']==1 ? $contentData['languages'][$i]['id'] : 0;	// 0 stands for non-multilanguage
 						$name       = 'input_'.$optionID.'_'.$languageID;
 						$value      = '';
@@ -96,7 +104,6 @@
 								}
 							case 'rich_text' :
 								{
-									// TODO: Implement the image picker into CKEditor
 									echo '<div class="'.$class.'"><textarea name="'.$name.'" class="richtext">'.$value.'</textarea></div>';
 									break;
 								}
@@ -125,12 +132,29 @@
 								}
 							case 'dropdown' :
 								{
-									// TODO: Add a dropdown where a single value can be selected
+									$values = explode('||', $item['default_value']);
+									echo '<select name="'.$name.'">';
+									foreach($values as $option) {
+										$optionArray = explode('==', $option);
+										$optionName  = $optionArray[0];
+										$optionValue = count($optionArray)==1 ? $optionArray[0] : $optionArray[1];
+										$selected    = $optionValue == $value ? ' selected="selected"' : '';
+										echo '<option value="'.$optionValue.'"'.$selected.'>'.$optionName.'</option>';
+									}
+									echo '</select>';
 									break;
 								}
 							case 'selectbox' :
 								{
-									// TODO: Add a selectbox where multiple values can be selected
+									$values = explode('||', $item['default_value']);
+									$valueArray = explode(';', $value);
+									foreach($values as $option) {
+										$optionArray = explode('==', $option);
+										$optionName  = $optionArray[0];
+										$optionValue = count($optionArray)==1 ? $optionArray[0] : $optionArray[1];
+										$checked = in_array($optionValue, $valueArray) ? ' checked="checked" ' : '';
+										echo '<label><input type="checkbox" name="'.$name.'_'.md5($optionValue).'" '.$checked.' /> '.$optionName.'</label><br />';
+									}
 									break;
 								}
 							case 'date' :
@@ -174,8 +198,11 @@
 				</tr>
 			</table>			
 			<script type="text/javascript">
-				var language_ids        = [<?php echo $languagesString; ?>];
-				var default_language	= <?php echo DEFAULT_LANGUAGE_ID; ?>;
+				var language_ids     	     = [<?php echo $languagesString; ?>];
+				var default_language		 = <?php echo DEFAULT_LANGUAGE_ID; ?>;
+				var select_parent    	     = '<?php echo $lang->line('content_select_parent'); ?>';
+				var dialog_parent_same_id	 = '<?php echo $lang->line('dialog_parent_same_id'); ?>';
+				var dialog_parent_descendant = '<?php echo $lang->line('dialog_parent_descendant'); ?>';
 			</script>
 			<script type="text/javascript" src="<?php echo base_url(); ?>system/application/views/admin/js/content.js"></script>
 		</form>

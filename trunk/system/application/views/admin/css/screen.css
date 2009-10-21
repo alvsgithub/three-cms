@@ -49,11 +49,15 @@ td.content_actions a { text-indent: 0; padding: 5px; padding-left: 26px; width: 
 
 table input[type=text] { width: 300px; }
 textarea { width: 400px; height: 100px; }
+input[readonly] { color: #999; font-weight: bold; }
+table input.small { width: 50px; }
+a.selectParent { padding: 3px; background: #ccc; color: #fff; text-shadow: #000000 0 0 3px; text-decoration: none; border: 1px solid #999; -moz-border-radius: 5px; }
+a.selectParent span { color: #000; text-shadow: none; font-style: italic; font-size: 0.8em; }
 
 a.add { margin: auto; display: block; width: 200px; height: 20px; outline: none; background: #359 url(../images/icons/icon-new.png) 7px 7px no-repeat; font-size: 1.6em; color: #fff; text-decoration: none; padding: 5px; padding-left: 30px; margin-bottom: 1em; font-weight: bold; text-shadow: #000000 0 0 5px; }
 a.addContent { display: block; width: auto; background: url(../images/icons/icon-add.png) no-repeat; color: #359; text-decoration: none; padding: 2px 0 2px 20px; text-indent: 0; }
 a.addContent:hover { color: #333; background-color: #eee; }
-a.switchLanguage { text-indent: 0; width: auto; color: #359; padding: 5px; margin: 0; margin-right: 5px; text-decoration: none; background-repeat: no-repeat; background-position: 5px 8px; }
+a.switchLanguage { text-indent: 0; width: auto; color: #359; padding: 5px; margin: 0; margin-right: 5px; text-decoration: none; background-repeat: no-repeat; background-position: 5px 8px; -moz-border-radius: 5px; }
 a.switchLanguage:hover { background-color: #ccc; }
 a.switchLanguage.active { color: #fff; background-color: #359; }
 

@@ -61,6 +61,8 @@
 	$lang['dialog_delete']				= 'Are you sure you want to delete this item? This action cannot be undone!';
 	$lang['dialog_delete_tree']			= 'Are you sure you want to delete this item? All child documents will also be deleted! This action cannot be undone!';
 	$lang['dialog_option_exists']		= 'This option already exists in this data object. An option can only appear once in a data object!';
+	$lang['dialog_parent_same_id']		= 'You cannot set the document as a parent of itself!';
+	$lang['dialog_parent_descendant']	= 'You cannot set a descendant of this document as the parent of this document!';
 	
 	// Options:
 	$lang['option_small_text']			= 'Small Text';
@@ -101,6 +103,7 @@
 	$lang['content_alias']				= 'Alias';
 	$lang['content_languages']			= 'Languages';
 	$lang['content_language']			= 'Language';
+	$lang['content_select_parent']		= 'select a parent from the tree on the right of the screen';
 
     // Default text chunks:
     $lang['default_actions']        	= 'Actions';

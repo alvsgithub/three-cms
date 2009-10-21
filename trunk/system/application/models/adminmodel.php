@@ -665,5 +665,32 @@ class AdminModel extends Model
         }
         return $languages;
     }
+    
+    /**
+     * Check if ID of the parent is not a descendant of the ID of the content
+     * @param   $idContent  int     The ID of the content
+     * @param   $idParent   int     The ID of the parent
+     * @return  boolean             True of the parent is a descendant, false if not.
+     */
+    function checkDescendant($idContent, $idParent)
+    {
+        // Get a list of all the documents which have this document as parent:
+        $this->db->select('id');
+        $this->db->where('id_content', $idContent);
+        $query = $this->db->get('content');
+        foreach($query->result() as $result) {
+            if($result->id==$idParent) {
+                // Descendant found!
+                return true;
+            }
+            // Recursive:
+            $isDescendant = $this->checkDescendant($result->id, $idParent);
+            if($isDescendant) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
 }
 ?>
