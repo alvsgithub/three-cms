@@ -7,12 +7,15 @@
 		<script type="text/javascript">
             var baseURL              = '<?php echo base_url(); ?>';
 			var deleteFile  		 = '<?php echo $lang->line('dialog_delete'); ?>';
+			var dialog_new_folder    = '<?php echo $lang->line('dialog_new_folder'); ?>';
+			var dialog_no_folder     = '<?php echo $lang->line('dialog_no_folder'); ?>';
 		</script>
         <script type="text/javascript" src="<?php echo base_url(); ?>system/application/views/admin/browser/browser.js"></script>
     </head>
     <body>
         <div id="body">
 			<div id="top">
+				<form method="post" enctype="multipart/form-data" action="<?php echo site_url(array('admin', 'browser', 'upload')); ?>">
 				<?php
 				/*
 				<a href="#" class="prev" title="<?php echo $lang->line('browser_previous'); ?>"><?php echo $lang->line('browser_previous'); ?></a>
@@ -26,10 +29,12 @@
 				*/
 				?>
 				<a href="#" class="newFile" title="<?php echo $lang->line('browser_new_file'); ?>"><?php echo $lang->line('browser_new_file'); ?></a>
+				<input type="file" name="uploadField" /><input type="submit" name="uploadButton" value="<?php echo $lang->line('button_upload'); ?>" />
 				<a href="#" class="newFolder" title="<?php echo $lang->line('browser_new_folder'); ?>"><?php echo $lang->line('browser_new_folder'); ?></a>
 				<?php				
 					/* <a href="#" class="delete" title="<?php echo $lang->line('browser_delete'); ?>"><?php echo $lang->line('browser_delete'); ?></a> */
 				?>
+				</form>
 			</div>
 			<div id="tree">
 				<?php
@@ -39,8 +44,6 @@
 					// TODO: Implement refresh functionality
 					// TODO: Implement search functionality (AJAX)
 					// TODO: Implement upload new file functionality (AJAX / multiple files)
-					// TODO: Implement new folder functionality
-					// TODO: Implement delete functionality
 					function buildTree($path)
 					{
 						$files = glob($path.'/*');

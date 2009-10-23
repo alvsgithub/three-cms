@@ -763,6 +763,7 @@ class Admin extends Controller
 	
 	/**
 	 * Show the file browser:
+	 * // TODO Replace browser with sfbrowser
 	 */
 	function browser()
 	{
@@ -791,6 +792,16 @@ class Admin extends Controller
 						// Redirect back to the browser:
 						redirect(site_url(array('admin', 'browser')));
 						break;
+					}
+				case 'newfolder' :
+					{
+						$currentFolder = $this->uri->segment(4);
+						$name          = $this->uri->segment(5);
+						$this->AdminModel->createFolder(str_replace('-', '/', $currentFolder).'/'.$name);
+					}
+				case 'upload' :
+					{
+						
 					}
 			}
 		} else {
