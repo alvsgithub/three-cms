@@ -56,6 +56,7 @@
     $lang['button_add_new_item']   		= 'Add a new %s...';    
     $lang['button_save']           		= 'Save';
 	$lang['button_add_option']			= 'Add option';
+	$lang['button_upload']				= 'Upload';
     
 	// Dialogs:
 	$lang['dialog_delete']				= 'Are you sure you want to delete this item? This action cannot be undone!';
@@ -63,6 +64,8 @@
 	$lang['dialog_option_exists']		= 'This option already exists in this data object. An option can only appear once in a data object!';
 	$lang['dialog_parent_same_id']		= 'You cannot set the document as a parent of itself!';
 	$lang['dialog_parent_descendant']	= 'You cannot set a descendant of this document as the parent of this document!';
+	$lang['dialog_new_folder']			= 'Please enter the name of the new folder:';
+	$lang['dialog_no_folder']			= 'Please select a folder to perform this action.';
 	
 	// Options:
 	$lang['option_small_text']			= 'Small Text';

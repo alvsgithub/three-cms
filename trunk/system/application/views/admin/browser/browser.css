@@ -12,7 +12,8 @@ html { font-family: sans-serif; font-size: 12px; }
 #top a.newFolder { background-image: url(images/folder-new.png);}
 #top a.newFile   { background-image: url(images/document-new.png);}
 #top a.delete    { background-image: url(images/process-stop.png);}
-#top input { float: left; margin: 4px; border: 1px solid #ccc; padding: 4px; width: 200px; }
+/* #top input { float: left; margin: 4px; border: 1px solid #ccc; padding: 4px; width: 200px; margin-right: 2em; } */
+#top input { float: left; margin-right: 2em; margin-top: 4px; }
 #top span.delimiter { display: block; float: left; width: 0; height: 32px; border: 1px inset #fff; margin: 0 5px; }
 #top a:hover { background-color: #ddd; }
 

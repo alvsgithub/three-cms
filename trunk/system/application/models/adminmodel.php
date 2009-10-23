@@ -692,5 +692,14 @@ class AdminModel extends Model
         return false;
     }
     
+    /**
+     * Create a folder
+     * @param   $name   string  The name of the folder
+     */
+    function createFolder($name)
+    {
+        mkdir($name);
+    }
+    
 }
 ?>
