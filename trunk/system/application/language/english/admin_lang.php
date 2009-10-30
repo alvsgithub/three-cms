@@ -14,6 +14,7 @@
     $lang['menu_options']           	= 'Option Types';
     $lang['menu_languages']         	= 'Languages';
     $lang['menu_locales']           	= 'Locales';
+	$lang['menu_dashboard']				= 'Dashboard';
     
     // Titles:
     $lang['title_templates']        	= 'Templates';
@@ -95,6 +96,7 @@
 	$lang['system_template_name']		= 'Name';
 	$lang['system_template_dataobject'] = 'Data Object';
 	$lang['system_template_file']		= 'Template File';
+	$lang['system_template_root']		= 'Can be added to the root';
 	$lang['system_dataobject_name']		= 'Name';
 	$lang['system_dataobject_linked']	= 'Linked Options';
 
@@ -106,7 +108,8 @@
 	$lang['content_alias']				= 'Alias';
 	$lang['content_languages']			= 'Languages';
 	$lang['content_language']			= 'Language';
-	$lang['content_select_parent']		= 'select a parent from the tree on the right of the screen';
+	$lang['content_select_parent']		= 'Select a parent from the tree on the right of the screen';
+	$lang['content_order']				= 'Order';
 
     // Default text chunks:
     $lang['default_actions']        	= 'Actions';
@@ -120,4 +123,7 @@
 	$lang['browser_new_file']			= 'New file';
 	$lang['browser_delete']				= 'Delete';
 	$lang['browser_search']				= 'Search';
+	
+	// Tree:
+	$lang['tree_add']					= 'Add new content to the root';
 ?>

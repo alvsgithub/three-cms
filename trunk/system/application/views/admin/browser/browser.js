@@ -1,6 +1,8 @@
 var parent;
 var currentFolder = '';
 var currentPath   = '';
+var ckEditor = false;
+var ckEditorFuncNum;
 
 $(function(){
 	$("input[name=searchField]").hide();
@@ -35,6 +37,15 @@ $(function(){
 			alert(dialog_no_folder);
 		}
 		return false;
+	});
+	
+	if(getQueryVariable("CKEditor")!=false) {
+		ckEditor = window.opener.CKEDITOR; // document.getElementById(getQueryVariable("CKEditor"));	
+		ckEditorFuncNum = getQueryVariable("CKEditorFuncNum");
+	}
+	
+	$("input[name=uploadButton]").mousedown(function(){
+		$("input[name=folder]").val(currentPath);
 	});
 });
 
@@ -80,9 +91,14 @@ function loadFileView()
 		});			
 		$(".file", this).click(function(){
 			// Check if it is not the delete-link which is clicked:
+			
 			if(!deletion) {
-				fileName = $("input[name=filename]", this).val();				
-				window.opener.setInputValue(fileName);
+				fileName = $("input[name=filename]", this).val();
+				if(ckEditor!=false) {
+					ckEditor.tools.callFunction(ckEditorFuncNum, fileName);
+				} else {
+					window.opener.setInputValue(fileName);
+				}
 				window.close();
 			}
 			if(!ok) {
@@ -100,4 +116,16 @@ function resizeWindow()
 	
 	$("#files").height(h-43);
 	$("#files").width(w-246);
+}
+
+function getQueryVariable(variable) {
+	var query = window.location.search.substring(1);
+	var vars = query.split("&");
+	for (var i=0;i<vars.length;i++) {
+		var pair = vars[i].split("=");
+		if (pair[0] == variable) {
+			return pair[1];
+		}
+	}
+	return false;
 }

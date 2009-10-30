@@ -50,4 +50,5 @@ CKEDITOR.editorConfig = function( config )
 		['Maximize', 'ShowBlocks','-','About']
 	];
 
+	
 };

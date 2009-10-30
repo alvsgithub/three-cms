@@ -20,7 +20,7 @@ $(function(){
 	
 	// TextArea's with the class 'richtext' should be ckeditors:
 	$("textarea.richtext").each(function(){
-		CKEDITOR.replace($(this).attr('name'));	
+		CKEDITOR.replace($(this).attr('name'), {filebrowserBrowseUrl: baseURL + "index.php/admin/browser"});	
 	});
 	
 	$("input[name=browse]").click(function(){
