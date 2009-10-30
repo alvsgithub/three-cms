@@ -22,4 +22,21 @@ $(function(){
 		$(".language_" + id).show();
 		return false;
 	});
+	
+	// Bigger / smaller:
+	$("a.orderSmaller").click(function(){
+		newVal = $("input[name=order]").val();
+		newVal--;
+		if(newVal < 0) { newVal = 0; }
+		$("input[name=order]").val(newVal);
+		return false;
+	});
+	
+	$("a.orderBigger").click(function(){
+		newVal = $("input[name=order]").val();
+		newVal++;
+		$("input[name=order]").val(newVal);
+		return false;
+	});
+	
 });

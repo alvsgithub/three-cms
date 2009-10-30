@@ -6,7 +6,7 @@ html { font-family: arial, helvetica, sans-serif; font-size: 62.5%; cursor: defa
 #navigation { background: #ccc; border-bottom: 1px solid #666; height: 30px; font-size: 1.6em; }
 #navigation ul { list-style-type: none; }
 #navigation ul li { padding: 5px; border-right: 1px solid #026; border-left: 1px solid #68b; float: left; background: #359; height: 20px; color: #fff; }
-
+#navigation a { color: #fff; text-decoration: none; }
 #navigation ul ul { position: absolute; margin-top: 6px; margin-left: -6px; display: none; border-bottom: 1px solid #666; }
 #navigation ul ul li { display: block; width: 140px; border: 1px solid #666; background: #ccc; clear: left; border-bottom: none; padding: 0; height: 28px; }
 #navigation ul ul li a { color: #000; text-decoration: none; padding: 5px; display: block; }
@@ -25,6 +25,9 @@ html { font-family: arial, helvetica, sans-serif; font-size: 62.5%; cursor: defa
 #tree ul ul { margin-left: 1em; }
 .innerTree { margin-top: 5px; }
 .innerTree img { margin-left: 30px; }
+
+#treeNavigation li { background: none; }
+#treeNavigation li a { background-position: 3px 3px; }
 
 #content { float: left; width: 75%; }
 #innerContent { padding: 10px; }
@@ -60,6 +63,8 @@ a.addContent:hover { color: #333; background-color: #eee; }
 a.switchLanguage { text-indent: 0; width: auto; color: #359; padding: 5px; margin: 0; margin-right: 5px; text-decoration: none; background-repeat: no-repeat; background-position: 5px 8px; -moz-border-radius: 5px; }
 a.switchLanguage:hover { background-color: #ccc; }
 a.switchLanguage.active { color: #fff; background-color: #359; }
+
+a.orderSmaller, a.orderBigger { text-decoration: none; color: #fff; font-weight: bold; padding: 3px 5px; background: #ccc; border: 1px solid #999; -moz-border-radius: 5px; text-shadow: #000000 0 0 3px; }
 
 #footer { float: left; clear: both; height: 30px; border-top: 1px solid #666; width: 100%; }
 

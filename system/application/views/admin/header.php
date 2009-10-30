@@ -16,11 +16,9 @@
     </head>
     <body>
         <div id="body">
-            <div id="top">
-                <!-- TODO: Logo goes here -->
-            </div>
             <div id="navigation">
                 <ul>
+                    <li><a href="<?php echo site_url(array('admin')); ?>"><?php echo $lang->line('menu_dashboard'); ?></a></li>
                     <li><?php echo $lang->line('menu_configuration'); ?>
                         <ul>
                             <li><a href="<?php echo site_url(array('admin', 'settings')); ?>"><?php echo $lang->line('menu_site_settings'); ?></a></li>

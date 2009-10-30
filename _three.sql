@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Sep 28, 2009 at 04:57 PM
+-- Generation Time: Oct 30, 2009 at 04:37 PM
 -- Server version: 5.1.33
 -- PHP Version: 5.2.9-2
 
@@ -31,20 +31,21 @@ CREATE TABLE IF NOT EXISTS `content` (
   `id_template` int(11) NOT NULL,
   `name` tinytext NOT NULL,
   `alias` tinytext NOT NULL,
+  `order` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=7 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=50 ;
 
 --
 -- Dumping data for table `content`
 --
 
-INSERT INTO `content` (`id`, `id_content`, `id_template`, `name`, `alias`) VALUES
-(1, 0, 1, 'Test pagina', 'test'),
-(2, 1, 2, 'Blok 1', 'blok1'),
-(3, 1, 2, 'Blok 2', 'blok2'),
-(4, 2, 2, 'Blok 1.1', 'blok-1-1'),
-(5, 2, 2, 'Blok 1.2', 'blok-1-2'),
-(6, 1, 3, 'TestBlok', 'testblok');
+INSERT INTO `content` (`id`, `id_content`, `id_template`, `name`, `alias`, `order`) VALUES
+(1, 0, 1, 'Test pagina', 'test', 0),
+(2, 1, 2, 'Blok 1', 'blok1', 1),
+(3, 1, 2, 'Blok 2', 'blok2', 2),
+(4, 2, 2, 'Blok 1.1', 'blok-1-1', 0),
+(5, 2, 2, 'Blok 1.2', 'blok-1-2', 0),
+(6, 1, 3, 'TestBlok', 'testblok', 0);
 
 -- --------------------------------------------------------
 
@@ -56,7 +57,7 @@ CREATE TABLE IF NOT EXISTS `dataobjects` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` tinytext NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
 
 --
 -- Dumping data for table `dataobjects`
@@ -79,23 +80,25 @@ CREATE TABLE IF NOT EXISTS `dataobjects_options` (
   `id_option` int(11) NOT NULL,
   `order` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=65 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=86 ;
 
 --
 -- Dumping data for table `dataobjects_options`
 --
 
 INSERT INTO `dataobjects_options` (`id`, `id_dataobject`, `id_option`, `order`) VALUES
-(61, 1, 6, 4),
+(84, 1, 10, 6),
 (39, 2, 2, 1),
 (38, 2, 1, 0),
-(60, 1, 2, 3),
-(59, 1, 8, 2),
-(58, 1, 7, 1),
-(57, 1, 1, 0),
-(62, 1, 3, 5),
+(83, 1, 3, 5),
+(82, 1, 6, 4),
+(81, 1, 2, 3),
+(80, 1, 8, 2),
+(79, 1, 7, 1),
 (63, 3, 2, 0),
-(64, 3, 3, 1);
+(64, 3, 3, 1),
+(85, 1, 11, 7),
+(78, 1, 1, 0);
 
 -- --------------------------------------------------------
 
@@ -109,7 +112,7 @@ CREATE TABLE IF NOT EXISTS `languages` (
   `code` varchar(2) NOT NULL,
   `active` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=10 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=11 ;
 
 --
 -- Dumping data for table `languages`
@@ -131,7 +134,7 @@ CREATE TABLE IF NOT EXISTS `locales` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` tinytext NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=10 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=11 ;
 
 --
 -- Dumping data for table `locales`
@@ -154,7 +157,7 @@ CREATE TABLE IF NOT EXISTS `locales_values` (
   `id_language` int(11) NOT NULL,
   `value` text NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=48 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=52 ;
 
 --
 -- Dumping data for table `locales_values`
@@ -187,7 +190,7 @@ CREATE TABLE IF NOT EXISTS `options` (
   `default_value` text NOT NULL,
   `multilanguage` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=9 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=12 ;
 
 --
 -- Dumping data for table `options`
@@ -199,7 +202,9 @@ INSERT INTO `options` (`id`, `name`, `type`, `default_value`, `multilanguage`) V
 (3, 'content', 'rich_text', '', 1),
 (6, 'headerImage', 'image', '', 0),
 (7, 'Show in menu', 'boolean', '', 0),
-(8, 'summary', 'large_text', '', 1);
+(8, 'summary', 'large_text', '', 1),
+(10, 'Kleur', 'dropdown', 'rood==#FF0000||groen==#00FF00||blauw==#0000FF||paars==#FF00FF||geel==#FFFF00', 0),
+(11, 'Zichtbare elementen', 'selectbox', 'Heeft foto aan de linkerkant==fotoLinks||Heeft foto in het midden==fotoMidden||Heeft foto aan de rechterkant==fotoRechts', 0);
 
 -- --------------------------------------------------------
 
@@ -233,17 +238,18 @@ CREATE TABLE IF NOT EXISTS `templates` (
   `name` tinytext NOT NULL,
   `id_dataobject` int(11) NOT NULL,
   `templatefile` tinytext NOT NULL,
+  `root` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
 
 --
 -- Dumping data for table `templates`
 --
 
-INSERT INTO `templates` (`id`, `name`, `id_dataobject`, `templatefile`) VALUES
-(1, 'Default template', 1, 'index.tpl'),
-(2, 'Block', 1, 'block.tpl'),
-(3, 'Blok', 3, 'block.tpl');
+INSERT INTO `templates` (`id`, `name`, `id_dataobject`, `templatefile`, `root`) VALUES
+(1, 'Default template', 1, 'index.tpl', 1),
+(2, 'Block', 1, 'block.tpl', 0),
+(3, 'Blok', 3, 'block.tpl', 0);
 
 -- --------------------------------------------------------
 
@@ -256,17 +262,20 @@ CREATE TABLE IF NOT EXISTS `templates_allowed_children` (
   `id_template` int(11) NOT NULL,
   `id_child_template` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=11 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=29 ;
 
 --
 -- Dumping data for table `templates_allowed_children`
 --
 
 INSERT INTO `templates_allowed_children` (`id`, `id_template`, `id_child_template`) VALUES
-(9, 1, 2),
-(8, 1, 1),
+(28, 1, 3),
+(27, 1, 2),
 (7, 2, 2),
-(10, 1, 3);
+(26, 1, 1),
+(11, 4, 2),
+(12, 4, 1),
+(13, 4, 3);
 
 -- --------------------------------------------------------
 
@@ -281,7 +290,7 @@ CREATE TABLE IF NOT EXISTS `values` (
   `id_language` int(11) NOT NULL,
   `value` text NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=45 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=281 ;
 
 --
 -- Dumping data for table `values`
@@ -300,17 +309,17 @@ INSERT INTO `values` (`id`, `id_content`, `id_option`, `id_language`, `value`) V
 (23, 1, 7, 1, '1'),
 (22, 1, 1, 6, ''),
 (10, 2, 2, 1, 'Koptekst'),
-(11, 2, 3, 1, 'Inhoud'),
+(11, 2, 3, 1, '<p>\n	Inhoud</p>\n'),
 (12, 2, 2, 2, 'Small header'),
-(13, 2, 3, 2, 'content'),
+(13, 2, 3, 2, '<p>\n	content</p>\n'),
 (14, 2, 2, 3, 'Eine kopf'),
-(15, 2, 3, 3, 'Inhalt'),
+(15, 2, 3, 3, '<p>\n	Inhalt</p>\n'),
 (16, 3, 2, 1, 'Nog een koptekst'),
-(17, 3, 3, 1, 'Nog wat inhoud'),
+(17, 3, 3, 1, '<p>\n	Nog wat inhoud</p>\n'),
 (18, 3, 2, 2, 'Another header'),
-(19, 3, 3, 2, 'Yet some other content'),
+(19, 3, 3, 2, '<p>\n	Yet some other content</p>\n'),
 (20, 3, 2, 3, 'Eine header wieder'),
-(21, 3, 3, 3, 'Und nog wat tekscht'),
+(21, 3, 3, 3, '<p>\n	Und nog wat tekscht</p>\n'),
 (24, 1, 7, 2, '1'),
 (25, 1, 7, 3, '1'),
 (26, 1, 7, 6, '1'),
@@ -331,4 +340,96 @@ INSERT INTO `values` (`id`, `id_content`, `id_option`, `id_language`, `value`) V
 (41, 6, 3, 1, ''),
 (42, 6, 3, 2, ''),
 (43, 6, 3, 3, ''),
-(44, 6, 3, 6, '');
+(44, 6, 3, 6, ''),
+(155, 1, 11, 1, 'fotoLinks;fotoMidden'),
+(154, 1, 10, 6, '#00FF00'),
+(153, 1, 10, 3, '#00FF00'),
+(152, 1, 10, 2, '#00FF00'),
+(151, 1, 10, 1, '#00FF00'),
+(267, 3, 2, 6, ''),
+(268, 3, 6, 1, ''),
+(266, 3, 8, 6, ''),
+(265, 3, 8, 3, ''),
+(264, 3, 8, 2, ''),
+(262, 3, 7, 6, '0'),
+(263, 3, 8, 1, ''),
+(261, 3, 7, 3, '0'),
+(260, 3, 7, 2, '0'),
+(259, 3, 7, 1, '0'),
+(258, 3, 1, 6, ''),
+(257, 3, 1, 3, ''),
+(256, 3, 1, 2, ''),
+(255, 3, 1, 1, ''),
+(254, 2, 11, 6, ''),
+(253, 2, 11, 3, ''),
+(252, 2, 11, 2, ''),
+(251, 2, 11, 1, ''),
+(250, 2, 10, 6, '#FF0000'),
+(249, 2, 10, 3, '#FF0000'),
+(248, 2, 10, 2, '#FF0000'),
+(247, 2, 10, 1, '#FF0000'),
+(246, 2, 3, 6, ''),
+(245, 2, 6, 6, ''),
+(244, 2, 6, 3, ''),
+(235, 2, 7, 3, '0'),
+(236, 2, 7, 6, '0'),
+(237, 2, 8, 1, ''),
+(238, 2, 8, 2, ''),
+(239, 2, 8, 3, ''),
+(240, 2, 8, 6, ''),
+(241, 2, 2, 6, ''),
+(242, 2, 6, 1, ''),
+(243, 2, 6, 2, ''),
+(271, 3, 6, 6, ''),
+(270, 3, 6, 3, ''),
+(269, 3, 6, 2, ''),
+(229, 2, 1, 1, ''),
+(230, 2, 1, 2, ''),
+(231, 2, 1, 3, ''),
+(232, 2, 1, 6, ''),
+(233, 2, 7, 1, '0'),
+(234, 2, 7, 2, '0'),
+(190, 5, 11, 6, 'fotoMidden'),
+(189, 5, 11, 3, 'fotoMidden'),
+(188, 5, 11, 2, 'fotoMidden'),
+(187, 5, 11, 1, 'fotoMidden'),
+(186, 5, 10, 6, '#FF00FF'),
+(185, 5, 10, 3, '#FF00FF'),
+(184, 5, 10, 2, '#FF00FF'),
+(183, 5, 10, 1, '#FF00FF'),
+(182, 5, 3, 6, ''),
+(181, 5, 3, 3, ''),
+(180, 5, 3, 2, ''),
+(179, 5, 3, 1, ''),
+(178, 5, 6, 6, ''),
+(177, 5, 6, 3, ''),
+(176, 5, 6, 2, ''),
+(175, 5, 6, 1, ''),
+(174, 5, 2, 6, ''),
+(173, 5, 2, 3, ''),
+(172, 5, 2, 2, ''),
+(171, 5, 2, 1, ''),
+(170, 5, 8, 6, ''),
+(169, 5, 8, 3, ''),
+(168, 5, 8, 2, ''),
+(167, 5, 8, 1, ''),
+(166, 5, 7, 6, '0'),
+(165, 5, 7, 3, '0'),
+(164, 5, 7, 2, '0'),
+(163, 5, 7, 1, '0'),
+(162, 5, 1, 6, ''),
+(161, 5, 1, 3, ''),
+(160, 5, 1, 2, 'Content of block 1.2'),
+(159, 5, 1, 1, 'Inhoud van blok 1.2'),
+(158, 1, 11, 6, 'fotoLinks;fotoMidden'),
+(157, 1, 11, 3, 'fotoLinks;fotoMidden'),
+(156, 1, 11, 2, 'fotoLinks;fotoMidden'),
+(272, 3, 3, 6, ''),
+(273, 3, 10, 1, '#FF0000'),
+(274, 3, 10, 2, '#FF0000'),
+(275, 3, 10, 3, '#FF0000'),
+(276, 3, 10, 6, '#FF0000'),
+(277, 3, 11, 1, ''),
+(278, 3, 11, 2, ''),
+(279, 3, 11, 3, ''),
+(280, 3, 11, 6, '');

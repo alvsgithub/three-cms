@@ -30,6 +30,7 @@
 				?>
 				<a href="#" class="newFile" title="<?php echo $lang->line('browser_new_file'); ?>"><?php echo $lang->line('browser_new_file'); ?></a>
 				<input type="file" name="uploadField" /><input type="submit" name="uploadButton" value="<?php echo $lang->line('button_upload'); ?>" />
+				<input type="hidden" name="folder" />
 				<a href="#" class="newFolder" title="<?php echo $lang->line('browser_new_folder'); ?>"><?php echo $lang->line('browser_new_folder'); ?></a>
 				<?php				
 					/* <a href="#" class="delete" title="<?php echo $lang->line('browser_delete'); ?>"><?php echo $lang->line('browser_delete'); ?></a> */

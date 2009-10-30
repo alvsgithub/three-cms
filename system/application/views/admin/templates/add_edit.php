@@ -25,6 +25,10 @@
 					<th><?php echo $lang->line('system_template_file'); ?>:</th>
 					<td><input type="text" name="templatefile" value="<?php echo $values['templatefile']; ?>" /></td>
 				</tr>
+				<tr>
+					<th><?php echo $lang->line('system_template_root'); ?>:</th>
+					<td><input type="checkbox" name="root" <?php echo $values['root']==1 ? ' checked="checked" ' : ''; ?> /></td>
+				</tr>
 				<tr class="delimiter">
 					<td colspan="2">&nbsp;</td>
 				</tr>

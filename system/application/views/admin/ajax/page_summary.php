@@ -17,6 +17,10 @@
 			<th><?php echo $lang->line('content_template'); ?>:</th>
 			<td><?php echo $content['templateName']; ?></td>
 		</tr>
+		<tr>
+			<th><?php echo $lang->line('content_order'); ?>:</th>
+			<td><?php echo $content['order']; ?></td>
+		</tr>
 		<tr class="delimiter">
 			<td colspan="2">&nbsp;</td>
 		</tr>

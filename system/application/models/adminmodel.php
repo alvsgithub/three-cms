@@ -42,6 +42,7 @@ class AdminModel extends Model
         $tree  = array();
         $this->db->where('id_content', $startID);
         $this->db->select('id,name');
+        $this->db->order_by('order', 'asc');
         $query = $this->db->get('content');
         foreach($query->result() as $result) {
             $this->db->where('id_content', $result->id);
@@ -390,6 +391,22 @@ class AdminModel extends Model
     }
     
     /**
+     * Get the templates that can be added to the root
+     * @return  array   A 2-dimensional array of the templates: [[id=int, name=string], ...]
+     */
+    function getRootTemplates()
+    {
+        $templates = array();
+        $this->db->select('id,name');
+        $this->db->where('root', 1);
+        $query = $this->db->get('templates');
+        foreach($query->result() as $result) {
+            array_push($templates, array('id'=>$result->id, 'name'=>$result->name));
+        }
+        return $templates;
+    }
+    
+    /**
      * Set the templates which are allowed to be a child of the current template
      * @param   $id         int     The ID of the template
      * @param   $templates  array   A 2-dimensional array with the templates: [[id=int, allowed=bool], ...]
@@ -413,10 +430,8 @@ class AdminModel extends Model
      */
     function getContent($id)
     {
-        $this->db->select('
-            content.id          as id,
-            content.name        as name,
-            content.alias       as alias,
+        $this->db->select('            
+            content.*,
             content.id_template as id_template,
             templates.name      as templateName
         ');
@@ -511,7 +526,8 @@ class AdminModel extends Model
             'id_content'=>$contentData['id_content'],
             'id_template'=>$contentData['id_template'],
             'name'=>$contentData['name'],
-            'alias'=>$contentData['alias']
+            'alias'=>$contentData['alias'],
+            'order'=>$contentData['order']
         );
         // Insert/update base content information:
         if($idContent==0) {
@@ -701,5 +717,14 @@ class AdminModel extends Model
         mkdir($name);
     }
     
+    /**
+     * Store an upload
+     * @param   $fileArray  array   File array, as given in $_FILES
+     * @param   $folder     string  Name of the folder to store the file in.
+     */
+    function storeUpload($fileArray, $folder)
+    {
+        move_uploaded_file($fileArray['tmp_name'], $folder.'/'.$fileArray['name']);
+    }
 }
 ?>

@@ -140,10 +140,12 @@ class Admin extends Controller
 			case 'save' :
 				{
 					// Save the data (POST-action)
+					$root = isset($_POST['root']) ? 1 : 0;
 					$data = array(
 						'name'=>$this->input->post('name'),
 						'id_dataobject'=>$this->input->post('id_dataobject'),
-						'templatefile'=>$this->input->post('templatefile')
+						'templatefile'=>$this->input->post('templatefile'),
+						'root'=>$root
 					);
 					$id = $this->AdminModel->saveData('templates', $data, $this->input->post('id'));
 					// Save the allowed templates:
@@ -509,7 +511,7 @@ class Admin extends Controller
 				}
 			case 'page_summary' :
 				{
-					$id = $this->uri->segment(4);
+					$id = $this->uri->segment(4);					
 					if($id!=false) {
 						$content = $this->AdminModel->getContent($id);
 						$data = array(
@@ -558,6 +560,7 @@ class Admin extends Controller
 					$contentData['id_content']  = $idParent;		// id_content is the parent of this content
 					$contentData['name']        = $this->input->post('name');
 					$contentData['alias']       = $this->input->post('alias');
+					$contentData['order']		= $this->input->post('order');
 					// Get the values:
 					for($item=0; $item<count($contentData['content']); $item++) {
 						if($contentData['content'][$item]['multilanguage']==1) {
@@ -614,16 +617,16 @@ class Admin extends Controller
 				{
 					$this->showTree();
 					$id_template = $this->uri->segment(5);
-					if($id!=false && $id_template!=false) {
+					if($id!==false && $id_template!==false) {
 						// In this case, $id is the parent.
 						$contentData = $this->AdminModel->getContentData(0, $id, $id_template);
 						$data = array(
 							'lang'=>$this->lang,
 							'contentData'=>$contentData,
+							'templates'=>$this->AdminModel->getTableData('templates', 'id,name,templatefile'),
 							'title'=>$this->lang->line('title_add_content')
 						);
 						$this->load->view('admin/content/add_edit.php', $data);
-						
 					}
 					break;
 				}
@@ -666,6 +669,16 @@ class Admin extends Controller
 					}
 					$this->showTree();
 					$this->showDashBoard();
+					break;
+				}
+			case 'root' :
+				{
+					$this->showTree();
+					$data = array(
+						'lang'=>$this->lang,
+						'templates'=>$this->AdminModel->getRootTemplates()
+					);
+					$this->load->view('admin/content/new_content.php', $data);
 					break;
 				}
 			default :
@@ -801,7 +814,9 @@ class Admin extends Controller
 					}
 				case 'upload' :
 					{
-						
+						$folder = str_replace('-', '/', $_POST['folder']);
+						$this->AdminModel->storeUpload($_FILES['uploadField'], $folder);
+						redirect(site_url(array('admin', 'browser')));
 					}
 			}
 		} else {

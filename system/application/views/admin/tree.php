@@ -1,4 +1,9 @@
 <div id="tree">
+	<div id="treeNavigation">
+		<ul>
+			<li><a href="<?php echo site_url(array('admin', 'content', 'root')); ?>" class="addContent"><?php echo $lang->line('tree_add'); ?></a></li>
+		</ul>
+	</div>
 	<div id="innerTree">
 		<?php
 			// Function to draw the tree:

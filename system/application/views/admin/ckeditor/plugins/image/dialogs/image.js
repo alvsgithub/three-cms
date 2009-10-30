@@ -274,7 +274,7 @@ For licensing, see LICENSE.html or http://ckeditor.com/license
                                 }
                             }
                         },
-						/*
+						
                         {
                             type: 'button',
                             id: 'browse',
@@ -282,8 +282,9 @@ For licensing, see LICENSE.html or http://ckeditor.com/license
                             label: m.lang.common.browseServer,
                             hidden: true,
                             filebrowser: 'info:txtUrl'
-                        }]
-						*/
+                        }
+						
+						/*
                         {
                             type: 'button',
                             id: 'browse',
@@ -296,7 +297,9 @@ For licensing, see LICENSE.html or http://ckeditor.com/license
 								var top  = screen.height/2 - 300;
 								window.open(baseURL + 'index.php/admin/browser', 'File browser', 'toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width=800,height=600,left='+left+',top='+top);
 							}
-                        }]
+                        }
+						*/
+						]
                     }]
                 },
                 {

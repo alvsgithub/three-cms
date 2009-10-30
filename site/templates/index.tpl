@@ -2,16 +2,33 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 	<head>
 		<title>{$title}</title>
+		<link rel="stylesheet" type="text/css" media="screen" href="site/css/screen.css" />
 	</head>
 	<body>
-		<h1>{$header}</h1>
-		<p>{$content}</p>
-		{* DataObject aanroepen: *}
-		<hr />
+		<div id="body">
+			<div id="top">
+				<h1>Three CMS Demonstration page</h1>
+			</div>
+			<div id="navigation">
+				{* See how simple it is to create a navigation: *}
+				<ul>
+				{foreach from=$dataObject->children() item=child}
+					<li><a href="#">{$child->get('header')}</a></li>
+				{/foreach}
+				</ul>
+			</div>
+			<div id="content">
+				<h1>{$header}</h1>
+				<p>{$content}</p>
+			</div>
+			<div id="footer">
+				<p>&copy; {$smarty.now|date_format:"%Y"} || Powered by Three CMS</p>
+			</div>
+		</div>
+		{*
 		{foreach from=$dataObject->children() item=obj}
 			{$obj->render()}
 		{/foreach}
-		<hr />
-		Children: {$dataObject->children()}		
+		*}
 	</body>
 </html>
