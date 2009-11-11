@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Oct 30, 2009 at 04:37 PM
+-- Generation Time: Nov 11, 2009 at 04:59 PM
 -- Server version: 5.1.33
 -- PHP Version: 5.2.9-2
 
@@ -22,10 +22,10 @@ SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 -- --------------------------------------------------------
 
 --
--- Table structure for table `content`
+-- Table structure for table `three_content`
 --
 
-CREATE TABLE IF NOT EXISTS `content` (
+CREATE TABLE IF NOT EXISTS `three_content` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `id_content` int(11) NOT NULL,
   `id_template` int(11) NOT NULL,
@@ -36,10 +36,10 @@ CREATE TABLE IF NOT EXISTS `content` (
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=50 ;
 
 --
--- Dumping data for table `content`
+-- Dumping data for table `three_content`
 --
 
-INSERT INTO `content` (`id`, `id_content`, `id_template`, `name`, `alias`, `order`) VALUES
+INSERT INTO `three_content` (`id`, `id_content`, `id_template`, `name`, `alias`, `order`) VALUES
 (1, 0, 1, 'Test pagina', 'test', 0),
 (2, 1, 2, 'Blok 1', 'blok1', 1),
 (3, 1, 2, 'Blok 2', 'blok2', 2),
@@ -50,20 +50,20 @@ INSERT INTO `content` (`id`, `id_content`, `id_template`, `name`, `alias`, `orde
 -- --------------------------------------------------------
 
 --
--- Table structure for table `dataobjects`
+-- Table structure for table `three_dataobjects`
 --
 
-CREATE TABLE IF NOT EXISTS `dataobjects` (
+CREATE TABLE IF NOT EXISTS `three_dataobjects` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` tinytext NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
 
 --
--- Dumping data for table `dataobjects`
+-- Dumping data for table `three_dataobjects`
 --
 
-INSERT INTO `dataobjects` (`id`, `name`) VALUES
+INSERT INTO `three_dataobjects` (`id`, `name`) VALUES
 (1, 'Default Page'),
 (2, 'Content 2'),
 (3, 'Blok');
@@ -71,10 +71,10 @@ INSERT INTO `dataobjects` (`id`, `name`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `dataobjects_options`
+-- Table structure for table `three_dataobjects_options`
 --
 
-CREATE TABLE IF NOT EXISTS `dataobjects_options` (
+CREATE TABLE IF NOT EXISTS `three_dataobjects_options` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `id_dataobject` int(11) NOT NULL,
   `id_option` int(11) NOT NULL,
@@ -83,10 +83,10 @@ CREATE TABLE IF NOT EXISTS `dataobjects_options` (
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=86 ;
 
 --
--- Dumping data for table `dataobjects_options`
+-- Dumping data for table `three_dataobjects_options`
 --
 
-INSERT INTO `dataobjects_options` (`id`, `id_dataobject`, `id_option`, `order`) VALUES
+INSERT INTO `three_dataobjects_options` (`id`, `id_dataobject`, `id_option`, `order`) VALUES
 (84, 1, 10, 6),
 (39, 2, 2, 1),
 (38, 2, 1, 0),
@@ -103,10 +103,10 @@ INSERT INTO `dataobjects_options` (`id`, `id_dataobject`, `id_option`, `order`) 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `languages`
+-- Table structure for table `three_languages`
 --
 
-CREATE TABLE IF NOT EXISTS `languages` (
+CREATE TABLE IF NOT EXISTS `three_languages` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` tinytext NOT NULL,
   `code` varchar(2) NOT NULL,
@@ -115,10 +115,10 @@ CREATE TABLE IF NOT EXISTS `languages` (
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=11 ;
 
 --
--- Dumping data for table `languages`
+-- Dumping data for table `three_languages`
 --
 
-INSERT INTO `languages` (`id`, `name`, `code`, `active`) VALUES
+INSERT INTO `three_languages` (`id`, `name`, `code`, `active`) VALUES
 (1, 'Nederlands', 'nl', 1),
 (2, 'English', 'en', 1),
 (3, 'Deutsch', 'de', 1),
@@ -127,20 +127,20 @@ INSERT INTO `languages` (`id`, `name`, `code`, `active`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `locales`
+-- Table structure for table `three_locales`
 --
 
-CREATE TABLE IF NOT EXISTS `locales` (
+CREATE TABLE IF NOT EXISTS `three_locales` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` tinytext NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=11 ;
 
 --
--- Dumping data for table `locales`
+-- Dumping data for table `three_locales`
 --
 
-INSERT INTO `locales` (`id`, `name`) VALUES
+INSERT INTO `three_locales` (`id`, `name`) VALUES
 (1, 'Hallo'),
 (8, 'Ja'),
 (7, 'Nieuw');
@@ -148,10 +148,10 @@ INSERT INTO `locales` (`id`, `name`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `locales_values`
+-- Table structure for table `three_locales_values`
 --
 
-CREATE TABLE IF NOT EXISTS `locales_values` (
+CREATE TABLE IF NOT EXISTS `three_locales_values` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `id_locale` int(11) NOT NULL,
   `id_language` int(11) NOT NULL,
@@ -160,10 +160,10 @@ CREATE TABLE IF NOT EXISTS `locales_values` (
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=52 ;
 
 --
--- Dumping data for table `locales_values`
+-- Dumping data for table `three_locales_values`
 --
 
-INSERT INTO `locales_values` (`id`, `id_locale`, `id_language`, `value`) VALUES
+INSERT INTO `three_locales_values` (`id`, `id_locale`, `id_language`, `value`) VALUES
 (8, 1, 1, 'Hallo'),
 (9, 1, 2, 'Hello'),
 (10, 1, 3, 'Guten tag'),
@@ -180,10 +180,10 @@ INSERT INTO `locales_values` (`id`, `id_locale`, `id_language`, `value`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `options`
+-- Table structure for table `three_options`
 --
 
-CREATE TABLE IF NOT EXISTS `options` (
+CREATE TABLE IF NOT EXISTS `three_options` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` tinytext NOT NULL,
   `type` enum('small_text','large_text','rich_text','url','image','file','boolean','dropdown','selectbox','date','time','content','content_of_type') NOT NULL,
@@ -193,10 +193,10 @@ CREATE TABLE IF NOT EXISTS `options` (
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=12 ;
 
 --
--- Dumping data for table `options`
+-- Dumping data for table `three_options`
 --
 
-INSERT INTO `options` (`id`, `name`, `type`, `default_value`, `multilanguage`) VALUES
+INSERT INTO `three_options` (`id`, `name`, `type`, `default_value`, `multilanguage`) VALUES
 (1, 'title', 'small_text', '', 1),
 (2, 'header', 'small_text', '', 1),
 (3, 'content', 'rich_text', '', 1),
@@ -209,10 +209,33 @@ INSERT INTO `options` (`id`, `name`, `type`, `default_value`, `multilanguage`) V
 -- --------------------------------------------------------
 
 --
--- Table structure for table `settings`
+-- Table structure for table `three_ranks`
 --
 
-CREATE TABLE IF NOT EXISTS `settings` (
+CREATE TABLE IF NOT EXISTS `three_ranks` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` tinytext NOT NULL,
+  `system` tinyint(1) NOT NULL,
+  `users` tinyint(1) NOT NULL,
+  `ranks` tinyint(1) NOT NULL,
+  `configuration` tinyint(1) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
+
+--
+-- Dumping data for table `three_ranks`
+--
+
+INSERT INTO `three_ranks` (`id`, `name`, `system`, `users`, `ranks`, `configuration`) VALUES
+(1, 'Administrator', 1, 1, 1, 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `three_settings`
+--
+
+CREATE TABLE IF NOT EXISTS `three_settings` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` tinytext NOT NULL,
   `value` text NOT NULL,
@@ -220,20 +243,20 @@ CREATE TABLE IF NOT EXISTS `settings` (
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
 
 --
--- Dumping data for table `settings`
+-- Dumping data for table `three_settings`
 --
 
-INSERT INTO `settings` (`id`, `name`, `value`) VALUES
+INSERT INTO `three_settings` (`id`, `name`, `value`) VALUES
 (1, 'default_language', '2'),
 (2, 'default_page_id', '1');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `templates`
+-- Table structure for table `three_templates`
 --
 
-CREATE TABLE IF NOT EXISTS `templates` (
+CREATE TABLE IF NOT EXISTS `three_templates` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` tinytext NOT NULL,
   `id_dataobject` int(11) NOT NULL,
@@ -243,10 +266,10 @@ CREATE TABLE IF NOT EXISTS `templates` (
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
 
 --
--- Dumping data for table `templates`
+-- Dumping data for table `three_templates`
 --
 
-INSERT INTO `templates` (`id`, `name`, `id_dataobject`, `templatefile`, `root`) VALUES
+INSERT INTO `three_templates` (`id`, `name`, `id_dataobject`, `templatefile`, `root`) VALUES
 (1, 'Default template', 1, 'index.tpl', 1),
 (2, 'Block', 1, 'block.tpl', 0),
 (3, 'Blok', 3, 'block.tpl', 0);
@@ -254,21 +277,21 @@ INSERT INTO `templates` (`id`, `name`, `id_dataobject`, `templatefile`, `root`) 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `templates_allowed_children`
+-- Table structure for table `three_templates_allowed_children`
 --
 
-CREATE TABLE IF NOT EXISTS `templates_allowed_children` (
+CREATE TABLE IF NOT EXISTS `three_templates_allowed_children` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `id_template` int(11) NOT NULL,
   `id_child_template` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=29 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=30 ;
 
 --
--- Dumping data for table `templates_allowed_children`
+-- Dumping data for table `three_templates_allowed_children`
 --
 
-INSERT INTO `templates_allowed_children` (`id`, `id_template`, `id_child_template`) VALUES
+INSERT INTO `three_templates_allowed_children` (`id`, `id_template`, `id_child_template`) VALUES
 (28, 1, 3),
 (27, 1, 2),
 (7, 2, 2),
@@ -280,10 +303,33 @@ INSERT INTO `templates_allowed_children` (`id`, `id_template`, `id_child_templat
 -- --------------------------------------------------------
 
 --
--- Table structure for table `values`
+-- Table structure for table `three_users`
 --
 
-CREATE TABLE IF NOT EXISTS `values` (
+CREATE TABLE IF NOT EXISTS `three_users` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `username` tinytext NOT NULL,
+  `password` tinytext NOT NULL,
+  `name` tinytext NOT NULL,
+  `email` tinytext NOT NULL,
+  `id_rank` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
+
+--
+-- Dumping data for table `three_users`
+--
+
+INSERT INTO `three_users` (`id`, `username`, `password`, `name`, `email`, `id_rank`) VALUES
+(1, 'admin', '81dc9bdb52d04dc20036dbd8313ed055', 'Administrator', 'admin@domain.com', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `three_values`
+--
+
+CREATE TABLE IF NOT EXISTS `three_values` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `id_content` int(11) NOT NULL,
   `id_option` int(11) NOT NULL,
@@ -293,10 +339,10 @@ CREATE TABLE IF NOT EXISTS `values` (
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=281 ;
 
 --
--- Dumping data for table `values`
+-- Dumping data for table `three_values`
 --
 
-INSERT INTO `values` (`id`, `id_content`, `id_option`, `id_language`, `value`) VALUES
+INSERT INTO `three_values` (`id`, `id_content`, `id_option`, `id_language`, `value`) VALUES
 (1, 1, 1, 1, 'Titel (NL)'),
 (2, 1, 1, 2, 'Titel (EN) Test'),
 (3, 1, 1, 3, 'Titel (DE)'),

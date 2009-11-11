@@ -3,13 +3,12 @@
     <head>
         <title>Admin :: Login</title>
     </head>
-    <body>
-        <h1>Login</h1>
-        <hr />
-        <form method="post" action="">
+    <body>        
+        <h1>Login</h1>        
+        <form method="post" action="<?php echo site_url(array('admin', 'login')); ?>">
             Username:   <input type="text" name="username" /><br />
             Password:   <input type="password" name="password" /><br />
-            <input type="submit" value="login" />
+            <input type="submit" name="login" value="login" />
         </form>
     </body>
 </html>

@@ -15,6 +15,7 @@
     $lang['menu_languages']         	= 'Languages';
     $lang['menu_locales']           	= 'Locales';
 	$lang['menu_dashboard']				= 'Dashboard';
+	$lang['menu_logout']				= 'Logout';
     
     // Titles:
     $lang['title_templates']        	= 'Templates';
@@ -126,4 +127,23 @@
 	
 	// Tree:
 	$lang['tree_add']					= 'Add new content to the root';
+	
+	// Users:
+	$lang['users_title']				= 'Users';
+	$lang['users_add']					= 'Add a new user';
+	$lang['users_username']				= 'Username';
+	$lang['users_password']				= 'Password';
+	$lang['users_password_again']		= 'Password (again)';
+	$lang['users_name']					= 'Name';
+	$lang['users_email']				= 'E-mail address';
+	$lang['users_rank']					= 'Rank';
+	
+	// Ranks:
+	$lang['ranks_title']				= 'Ranks';
+	$lang['ranks_add']					= 'Add a new rank';
+	$lang['ranks_name']					= 'Name';
+	$lang['ranks_system']				= 'User can manage system functionality';
+	$lang['ranks_users']				= 'User can manage user accounts';
+	$lang['ranks_ranks']				= 'User can manage ranks';
+	$lang['ranks_configuration']		= 'User can edit the sites configuration';
 ?>

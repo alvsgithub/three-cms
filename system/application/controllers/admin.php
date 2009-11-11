@@ -2,7 +2,8 @@
 class Admin extends Controller
 {
     private $loggedIn;
-    
+    private $rank;
+	
     function Admin()
     {
         parent::Controller();
@@ -28,20 +29,23 @@ class Admin extends Controller
         
         // See if the user is logged in:
         $this->loggedIn = $this->session->userdata('loggedIn');
+		$this->rank     = $this->session->userdata('rank');
+		if(!$this->loggedIn) {
+			if($this->uri->segment(2)!='login') {
+				redirect(site_url(array('admin', 'login')));
+			}
+        }		
         
         // Load the adminModel:
         $this->load->model('AdminModel', '', true);
+		
     }
     
+	/**
+	 * Default index function
+	 */
     function index()
     {
-        // TODO: Create login part
-		/*
-		if(!$this->loggedIn) {
-            $this->load->view('admin/login.php');
-        }
-		*/
-		
         $this->showHeader();
 		$this->showTree();
         // By default, load the dashboard:
@@ -49,6 +53,34 @@ class Admin extends Controller
         $this->showFooter();
     }
     
+	/**
+	 * Default login
+	 */
+	function login()
+	{
+		if(isset($_POST['login'])) {
+			$username = $this->input->post('username');
+			$password = md5($this->input->post('password'));
+			$info     = $this->AdminModel->checkLogin($username, $password);
+			if($info==false) {
+				// TODO: Show error				
+			} else {
+				$this->session->set_userdata(array('loggedIn'=>true, 'rank'=>$info['id_rank']));
+				redirect(site_url('admin'));
+			}
+		} 
+		$this->load->view('admin/login.php');
+	}
+	
+	/**
+	 * Default logout
+	 */
+	function logout()
+	{
+		$this->session->sess_destroy();
+		redirect(site_url('admin'));
+	}
+	
 	/**
 	 * The default manager. This manages the data
 	 */
@@ -776,7 +808,6 @@ class Admin extends Controller
 	
 	/**
 	 * Show the file browser:
-	 * // TODO Replace browser with sfbrowser
 	 */
 	function browser()
 	{
@@ -811,17 +842,164 @@ class Admin extends Controller
 						$currentFolder = $this->uri->segment(4);
 						$name          = $this->uri->segment(5);
 						$this->AdminModel->createFolder(str_replace('-', '/', $currentFolder).'/'.$name);
+						break;
 					}
 				case 'upload' :
 					{
 						$folder = str_replace('-', '/', $_POST['folder']);
 						$this->AdminModel->storeUpload($_FILES['uploadField'], $folder);
 						redirect(site_url(array('admin', 'browser')));
+						break;
 					}
 			}
 		} else {
 			$this->load->view('admin/browser/browser.php', $data);
 		}
+	}
+	
+	/**
+	 * Users:
+	 */
+	function users()
+	{
+		$this->showHeader();
+		$this->showTree();
+		$data = array(
+			'lang'=>$this->lang			
+		);		
+		$action = $this->uri->segment(3);
+		if($action!=false) {
+			switch($action) {
+				case 'save' :
+					{
+						$id = $this->input->post('id');
+						if($id!=false) {
+							$data = $this->AdminModel->getData('users', $id);
+							$data['username'] = $this->input->post('username');
+							$data['name']     = $this->input->post('name');
+							$data['email']    = $this->input->post('email');
+							$data['id_rank']  = $this->input->post('id_rank');
+							if($this->input->post('password')!='') {
+								if($this->input->post('password')==$this->input->post('password_check')) {
+									$data['password'] = md5($this->input->post('password'));
+								}
+							} else {
+								// Password cannot be empty for a new user:
+								if($id==0) {
+									// TODO: Some sort of error handling
+								}
+							}
+							$this->AdminModel->saveData('users', $data, $id);
+						}
+						redirect(site_url(array('admin', 'users')));
+					}
+				case 'add' :
+					{
+						$data['user'] = $this->AdminModel->getData('users', 0);
+						$data['ranks'] = $this->AdminModel->getRanks();
+						$this->load->view('admin/users/add_edit.php', $data);
+						break;
+					}
+				case 'edit' :
+					{
+						$id = $this->uri->segment(4);
+						if($id!=false) {
+							$data['user'] = $this->AdminModel->getData('users', $id);
+							$data['ranks'] = $this->AdminModel->getRanks();
+							$data['user']['password'] = '';		// When editing, leave the password empty.
+							$this->load->view('admin/users/add_edit.php', $data);
+						}
+						break;
+					}				
+				case 'duplicate' :
+					{
+						// TODO
+						break;
+					}
+				case 'delete' :
+					{
+						$id = $this->uri->segment(4);
+						// ID can also not be 1, because that is the administrators user ID:
+						if($id!=false && $id!=1) {
+							$this->AdminModel->deleteData(array('users'=>'id'), $id);
+						}
+						redirect(site_url(array('admin', 'users')));
+						break;
+					}
+			}
+		} else {
+			// Show default browser:
+			$data['users'] = $this->AdminModel->getUsers();
+			$this->load->view('admin/users/browse.php', $data);
+		}
+		// Show the footer:
+		$this->showFooter();
+	}
+	
+	/**
+	 * Ranks:
+	 */
+	function ranks()
+	{
+		$this->showHeader();
+		$this->showTree();
+		$data = array(
+			'lang'=>$this->lang			
+		);		
+		$action = $this->uri->segment(3);
+		if($action!=false) {
+			switch($action) {
+				case 'save' :
+					{
+						$id = $this->input->post('id');
+						$data = $this->AdminModel->getData('ranks', $id);
+						// Adjust the data:
+						$data['name'] = $this->input->post('name');
+						$data['system'] = isset($_POST['system']) ? 1 : 0;
+						$data['users'] = isset($_POST['users']) ? 1 : 0;
+						$data['ranks'] = isset($_POST['ranks']) ? 1 : 0;
+						$data['configuration'] = isset($_POST['configuration']) ? 1 : 0;
+						// Store the data:
+						$this->AdminModel->saveData('ranks', $data, $id);
+						redirect(site_url(array('admin', 'ranks')));
+					}
+				case 'add' :
+					{
+						$data['rank'] = $this->AdminModel->getData('ranks', 0);
+						$this->load->view('admin/ranks/add_edit.php', $data);
+						break;
+					}
+				case 'edit' :
+					{
+						$id = $this->uri->segment(4);
+						$data['rank'] = $this->AdminModel->getData('ranks', $id);
+						$this->load->view('admin/ranks/add_edit.php', $data);
+						break;
+					}				
+				case 'duplicate' :
+					{
+						// TODO
+						break;
+					}
+				case 'delete' :
+					{
+						$id = $this->uri->segment(4);
+						// ID can also not be 1, because that is the administrators rank:
+						if($id!=false && $id!=1) {
+							// TODO: Check if there are nu users currently using this rank
+							$this->AdminModel->deleteData(array('ranks'=>'id'), $id);
+						}
+						redirect(site_url(array('admin', 'ranks')));
+						break;
+					}
+			}
+		} else {
+			// Show default browser:
+			$data['ranks'] = $this->AdminModel->getRanks();
+			$this->load->view('admin/ranks/browse.php', $data);
+		}
+		// Show the footer:
+		$this->showFooter();
 	}
 	
 }

@@ -48,12 +48,13 @@ class DataModel extends Model
 		// What it does: It selects the options that belong to the object of this content,
 		// and it retrieves the objects correct values according to the given language, or
 		// if the object isn't multilanguage, it returns it's defaults language value.
+		$pf = $this->db->dbprefix;
 		$sql = 'SELECT C.`name`, D.`value` FROM
-			`content` A,
-			`dataobjects_options` B,
-			`options` C,
-			`values` D,
-			`templates` E
+			`'.$pf.'content` A,
+			`'.$pf.'dataobjects_options` B,
+			`'.$pf.'options` C,
+			`'.$pf.'values` D,
+			`'.$pf.'templates` E
 				WHERE
 			A.`id`              = '.$idContent.' AND
 			A.`id_template`     = E.`id` AND
@@ -72,8 +73,8 @@ class DataModel extends Model
 		
 		// Retrieve the template file:
 		$sql = 'SELECT B.`templatefile` FROM
-			`content` A,
-			`templates` B
+			`'.$pf.'content` A,
+			`'.$pf.'templates` B
 				WHERE
 			A.`id_template` = B.`id` AND
 			A.`id` = '.$idContent.';
