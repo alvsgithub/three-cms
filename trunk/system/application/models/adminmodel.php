@@ -473,10 +473,11 @@ class AdminModel extends Model
         $content = array();
         
         // TODO: Make this query Active Record Style:
+        $pf = $this->db->dbprefix;
         $sql = 'SELECT A.`id_option`, C.`name`, C.`type`, C.`default_value`, C.`multilanguage` FROM
-            `dataobjects_options` A,
-            `templates` B,
-            `options` C
+            `'.$pf.'dataobjects_options` A,
+            `'.$pf.'templates` B,
+            `'.$pf.'options` C
                 WHERE
             B.`id` = '.$contentData['id_template'].' AND
             A.`id_dataobject` = B.`id_dataobject` AND
@@ -725,6 +726,63 @@ class AdminModel extends Model
     function storeUpload($fileArray, $folder)
     {
         move_uploaded_file($fileArray['tmp_name'], $folder.'/'.$fileArray['name']);
+    }
+    
+    /**
+     * Get the users
+     * @return  $users  array   A 2-dimensional array with user information
+     */
+    function getUsers()
+    {
+        $users = array();
+        $this->db->select('*');
+        $query = $this->db->get('users');
+        foreach($query->result_array() as $user) {
+            $this->db->select('name');
+            $this->db->where('id', $user['id_rank']);
+            $userQuery = $this->db->get('ranks');
+            $result = $userQuery->result_array();
+            if(!empty($result)) {
+                $user['rank'] = $result[0]['name'];
+            } else {
+                $user['rank'] = '<em>unknown</em>';
+            }
+            array_push($users, $user);
+        }
+        return $users;
+    }
+    
+    /**
+     * Get the ranks
+     * @return  $ranks  array   A 2-dimensional array with rank information
+     */
+    function getRanks()
+    {
+        $ranks = array();
+        $this->db->select('*');
+        $query = $this->db->get('ranks');
+        foreach($query->result_array() as $rank) {
+            array_push($ranks, $rank);
+        }
+        return $ranks;
+    }
+    
+    /**
+     * Check the login
+     * @param   $username   string  The username
+     * @param   $password   string  The password
+     */
+    function checkLogin($username, $password)
+    {
+        $this->db->select('*');
+        $this->db->where(array('username'=>$username, 'password'=>$password));
+        $query = $this->db->get('users');
+        $info  = $query->result_array();
+        if(empty($info)) {
+            return false;
+        } else {
+            return $info;
+        }
     }
 }
 ?>

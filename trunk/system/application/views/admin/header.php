@@ -26,10 +26,8 @@
                     </li>
                     <li><?php echo $lang->line('menu_users'); ?>
                         <ul>
-                            <li><a href="#"><?php echo $lang->line('menu_users'); ?></a></li>
-                            <li><a href="#"><?php echo $lang->line('menu_ranks'); ?></a></li>
-                            <li><a href="#"><?php echo $lang->line('menu_web_users'); ?></a></li>
-                            <li><a href="#"><?php echo $lang->line('menu_web_ranks'); ?></a></li>
+                            <li><a href="<?php echo site_url(array('admin', 'users')); ?>"><?php echo $lang->line('menu_users'); ?></a></li>
+                            <li><a href="<?php echo site_url(array('admin', 'ranks')); ?>"><?php echo $lang->line('menu_ranks'); ?></a></li>
                         </ul>
                     </li>
                     <li><?php echo $lang->line('menu_system'); ?>
@@ -41,6 +39,7 @@
                             <li><a href="<?php echo site_url(array('admin', 'manage', 'locales'));   ?>"><?php echo $lang->line('menu_locales'); ?></a></li>
                         </ul>
                     </li>
+                    <li class="logout"><a href="<?php echo site_url(array('admin', 'logout')); ?>"><?php echo $lang->line('menu_logout'); ?></a></li>
                 </ul>
             </div>
 
