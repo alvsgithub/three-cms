@@ -10,8 +10,10 @@
 				<td>
 					<?php
 						foreach($templates as $template) {
-							$buttonText = str_replace('%s', $template['name'], $lang->line('action_add_type'));
-							echo '<a href="'.site_url(array('admin', 'content', 'add', 0, $template['id'])).'" class="addContent" title="'.$buttonText.'">'.$buttonText.'</a>';
+							if(in_array($template['id'], $allowedTemplates)) {
+								$buttonText = str_replace('%s', $template['name'], $lang->line('action_add_type'));
+								echo '<a href="'.site_url(array('admin', 'content', 'add', 0, $template['id'])).'" class="addContent" title="'.$buttonText.'">'.$buttonText.'</a>';
+							}
 						}
 					?>
 				</td>

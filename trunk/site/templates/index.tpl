@@ -7,7 +7,7 @@
 	<body>
 		<div id="body">
 			<div id="top">
-				<h1>Three CMS Demonstration page</h1>
+				<h1>{$title}</h1>
 			</div>
 			<div id="navigation">
 				{* See how simple it is to create a navigation: *}

@@ -42,7 +42,9 @@ class DataModel extends Model
 		$this->idLanguage	= $idLanguage;
 		$this->options		= array();
 		
-		// TODO: Ook de standaard elementen in options zetten.
+		// TODO: Also set set the default options of the content (name, order, parent, etc) in the data object
+		
+		// TODO: Add settings-object to the content
 		
 		// Killer Query to do the magic:
 		// What it does: It selects the options that belong to the object of this content,
@@ -203,7 +205,6 @@ class DataModel extends Model
 	 */
 	function get($parameter)
 	{
-
 		if(isset($this->options[$parameter])) {
 			return $this->options[$parameter];
 		} else {

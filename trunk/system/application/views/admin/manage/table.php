@@ -13,7 +13,7 @@
             <tr>
                 <?php foreach($data as $value) { ?>
                 <td><?php
-                    // TODO: With options, set language support for the options' type-field:
+                    // TODO: Make options type mulitlingual
                     echo $value;                    
                     ?></td>
                 <?php } ?>

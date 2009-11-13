@@ -19,17 +19,43 @@
             <div id="navigation">
                 <ul>
                     <li><a href="<?php echo site_url(array('admin')); ?>"><?php echo $lang->line('menu_dashboard'); ?></a></li>
+                    <?php
+                        if($rank['configuration']==1)
+                        {
+                    ?>                    
                     <li><?php echo $lang->line('menu_configuration'); ?>
                         <ul>
                             <li><a href="<?php echo site_url(array('admin', 'settings')); ?>"><?php echo $lang->line('menu_site_settings'); ?></a></li>
                         </ul>
                     </li>
+                    <?php
+                        } 
+                        if($rank['users']==1 || $rank['ranks']==1)
+                        {
+                    ?>                    
                     <li><?php echo $lang->line('menu_users'); ?>
                         <ul>
+                            <?php
+                                if($rank['users']==1)
+                                {
+                            ?>
                             <li><a href="<?php echo site_url(array('admin', 'users')); ?>"><?php echo $lang->line('menu_users'); ?></a></li>
+                            <?php
+                                }
+                                if($rank['ranks']==1)
+                                {
+                            ?>
                             <li><a href="<?php echo site_url(array('admin', 'ranks')); ?>"><?php echo $lang->line('menu_ranks'); ?></a></li>
+                            <?php
+                                }
+                            ?>
                         </ul>
                     </li>
+                    <?php
+                        } 
+                        if($rank['system']==1)
+                        {
+                    ?>                    
                     <li><?php echo $lang->line('menu_system'); ?>
                         <ul>
                             <li><a href="<?php echo site_url(array('admin', 'manage', 'templates')); ?>"><?php echo $lang->line('menu_templates'); ?></a></li>
@@ -39,6 +65,9 @@
                             <li><a href="<?php echo site_url(array('admin', 'manage', 'locales'));   ?>"><?php echo $lang->line('menu_locales'); ?></a></li>
                         </ul>
                     </li>
+                    <?php
+                        }
+                    ?>
                     <li class="logout"><a href="<?php echo site_url(array('admin', 'logout')); ?>"><?php echo $lang->line('menu_logout'); ?></a></li>
                 </ul>
             </div>

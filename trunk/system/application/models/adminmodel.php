@@ -16,9 +16,7 @@
  *
  */
 
-// TODO: Add an order-index to the content
 // TODO: Changing of templates (what happens with the options?)
-// TODO: Changing of the parents (move)
 
 class AdminModel extends Model
 {
@@ -519,10 +517,6 @@ class AdminModel extends Model
     {
         // TODO: Check if the alias already exists. If so, create a new alias with an increasing number.
         // TODO: Auto-check / auto-generate alias.
-        // TODO: Check if the id of the parent is not the same as this contents own ID.
-        // TODO: Check if the id of the parent is not a child or deeper of this contents own ID.
-        // TODO: Check if the id of the parent is not an infinite loop of some sort.
-        // TODO: Also do these checks AJAX-wise when they get changed in the editing screen.
         $content = array(
             'id_content'=>$contentData['id_content'],
             'id_template'=>$contentData['id_template'],
@@ -768,9 +762,78 @@ class AdminModel extends Model
     }
     
     /**
+     * Get the ranks that are allowed to use this template
+     * @param   $id     int     The ID of the template
+     * @return  array           An array with ranks, and if they are allowed to use this template
+     */
+    function getAllowedRanks($id)
+    {
+        $ranks = array();
+        $this->db->select('*');
+        $query = $this->db->get('ranks');
+        foreach($query->result_array() as $rank) {
+            // See if this rank is allowed to this template:
+            if($id!=0 && $id!=false) {
+                $this->db->where('id_template', $id);
+                $this->db->where('id_rank', $rank['id']);
+                $this->db->from('templates_ranks');
+                $allowed = $this->db->count_all_results()==1;
+            } else {
+                $allowed = false;
+            }
+            // Administrators rank (id=1) is always allowed:
+            if($rank['id'] == 1) {
+                $allowed = true;
+            }
+            $rank['allowed'] = $allowed;
+            array_push($ranks, $rank);
+        }
+        return $ranks;
+    }
+    
+    /**
+     * Get an array with ID's of templates that are allowed for this rank
+     * @param   $id     int     The ID of the rank
+     * @return  array           An array with ID's
+     */
+    function getAllowedTemplates($id)
+    {
+        $templates = array();
+        $this->db->select('id_template');
+        $this->db->where('id_rank', $id);
+        $query = $this->db->get('templates_ranks');
+        foreach($query->result() as $result) {
+            array_push($templates, $result->id_template);
+        }
+        return $templates;
+    }
+    
+    /**
+     * Save the ranks that are allowed to use this template
+     * @param   $id             int     The ID of the template
+     * @param   $allowedRanks   array   A 2-dimensional array with each rank, and if it's allowed to use the template
+     */
+    function saveAllowedRanks($id, $allowedRanks)
+    {
+        // First delete all links
+        $this->db->delete('templates_ranks', array('id_template'=>$id));
+        // Then add new ones:
+        foreach($allowedRanks as $rank) {
+            // Administrators rank (id=1) is always allowed:
+            if($rank['id']==1) {
+                $rank['allowed'] = true;
+            }
+            if($rank['allowed']) {
+                $this->db->insert('templates_ranks', array('id_template'=>$id, 'id_rank'=>$rank['id']));
+            }
+        }
+    }
+    
+    /**
      * Check the login
      * @param   $username   string  The username
      * @param   $password   string  The password
+     * @return  mixed       Array with user information on success, false on failure
      */
     function checkLogin($username, $password)
     {
@@ -781,8 +844,22 @@ class AdminModel extends Model
         if(empty($info)) {
             return false;
         } else {
-            return $info;
+            return $info[0];
         }
+    }
+    
+    /**
+     * Get the rank
+     * @param   $id     int     The id of the rank
+     * @return  mixed           Array with the rank information, false on failure
+     */
+    function getRank($id)
+    {
+        $this->db->select('*');
+        $this->db->where('id', $id);
+        $query = $this->db->get('ranks');
+        $info = $query->result_array();        
+        return $info[0];
     }
 }
 ?>

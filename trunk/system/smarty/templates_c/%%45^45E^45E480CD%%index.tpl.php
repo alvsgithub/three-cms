@@ -1,4 +1,4 @@
-<?php /* Smarty version 2.6.26, created on 2009-10-30 16:36:44
+<?php /* Smarty version 2.6.26, created on 2009-11-13 16:52:19
          compiled from index.tpl */ ?>
 <?php require_once(SMARTY_CORE_DIR . 'core.load_plugins.php');
 smarty_core_load_plugins(array('plugins' => array(array('modifier', 'date_format', 'index.tpl', 25, false),)), $this); ?>
@@ -12,7 +12,8 @@ smarty_core_load_plugins(array('plugins' => array(array('modifier', 'date_format
 	<body>
 		<div id="body">
 			<div id="top">
-				<h1>Three CMS Demonstration page</h1>
+				<h1><?php echo $this->_tpl_vars['title']; ?>
+</h1>
 			</div>
 			<div id="navigation">
 								<ul>

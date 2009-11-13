@@ -29,13 +29,13 @@ class Admin extends Controller
         
         // See if the user is logged in:
         $this->loggedIn = $this->session->userdata('loggedIn');
-		$this->rank     = $this->session->userdata('rank');
+		$this->rank     = $this->session->userdata('rank');		
 		if(!$this->loggedIn) {
 			if($this->uri->segment(2)!='login') {
 				redirect(site_url(array('admin', 'login')));
 			}
         }		
-        
+		
         // Load the adminModel:
         $this->load->model('AdminModel', '', true);
 		
@@ -186,6 +186,12 @@ class Admin extends Controller
 						$childTemplates[$i]['allowed'] = isset($_POST['allow_template_'.$childTemplates[$i]['id']]);
 					}
 					$this->AdminModel->saveChildTemplates($id, $childTemplates);
+					// Save the allowed ranks:
+					$allowedRanks = $this->AdminModel->getAllowedRanks($id);					
+					for($i=0; $i<count($allowedRanks); $i++) {
+						$allowedRanks[$i]['allowed'] = isset($_POST['allow_rank_'.$allowedRanks[$i]['id']]);
+					}
+					$this->AdminModel->saveAllowedRanks($id, $allowedRanks);
 					// Redirect away:
 					redirect(site_url(array('admin', 'manage', 'templates')));
 					break;
@@ -223,7 +229,8 @@ class Admin extends Controller
 						'title'=>$title,
 						'values'=>$this->AdminModel->getData('templates', $id),
 						'dataObjects'=>$this->AdminModel->getDataObjects(),
-						'childTemplates'=>$this->AdminModel->getChildTemplates($id)
+						'childTemplates'=>$this->AdminModel->getChildTemplates($id),
+						'ranks'=>$this->AdminModel->getAllowedRanks($id)
 					);
 					$this->showHeader();
 					$this->showTree();
@@ -589,10 +596,13 @@ class Admin extends Controller
 					$contentData = $this->AdminModel->getContentData($idContent, $idParent, $idTemplate);
 					// Adjust the contentData according to the parameters:
 					$contentData['id_template'] = $idTemplate;
-					$contentData['id_content']  = $idParent;		// id_content is the parent of this content
 					$contentData['name']        = $this->input->post('name');
 					$contentData['alias']       = $this->input->post('alias');
 					$contentData['order']		= $this->input->post('order');
+					// Check if the parent is not a descendant of this content and if the parent is not itself:					
+					if(!$this->AdminModel->checkDescendant($idContent, $idParent) && $idContent != $idParent) {
+						$contentData['id_content']  = $idParent;		// id_content is the parent of this content
+					}
 					// Get the values:
 					for($item=0; $item<count($contentData['content']); $item++) {
 						if($contentData['content'][$item]['multilanguage']==1) {
@@ -656,7 +666,8 @@ class Admin extends Controller
 							'lang'=>$this->lang,
 							'contentData'=>$contentData,
 							'templates'=>$this->AdminModel->getTableData('templates', 'id,name,templatefile'),
-							'title'=>$this->lang->line('title_add_content')
+							'title'=>$this->lang->line('title_add_content'),
+							'allowedTemplates'=>$this->AdminModel->getAllowedTemplates($this->rank)
 						);
 						$this->load->view('admin/content/add_edit.php', $data);
 					}
@@ -671,7 +682,8 @@ class Admin extends Controller
 							'lang'=>$this->lang,
 							'contentData'=>$contentData,
 							'templates'=>$this->AdminModel->getTableData('templates', 'id,name,templatefile'),
-							'title'=>$this->lang->line('title_modify_content')
+							'title'=>$this->lang->line('title_modify_content'),
+							'allowedTemplates'=>$this->AdminModel->getAllowedTemplates($this->rank)
 						);
 						$this->load->view('admin/content/add_edit.php', $data);
 					}
@@ -708,7 +720,8 @@ class Admin extends Controller
 					$this->showTree();
 					$data = array(
 						'lang'=>$this->lang,
-						'templates'=>$this->AdminModel->getRootTemplates()
+						'templates'=>$this->AdminModel->getRootTemplates(),
+						'allowedTemplates'=>$this->AdminModel->getAllowedTemplates($this->rank)
 					);
 					$this->load->view('admin/content/new_content.php', $data);
 					break;
@@ -768,7 +781,8 @@ class Admin extends Controller
 	function showHeader()
     {
         $data = array(
-            'lang'=>$this->lang
+            'lang'=>$this->lang,
+			'rank'=>$this->AdminModel->getRank($this->rank),
         );
 		$this->load->view('admin/header.php', $data);
     }
