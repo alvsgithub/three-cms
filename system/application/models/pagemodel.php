@@ -35,21 +35,21 @@ class PageModel extends Model
 	/**
 	 * Get the ID of the language with the code specified
 	 * @param	$code	String The code as specified in the database
-	 * @return	int
+	 * @return	mixed	The ID of the language, or false if the language is not found
 	 */
 	function getLanguageId($code)
 	{
-		$this->select('id');
-		$this->where('code', $code);
-		$this->where('active', 1);
-		$query = $this->get('languages');
+		$this->db->select('id');
+		$this->db->where('code', $code);
+		$this->db->where('active', 1);
+		$query = $this->db->get('languages');
 		
 		if($query->num_rows == 1) {
 			// Return the ID of this language
 			return $query->row()->id;
 		} else {
-			// Return the default language ID
-			return DEFAULT_LANGUAGE_ID;
+			// Return false if the language is not found
+			return false;
 		}
 	}
 	
@@ -79,6 +79,34 @@ class PageModel extends Model
 		$this->db->where('id_language', $idLanguage);
 		$query = $this->db->get('values');
 		return $query->row()->value;
+	}
+	
+	/**
+	 * Return the settings
+	 * @return	array		An associated array with the settings
+	 */
+	function getSettings()
+	{
+		$settings = array();
+		$this->db->select('name,value');		
+		$query = $this->db->get('settings');
+		foreach($query->result_array() as $result) {
+			$settings[$result['name']] = $result['value'];
+		}
+		return $settings;
+	}
+	
+	/**
+	 * Check if the given ID exists
+	 * @param	$id		int		The ID of the page to check
+	 * @return	boolean			True if the page exists, false if not
+	 */
+	function pageExists($id)
+	{
+		$this->db->select('id');
+		$this->db->where('id', $id);
+		$this->db->from('content');
+		return $this->db->count_all_results() == 1;
 	}
 }
 ?>

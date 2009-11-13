@@ -38,7 +38,22 @@
 						<?php
 							foreach($childTemplates as $item) {
 								$checked = $item['allowed'] ? ' checked="checked"' : '';
-								echo '<label class="allowedTemplate"><input type="checkbox" name="allow_template_'.$item['id'].'" '.$checked.' /> '.$item['name'].'</label>';
+								echo '<label class="allowed"><input type="checkbox" name="allow_template_'.$item['id'].'" '.$checked.' /> '.$item['name'].'</label>';
+							}
+						?>
+					</td>
+				</tr>
+				<tr class="delimiter">
+					<td colspan="2">&nbsp;</td>
+				</tr>
+				<tr>
+					<th><?php echo $lang->line('system_template_ranks'); ?>:</th>
+					<td>
+						<?php
+							foreach($ranks as $rank) {
+								$checked  = $rank['allowed'] ? ' checked="checked"' : '';
+								$readonly = $rank['id']==1 ? ' disabled="disabled"' : '';
+								echo '<label class="allowed"><input type="checkbox" name="allow_rank_'.$rank['id'].'" '.$checked.$readonly.' /> '.$rank['name'].'</label>';
 							}
 						?>
 					</td>

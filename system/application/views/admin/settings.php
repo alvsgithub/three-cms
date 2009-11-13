@@ -2,7 +2,33 @@
 	<div id="innerContent">
 		<h1><?php echo $lang->line('title_settings'); ?></h1>
 		<form method="post" action="<?php echo site_url(array('admin', 'settings', 'save')); ?>">
+			<?php
+				/**
+				 * Inline function: Show the value of a specific setting. This is used in case there are new settings added
+				 * @param	$settings	array	The associated settings array
+				 * @param	$name		string	The name of the setting
+				 */
+				function settingValue($settings, $name)
+				{
+					if(isset($settings[$name])) {
+						echo $settings[$name];
+					}
+				}
+				
+				// TODO: Make setting names multilingual
+			?>
 			<table>
+				<tr>
+					<th>Site name:</th>
+					<td><input type="text" name="site_name" value="<?php settingValue($settings, 'site_name'); ?>" /></td>
+				</tr>
+				<tr>
+					<th>Base URL:</th>
+					<td><input type="text" name="base_url" value="<?php settingValue($settings, 'base_url'); ?>" /></td>
+				</tr>
+				<tr class="delimiter">
+					<td colspan="2">&nbsp;</td>
+				</tr>
 				<tr>
 					<th>Default language:</th>
 					<td>
@@ -10,8 +36,10 @@
 							<?php
 								foreach($languages as $language) {
 									echo '<option value="'.$language['id'].'"';
-									if($language['id'] == $settings['default_language']) {
-										echo ' selected="selected"';
+									if(isset($settings['default_language'])) {
+										if($language['id'] == $settings['default_language']) {
+											echo ' selected="selected"';
+										}
 									}
 									echo '>'.$language['name'].'</option>';									
 								}
@@ -21,7 +49,7 @@
 				</tr>
 				<tr>
 					<th>Default page ID:</th>
-					<td><input type="text" name="default_page_id" value="<?php echo $settings['default_page_id']; ?>" /></td>
+					<td><input type="text" name="default_page_id" value="<?php settingValue($settings, 'default_page_id'); ?>" /></td>
 				</tr>
 				<tr class="delimiter">
 					<td colspan="2">&nbsp;</td>

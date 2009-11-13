@@ -97,6 +97,7 @@
 	$lang['system_template_name']		= 'Name';
 	$lang['system_template_dataobject'] = 'Data Object';
 	$lang['system_template_file']		= 'Template File';
+	$lang['system_template_ranks']		= 'Template is available for the following ranks';
 	$lang['system_template_root']		= 'Can be added to the root';
 	$lang['system_dataobject_name']		= 'Name';
 	$lang['system_dataobject_linked']	= 'Linked Options';

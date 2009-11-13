@@ -14,14 +14,30 @@
 				<tr>
 					<th><?php echo $lang->line('content_template'); ?>:</th>
 					<td>
+						<?php
+							// If id_template is not empty (will be empty when adding new content), check if the current template is allowed to use by the user:
+							if(!empty($contentData['id_template']) && !in_array($contentData['id_template'], $allowedTemplates)) {
+								echo '<input type="hidden" name"template" value="'.$contentData['id_template'].'" />';
+								foreach($templates->result() as $result) {
+									if($result->id==$contentData['id_template']) {
+										echo $result->name;
+									}
+								}
+							} else {								
+						?>
 						<select name="template">
 						<?php
 							foreach($templates->result() as $result) {
-								$selected = $contentData['id_template']==$result->id ? ' selected="selected"' : '';
-								echo '<option value="'.$result->id.'"'.$selected.'>'.$result->name.'</option>';
+								if(in_array($result->id, $allowedTemplates)) {
+									$selected = $contentData['id_template']==$result->id ? ' selected="selected"' : '';
+									echo '<option value="'.$result->id.'"'.$selected.'>'.$result->name.'</option>';
+								}
 							}
 						?>
 						</select>
+						<?php
+							}
+						?>
 					</td>
 				</tr>
 				<tr>
