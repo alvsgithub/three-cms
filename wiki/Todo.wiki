@@ -5,6 +5,7 @@ Things to do:
 
   * Update to Code Igniter 1.7.3 as soon as this is out
   * Update to latest version of ckEditor
+  * Implement Smarty 3 as soon as this is out
   * Error / message handling
   * When deleting a rank, check if no users are currently using this rank
   * Load the correct content according to the parameters
