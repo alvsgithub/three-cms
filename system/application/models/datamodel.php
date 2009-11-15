@@ -48,6 +48,9 @@ class DataModel extends Model
 		
 		// TODO: Add settings-object to the content
 		
+		// TODO: Generate URL
+		
+		
 		// Killer Query to do the magic:
 		// What it does: It selects the options that belong to the object of this content,
 		// and it retrieves the objects correct values according to the given language, or
@@ -127,10 +130,22 @@ class DataModel extends Model
 	 * @param	$startID			int		The ID to see as te root parent. Set to null to use the current dataModel's ID
 	 * @param	$templates			array	An array containing the ID's of the templates to allow in this tree. Set to null to allow all templates.
 	 * @param	$optionConditions	array	An associated array holding the name of the options and their value to which the content should be filterd. Set to null to allow all content
+	 * @return	array						A multi-dimensional array of the whole tree
 	 */
 	function getTree($startID=null, $templates=null, $optionConditions=null)
 	{
-		// TODO
+		if($startID==null) {
+			$startID = $this->idContent;
+		}
+		
+	}
+	
+	/**
+	 * Create the url to this dataobject.
+	 * @param	$idContent	int		The ID of the content to create the URL of, if left empty, the URL of the current page is returned.
+	 */
+	function getUrl($idContent = $this->idContent)
+	{
 		
 	}
 	
