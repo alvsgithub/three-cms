@@ -43,6 +43,8 @@ class DataModel extends Model
 		$this->options		= array();
 		
 		// TODO: Also set set the default options of the content (name, order, parent, etc) in the data object
+		$this->options['idContent']  = $idContent;
+		$this->options['idLanguage'] = $idLanguage;
 		
 		// TODO: Add settings-object to the content
 		
@@ -234,7 +236,10 @@ class DataModel extends Model
 		$smarty->cache_lifetime	= SMARTY_CACHE_LIFETIME;
 		
 		// Assign the options:
-		$smarty->assign($this->options);
+		// $smarty->assign($this->options);
+		foreach($this->options as $key=>$value) {
+			$smarty->assign($key, $value);
+		}
 		$smarty->assign('dataObject', $this);
 		
 		// Render the page:		
