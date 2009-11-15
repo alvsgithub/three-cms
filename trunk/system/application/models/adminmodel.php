@@ -515,8 +515,29 @@ class AdminModel extends Model
      */
     function saveContentData($idContent, $contentData)
     {
+        // TODO: Check if required fields name and template are filled in.
+        
+        // If there is no alias set, create one automaticly:
+        if(empty($contentData['alias'])) {
+            $contentData['alias'] = $this->makeAlias($contentData['name']);
+        }
+        
         // TODO: Check if the alias already exists. If so, create a new alias with an increasing number.
-        // TODO: Auto-check / auto-generate alias.
+        $count = 1;
+        $alias = $contentData['alias'];
+        while($count > 0) {
+            $this->db->where('alias', $contentData['alias']);
+            $this->db->get('content');
+            if($this->db->count_all_results() > 0) {
+                $contentData['alias'] = $alias.'-'.$count;
+            }
+            $count++;                
+            // Infinite loop safety:
+            if($count > 100) {
+                break;
+            }
+        }
+        
         $content = array(
             'id_content'=>$contentData['id_content'],
             'id_template'=>$contentData['id_template'],
@@ -626,6 +647,21 @@ class AdminModel extends Model
         foreach($ids as $id_content) {
             $this->deleteContent($id_content);
         }
+    }
+    
+    /**
+     * Create an alias
+     * @param   $string string  The string to create the alias from
+     * @reurn   string          The alias
+     */
+    function makeAlias($string)
+    {
+        $string = preg_replace("`\[.*\]`U", "", $string);
+        $string = preg_replace('`&(amp;)?#?[a-z0-9]+;`i', '-', $string);
+        $string = htmlentities($string, ENT_COMPAT, 'utf-8');
+        $string = preg_replace("`&([a-z])(acute|uml|circ|grave|ring|cedil|slash|tilde|caron|lig|quot|rsquo);`i","\\1", $string);
+        $string = preg_replace(array("`[^a-z0-9]`i","`[-]+`") , "-", $string);
+        return strtolower(trim($string, '-'));
     }
     
     /**
