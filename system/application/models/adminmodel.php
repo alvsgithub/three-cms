@@ -399,10 +399,41 @@ class AdminModel extends Model
         $this->db->where('root', 1);
         $query = $this->db->get('templates');
         foreach($query->result() as $result) {
-            array_push($templates, array('id'=>$result->id, 'name'=>$result->name));
+            array_push($templates, array('id'=>$result->id, 'name'=>$result->name, 'allowed'=>true));
         }
         return $templates;
     }
+    
+    /**
+     * Get the templates that are availabe for this template
+     * @param   $idParent   int     The ID of the content to get the available templates from
+     * @param   $isParent   bool    Is the given ID the parent? (In case of newly added content?)
+     * @return  array               A 2-dimensional array of the templates: [[id=int, name=string], ...]
+     */    
+    function getAvailableTemplates($idContent, $isParent = false)
+    {
+        if($idContent!=0) {
+            $content = $this->getContent($idContent);
+            if($isParent) {
+                // Newly added content. Treat $idContent as the parent to get available templates from                
+                $templates = $this->getChildTemplates($content['id_template']);
+            } else {
+                // Editing content. Treat $idContent as the document from which the available templates must be shown
+                // Get the parent:
+                if($content['id_content']!=0) {
+                    $content = $this->getContent($content['id_content']);
+                    $templates = $this->getChildTemplates($content['id_template']);
+                } else {
+                    // The parent is the root:
+                    $templates = $this->getRootTemplates();
+                }
+            }
+        } else {
+            // New content is added to the root:
+            $templates = $this->getRootTemplates();
+        }
+        return $templates;
+    }    
     
     /**
      * Set the templates which are allowed to be a child of the current template
@@ -522,20 +553,29 @@ class AdminModel extends Model
             $contentData['alias'] = $this->makeAlias($contentData['name']);
         }
         
-        // TODO: Check if the alias already exists. If so, create a new alias with an increasing number.
+        // Check if alias already exists:
         $count = 1;
         $alias = $contentData['alias'];
-        while($count > 0) {
+        while($count < 100) {
+            $this->db->select('id');
             $this->db->where('alias', $contentData['alias']);
-            $this->db->get('content');
-            if($this->db->count_all_results() > 0) {
+            $this->db->where('id !=', $idContent);
+            $this->db->from('content');            
+            if($this->db->count_all_results() > 0) {                
                 $contentData['alias'] = $alias.'-'.$count;
-            }
-            $count++;                
-            // Infinite loop safety:
-            if($count > 100) {
+            } else {                
                 break;
             }
+            $count++;
+        }
+        
+        // If no order is set, increase it's value automaticly:
+        if($contentData['order']==='') {
+            $this->db->select_max('order', '`order`');
+            $this->db->where('id_content', $contentData['id_content']);
+            $query = $this->db->get('content');
+            $result = $query->result();
+            $contentData['order'] = $result[0]->order + 1;
         }
         
         $content = array(

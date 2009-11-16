@@ -33,6 +33,8 @@ class DataModel extends Model
 	function DataModel()
 	{
 		parent::Model();
+		// Load the URL helper:
+		$this->load->helper('url');
 	}
 	
 	function load($idContent, $idLanguage)
@@ -42,14 +44,22 @@ class DataModel extends Model
 		$this->idLanguage	= $idLanguage;
 		$this->options		= array();
 		
-		// TODO: Also set set the default options of the content (name, order, parent, etc) in the data object
-		$this->options['idContent']  = $idContent;
-		$this->options['idLanguage'] = $idLanguage;
-		
 		// TODO: Add settings-object to the content
 		
-		// TODO: Generate URL
 		
+		// Default settings:
+		$this->db->select('name,alias,order');
+		$this->db->where('id', $idContent);
+		$query = $this->db->get('content');
+		$info  = $query->result_array();
+		
+		// Some default options:
+		$this->options['idContent']   = $idContent;
+		$this->options['idLanguage']  = $idLanguage;
+		// $this->options['url']         = $this->getUrl();
+		$this->options['alias']       = $info[0]['alias'];
+		$this->options['contentName'] = $info[0]['name'];
+		$this->options['order']       = $info[0]['order'];
 		
 		// Killer Query to do the magic:
 		// What it does: It selects the options that belong to the object of this content,
@@ -61,7 +71,7 @@ class DataModel extends Model
 			`'.$pf.'dataobjects_options` B,
 			`'.$pf.'options` C,
 			`'.$pf.'values` D,
-			`'.$pf.'templates` E
+			`'.$pf.'templates` E		
 				WHERE
 			A.`id`              = '.$idContent.' AND
 			A.`id_template`     = E.`id` AND
@@ -97,20 +107,24 @@ class DataModel extends Model
 	 */
 	function children($idContent = null)
 	{
+		$idContent = $idContent !== null ? $idContent : $this->idContent;
 		if(isset($this->childrenArray[$idContent])) {
 			$children = $this->childrenArray[$idContent];
 		} else {
 			// Retrieve the children of this data object:
 			$children = array();		
 			$this->db->select('id');
-			$this->db->where('id_content', $this->idContent);
+			$this->db->where('id_content', $idContent);
+			$this->db->order_by('order', 'asc');
 			$query = $this->db->get('content');		
 			foreach($query->result() as $result) {
 				$dataObject = new DataModel();
 				$dataObject->load($result->id, $this->idLanguage);
 				array_push($children, $dataObject);
 			}
-		}
+			// Store for optimization:
+			$this->childrenArray[$idContent] = $children;
+		}		
 		return $children;
 	}
 	
@@ -134,52 +148,99 @@ class DataModel extends Model
 	 */
 	function getTree($startID=null, $templates=null, $optionConditions=null)
 	{
-		if($startID==null) {
-			$startID = $this->idContent;
+		$startID = $startID !== null ? $startID : $this->idContent;
+		$tree = array();
+		$this->db->select('id');
+		$this->db->where('id_content', $startID);
+		if($templates !== null) {
+			$first = true;
+			foreach($templates as $id_template) {
+				if($first) {
+					$this->db->where('id_template', $id_template);
+					$first = false;
+				} else {
+					$this->db->or_where('id_template', $id_template);
+				}
+			}
 		}
-		
+		// TODO: Filter by optionConditions
+		$query = $this->db->get('content');
+		foreach($query->result() as $result) {
+			$child = array(
+				'id'=>$result->id,
+				'children'=>$this->getTree($result->id, $templates, $optionConditions)
+			);
+			array_push($tree, $child);
+		}
+		return $tree;
 	}
 	
 	/**
 	 * Create the url to this dataobject.
 	 * @param	$idContent	int		The ID of the content to create the URL of, if left empty, the URL of the current page is returned.
 	 */
-	function getUrl($idContent = $this->idContent)
+	function getUrl($idContent = null)
 	{
-		
+		$idContent = $idContent !== null ? $idContent : $this->idContent;
+		$parents = $this->parents($idContent);
+		$aliases = array($this->getLanguageCode());
+		foreach($parents as $parentObject)
+		{
+			array_push($aliases, $parentObject->get('alias'));
+		}
+		array_push($aliases, $this->get('alias'));
+		// print_r($aliases);
+		return site_url($aliases);
+	}
+	
+	/**
+	 * Get the language code
+	 * @param	$idLanguage		int		The ID of the language
+	 * @return	string					The code of the language
+	 */
+	function getLanguageCode($idLanguage = null)
+	{
+		$idLanguage = $idLanguage !== null ? $idLanguage : $this->idLanguage;
+		$this->db->select('code');
+		$this->db->where('id', $idLanguage);
+		$query = $this->db->get('languages');
+		$result = $query->result();
+		return $result[0]->code;
 	}
 	
 	/**
 	 * Get an array with all the parents
-	 * @param	$idContent	int	The ID of the child to get the parents from. If ID is set to null (default), the current dataobjects' ID is used
+	 * @param	$idContent	int	The ID of the child to get the parents from. If ID is set to null (default), the current dataObjects' ID is used
 	 * @return	array	An array with dataModels
 	 */
 	function parents($idContent = null)
 	{
-		$idContent = $idContent != null ? $idContent : $this->idContent;
+		$idContent = $idContent !== null ? $idContent : $this->idContent;
 		if(!isset($this->parentsArray[$idContent])) {
 			// Create an array in which the first entry is the root parent:
 			$parents = array();
 			$idParent = $idContent;
 			// Add a safety counter, so this will not become an infinite loop:
 			$safetyCounter = 0;
-			$infiniteLoop  = false;
-			while($safetyCounter<100) {
+			$infiniteLoop  = false;			
+			while($safetyCounter < 100) {
 				$this->db->select('id_content');
 				$this->db->where('id', $idParent);
 				$query = $this->db->get('content');
-				$idParent = $query->row()->id_content;
-				$dataObject = new DataModel();
-				$dataObject->load($idParent, $this->idLanguage);				
-				array_unshift($parents, $dataObject);				
+				if($this->db->count_all_results() > 0) {
+					$idParent = $query->row()->id_content;
+					if($idParent==0) {
+						break;
+					}
+					$dataObject = new DataModel();
+					$dataObject->load($idParent, $this->idLanguage);					
+					array_unshift($parents, $dataObject);
+				}				
 				$safetyCounter++;
 				if($safetyCounter>=100) {
 					$infiniteLoop = true;
 					break;
-				}
-				if($idParent==0) {
-					break;
-				}
+				}				
 			}
 			
 			if($infiniteLoop) {
@@ -191,6 +252,22 @@ class DataModel extends Model
 			}
 		}
 		return $this->parentsArray[$idContent];
+	}
+	
+	/**
+	 * Create an array with the different languages this website uses
+	 * @return	array	A 2-dimensional array
+	 */
+	function getLanguages()
+	{
+		$languages = array();
+		$query = $this->db->where('active', 1);
+		$query = $this->db->get('languages');
+		foreach($query->result_array() as $language) {
+			$language['url'] = site_url($language['code']);
+			array_push($languages, $language);
+		}
+		return $languages;
 	}
 	
 	/**
@@ -229,6 +306,51 @@ class DataModel extends Model
 		}
 	}
 	
+    /**
+     * Get the settings
+     * TODO: This is the same function as in the admin model. Is there a way that these two can be combined?
+     * @return  array   Associated array with the settings
+     */
+    function getSettings()
+    {
+        $settings = array();
+        $this->db->select('name,value');
+        $query = $this->db->get('settings');
+        foreach($query->result() as $setting) {
+            $settings[$setting->name] = $setting->value;
+        }
+        return $settings;
+    }
+	
+	/**
+	 * Get the locales
+	 * @param	$idLanguage		int		The ID of the language, leave null to get the current language
+	 */
+	function getLocales($idLanguage = null)
+	{
+		$locales = array();
+		$idLanguage = $idLanguage !== null ? $idLanguage : $this->idLanguage;
+		/*
+		$this->db->select('name','value');
+		$this->db->where('id_language', $idLanguage);
+		$this->db->join('locales_values', 'locales.id = locales_values.id_locale');
+		*/
+		
+		// TODO: Make this query active-record-style:
+		$pf = $this->db->dbprefix;
+		$sql = 'SELECT A.`name`, B.`value` FROM
+			`'.$pf.'locales` A,
+			`'.$pf.'locales_values` B
+				WHERE
+			B.`id_language` = '.$idLanguage.' AND
+			B.`id_locale`   = A.`id`';		
+		$query = $this->db->query($sql);
+		foreach($query->result() as $locale) {
+			$locales[$locale->name] = $locale->value;
+		}
+		return $locales;
+	}
+	
 	/**
 	 * Render this datamodel according to it's template
 	 */
@@ -255,7 +377,15 @@ class DataModel extends Model
 		foreach($this->options as $key=>$value) {
 			$smarty->assign($key, $value);
 		}
+		
+		// Assign a reference to the dataObject:
 		$smarty->assign('dataObject', $this);
+		
+		// Assign a reference to the settings:
+		$smarty->assign('settings', $this->getSettings());
+		
+		// Assign a reference to the locales:		
+		$smarty->assign('locale', $this->getLocales());
 		
 		// Render the page:		
 		$smarty->display($this->templateFile);

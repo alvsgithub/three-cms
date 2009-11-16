@@ -665,7 +665,8 @@ class Admin extends Controller
 						$data = array(
 							'lang'=>$this->lang,
 							'contentData'=>$contentData,
-							'templates'=>$this->AdminModel->getTableData('templates', 'id,name,templatefile'),
+							// 'templates'=>$this->AdminModel->getTableData('templates', 'id,name,templatefile'),
+							'templates'=>$this->AdminModel->getAvailableTemplates($id, true),
 							'title'=>$this->lang->line('title_add_content'),
 							'allowedTemplates'=>$this->AdminModel->getAllowedTemplates($this->rank)
 						);
@@ -681,7 +682,8 @@ class Admin extends Controller
 						$data = array(
 							'lang'=>$this->lang,
 							'contentData'=>$contentData,
-							'templates'=>$this->AdminModel->getTableData('templates', 'id,name,templatefile'),
+							// 'templates'=>$this->AdminModel->getTableData('templates', 'id,name,templatefile'),
+							'templates'=>$this->AdminModel->getAvailableTemplates($id),
 							'title'=>$this->lang->line('title_modify_content'),
 							'allowedTemplates'=>$this->AdminModel->getAllowedTemplates($this->rank)
 						);

@@ -26,16 +26,16 @@
 							} else {								
 						?>
 						<select name="template">
-						<?php
-							foreach($templates->result() as $result) {
-								if(in_array($result->id, $allowedTemplates)) {
-									$selected = $contentData['id_template']==$result->id ? ' selected="selected"' : '';
-									echo '<option value="'.$result->id.'"'.$selected.'>'.$result->name.'</option>';
+						<?php							
+							foreach($templates as $template) {
+								if(in_array($template['id'], $allowedTemplates) && $template['allowed']==1) {
+									$selected = $contentData['id_template']==$template['id'] ? ' selected="selected"' : '';
+									echo '<option value="'.$template['id'].'"'.$selected.'>'.$template['name'].'</option>';
 								}
 							}
 						?>
 						</select>
-						<?php
+						<?php							
 							}
 						?>
 					</td>

@@ -7,7 +7,17 @@ html { font-family: arial, helvetica, sans-serif; font-size: 62.5%; cursor: defa
 #top { width: 960px; height: 100px; background: #fff; margin: 10px 0; border: 1px solid #ccc; }
 #top h1 { font-size: 5em; letter-spacing: -0.05em; font-weight: normal; color: #ccc; padding: 0 8px; }
 
-#navigation { width: 300px; background: #fff; border: 1px solid #ccc; float: left; }
-#content { float: right; width: 628px; background: #fff; border: 1px solid #ccc; padding: 10px; }
+#navigation { width: 300px; float: left; }
+#navigation h2 { color: #fff; font-weight: normal; letter-spacing: 1px; margin-bottom: 3px; }
+#navigation ul { list-style-type: none; background: #fff; margin-bottom: 1em; }
+#navigation a { display: block; width: 280px; padding: 10px; border-bottom: 1px dotted #ccc; color: #666; text-decoration: none; letter-spacing: 1px; font-size: 1.2em; }
+#navigation a:hover, #navigation a.active { color: #000; background: #eee; }
+#navigation ul.language a { padding: 0px 10px; }
+
+#content { float: right; width: 628px; background: #fff; border: 1px solid #ccc; padding: 10px; font-size: 1.2em; }
+#content p { line-height: 1.6em; margin-bottom: 1em; color: #666; }
+
+.coreValue { border-top: 1px dotted #ccc; }
+.coreValue h3 { color: #666; background: #eee; padding: 5px; font-size: 1em; text-transform: uppercase; }
 
 #footer { color: #fff; clear: both; }

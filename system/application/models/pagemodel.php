@@ -66,6 +66,24 @@ class PageModel extends Model
 	}
 	
 	/**
+	 * Get the page ID according to an alias
+	 * @param	$alias	string	The alias
+	 * @return 	int				The ID of the page
+	 */
+	function getPageId($alias)
+	{
+		$this->db->select('id');
+		$this->db->where('alias', strtolower($alias));
+		$query = $this->db->get('content');
+		if($this->db->count_all_results()==1) {
+			$result = $query->result();			
+			return $result[0]->id;
+		} else {
+			return false;
+		}
+	}
+	
+	/**
 	 * Get the value of an option
 	 * @param	$idContent	int	the ID of the content
 	 * @param	$idOption	int	the ID of the option
