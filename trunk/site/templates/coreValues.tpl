@@ -13,6 +13,10 @@
 			<div id="content">
 				<h1>{$header}</h1>
 				<p>{$content}</p>
+				<h2>{$locale.coreValues}</h2>
+				{foreach from=$dataObject->children() item=child}
+					{$child->render()}
+				{/foreach}
 			</div>
 			<div id="footer">
 				<p>&copy; {$smarty.now|date_format:"%Y"} || Powered by Three CMS</p>
