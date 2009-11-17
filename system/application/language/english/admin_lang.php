@@ -112,10 +112,14 @@
 	$lang['content_language']			= 'Language';
 	$lang['content_select_parent']		= 'Select a parent from the tree on the right of the screen';
 	$lang['content_order']				= 'Order';
+	$lang['content_stored']				= 'Content succesfully stored';
+	$lang['content_server_error']		= 'Content not saved due to an internal server error!';
+	$lang['content_moved']				= 'Content successfully moved!';
 
     // Default text chunks:
     $lang['default_actions']        	= 'Actions';
     $lang['default_admin_panel']    	= 'Admin Panel';
+	$lang['default_one_moment']			= 'One moment please...';
 	
 	// File browser:
 	$lang['browser_previous']			= 'Previous';

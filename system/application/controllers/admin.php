@@ -3,6 +3,7 @@ class Admin extends Controller
 {
     private $loggedIn;
     private $rank;
+	private $settings;
 	
     function Admin()
     {
@@ -29,7 +30,7 @@ class Admin extends Controller
         
         // See if the user is logged in:
         $this->loggedIn = $this->session->userdata('loggedIn');
-		$this->rank     = $this->session->userdata('rank');		
+		$this->rank     = $this->session->userdata('rank');
 		if(!$this->loggedIn) {
 			if($this->uri->segment(2)!='login') {
 				redirect(site_url(array('admin', 'login')));
@@ -39,6 +40,8 @@ class Admin extends Controller
         // Load the adminModel:
         $this->load->model('AdminModel', '', true);
 		
+		// Load the settings:
+		$this->settings = $this->AdminModel->getSettings();
     }
     
 	/**
@@ -63,7 +66,7 @@ class Admin extends Controller
 			$password = md5($this->input->post('password'));
 			$info     = $this->AdminModel->checkLogin($username, $password);
 			if($info==false) {
-				// TODO: Show error				
+				// TODO: Show error
 			} else {
 				$this->session->set_userdata(array('loggedIn'=>true, 'rank'=>$info['id_rank']));
 				redirect(site_url('admin'));
@@ -174,7 +177,7 @@ class Admin extends Controller
 					// Save the data (POST-action)
 					$root = isset($_POST['root']) ? 1 : 0;
 					$data = array(
-						'name'=>$this->input->post('name'),
+						'name'=>$this->makeSafe($this->input->post('name')),
 						'id_dataobject'=>$this->input->post('id_dataobject'),
 						'templatefile'=>$this->input->post('templatefile'),
 						'root'=>$root
@@ -255,7 +258,7 @@ class Admin extends Controller
 				{
 					// Save the data (POST-action)
 					$data = array(						
-						'name'=>$this->input->post('name'),
+						'name'=>$this->makeSafe($this->input->post('name'))
 					);
 					$id = $this->AdminModel->saveData('dataobjects', $data, $this->input->post('id'));
 					// Save the options:
@@ -320,9 +323,9 @@ class Admin extends Controller
 			case 'save':
 				{
 					$data = array(
-						'name'=>$this->input->post('name'),
+						'name'=>$this->makeSafe($this->input->post('name')),
 						'type'=>$this->input->post('type'),
-						'default_value'=>$this->input->post('default_value'),
+						'default_value'=>$this->makeSafe($this->input->post('default_value')),
 						'multilanguage'=>isset($_POST['multilanguage']) ? 1 : 0
 					);
 					$this->AdminModel->saveData('options', $data, $this->input->post('id'));
@@ -382,7 +385,7 @@ class Admin extends Controller
 				{
 					// Save the data (POST-action)
 					$data = array(						
-						'name'=>$this->input->post('name'),
+						'name'=>$this->makeSafe($this->input->post('name')),
 						'code'=>$this->input->post('code'),
 						'active'=>isset($_POST['active']) ? 1 : 0
 					);
@@ -432,7 +435,6 @@ class Admin extends Controller
 		}
 	}
 	
-	
 	/**
 	 * Locales functions
 	 */
@@ -446,14 +448,14 @@ class Admin extends Controller
 				{
 					// Save the data (POST-action)
 					$data = array(						
-						'name'=>$this->input->post('name')
+						'name'=>$this->makeSafe($this->input->post('name'))
 					);
 					$id = $this->AdminModel->saveData('locales', $data, $this->input->post('id'));
 					echo $id;					
 					// Save the language-entries:
 					$locales = $this->AdminModel->getLocaleValues($id);
 					for($i=0; $i < count($locales); $i++) {
-						$locales[$i]['value'] = $this->input->post('language_'.$locales[$i]['id']);
+						$locales[$i]['value'] = $this->makeSafe($this->input->post('language_'.$locales[$i]['id']));
 					}
 					$this->AdminModel->saveLocaleValues($id, $locales);
 					redirect(site_url(array('admin', 'manage', 'locales')));					
@@ -521,6 +523,12 @@ class Admin extends Controller
 					$this->load->view('admin/ajax/tree.php', $data);
 					break;
 				}
+			case 'fulltree' :
+				{
+					// Show the complete tree:
+					$this->showTree();
+					break;
+				}
 			case 'treeclose' :
 				{
 					// Remove this id from the treeArray:
@@ -582,7 +590,9 @@ class Admin extends Controller
 	 */
 	function content()
 	{
-		$this->showHeader();
+		if(!isset($_POST['ajax'])) {
+			$this->showHeader();
+		}
 		$action = $this->uri->segment(3);
 		$id     = $this->uri->segment(4);
 		switch($action) {
@@ -596,7 +606,7 @@ class Admin extends Controller
 					$contentData = $this->AdminModel->getContentData($idContent, $idParent, $idTemplate);
 					// Adjust the contentData according to the parameters:
 					$contentData['id_template'] = $idTemplate;
-					$contentData['name']        = $this->input->post('name');
+					$contentData['name']        = $this->makeSafe($this->input->post('name'));
 					$contentData['alias']       = $this->input->post('alias');
 					$contentData['order']		= $this->input->post('order');
 					// Check if the parent is not a descendant of this content and if the parent is not itself:					
@@ -638,9 +648,15 @@ class Admin extends Controller
 											$value = implode(';', $valueArray);
 											break;
 										}
+										case 'rich_text' :
+										{
+											// Rich text already has it's entities converted, and html-tags are allowed:
+											$value = isset($_POST[$name]) ? $this->input->post($name) : '';											
+											break;
+										}
 										default:
 										{
-											$value = isset($_POST[$name]) ? $this->input->post($name) : '';
+											$value = isset($_POST[$name]) ? $this->makeSafe($this->input->post($name)) : '';
 											break;
 										}
 									}
@@ -651,8 +667,14 @@ class Admin extends Controller
 					}
 					// All the values are retreived, now save the data:
 					$idContent = $this->AdminModel->saveContentData($idContent, $contentData);
-					// Redirect to the editing-page:
-					redirect(site_url(array('admin', 'content', 'edit', $idContent)));
+					// See if this action was send using ajax:
+					if(isset($_POST['ajax'])) {
+						echo '1;'.$this->lang->line('content_stored');
+						die();
+					} else {
+						// Redirect to the editing-page:
+						redirect(site_url(array('admin', 'content', 'edit', $idContent)));
+					}
 					break;
 				}
 			case 'add' :
@@ -668,7 +690,8 @@ class Admin extends Controller
 							// 'templates'=>$this->AdminModel->getTableData('templates', 'id,name,templatefile'),
 							'templates'=>$this->AdminModel->getAvailableTemplates($id, true),
 							'title'=>$this->lang->line('title_add_content'),
-							'allowedTemplates'=>$this->AdminModel->getAllowedTemplates($this->rank)
+							'allowedTemplates'=>$this->AdminModel->getAllowedTemplates($this->rank),
+							'settings'=>$this->settings
 						);
 						$this->load->view('admin/content/add_edit.php', $data);
 					}
@@ -685,7 +708,8 @@ class Admin extends Controller
 							// 'templates'=>$this->AdminModel->getTableData('templates', 'id,name,templatefile'),
 							'templates'=>$this->AdminModel->getAvailableTemplates($id),
 							'title'=>$this->lang->line('title_modify_content'),
-							'allowedTemplates'=>$this->AdminModel->getAllowedTemplates($this->rank)
+							'allowedTemplates'=>$this->AdminModel->getAllowedTemplates($this->rank),
+							'settings'=>$this->settings
 						);
 						$this->load->view('admin/content/add_edit.php', $data);
 					}
@@ -702,9 +726,12 @@ class Admin extends Controller
 				}
 			case 'move' :
 				{
-					// TODO
 					if($id!=false) {
-						
+						$contentData = $this->AdminModel->getContentData($id);
+						// Change the parent:
+						$contentData['id_content'] = $this->input->post('id_content');
+						$this->AdminModel->saveContentData($id, $contentData);
+						die();	// Function can die here, this action is done with AJAX
 					}
 					break;
 				}
@@ -748,7 +775,7 @@ class Admin extends Controller
 			// Save the settings:
 			$settings = array();
 			foreach($_POST as $key=>$value) {
-				$settings[$key] = $this->input->post($key);
+				$settings[$key] = $this->makeSafe($this->input->post($key));
 			}
 			$this->AdminModel->saveSettings($settings);
 			redirect(site_url(array('admin')));
@@ -891,9 +918,9 @@ class Admin extends Controller
 						$id = $this->input->post('id');
 						if($id!=false) {
 							$data = $this->AdminModel->getData('users', $id);
-							$data['username'] = $this->input->post('username');
-							$data['name']     = $this->input->post('name');
-							$data['email']    = $this->input->post('email');
+							$data['username'] = $this->makeSafe($this->input->post('username'));
+							$data['name']     = $this->makeSafe($this->input->post('name'));
+							$data['email']    = $this->makeSafe($this->input->post('email'));
 							$data['id_rank']  = $this->input->post('id_rank');
 							if($this->input->post('password')!='') {
 								if($this->input->post('password')==$this->input->post('password_check')) {
@@ -903,6 +930,7 @@ class Admin extends Controller
 								// Password cannot be empty for a new user:
 								if($id==0) {
 									// TODO: Some sort of error handling
+									
 								}
 							}
 							$this->AdminModel->saveData('users', $data, $id);
@@ -970,7 +998,7 @@ class Admin extends Controller
 						$id = $this->input->post('id');
 						$data = $this->AdminModel->getData('ranks', $id);
 						// Adjust the data:
-						$data['name'] = $this->input->post('name');
+						$data['name'] = $this->makeSafe($this->input->post('name'));
 						$data['system'] = isset($_POST['system']) ? 1 : 0;
 						$data['users'] = isset($_POST['users']) ? 1 : 0;
 						$data['ranks'] = isset($_POST['ranks']) ? 1 : 0;
@@ -1002,7 +1030,7 @@ class Admin extends Controller
 						$id = $this->uri->segment(4);
 						// ID can also not be 1, because that is the administrators rank:
 						if($id!=false && $id!=1) {
-							// TODO: Check if there are nu users currently using this rank
+							// TODO: Check if there are no users currently using this rank
 							$this->AdminModel->deleteData(array('ranks'=>'id'), $id);
 						}
 						redirect(site_url(array('admin', 'ranks')));
@@ -1018,5 +1046,14 @@ class Admin extends Controller
 		$this->showFooter();
 	}
 	
+	/**
+	 * Make a string safe (strip tags and convert html entities)
+	 * @param	$str	string	The string to convert
+	 * @return	string			The 'safe' string
+	 */
+	function makeSafe($str)
+	{
+		return htmlentities(strip_tags($str), ENT_QUOTES);
+	}
 }
 ?>

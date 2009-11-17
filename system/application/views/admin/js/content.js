@@ -39,4 +39,45 @@ $(function(){
 		return false;
 	});
 	
+	// Override submit-function for ajax-functionality:
+	$("form").submit(function(){
+		// Disable the submit button, and make the loading bar visible:
+		$("input[type=submit]", this).attr("disabled", "disabled");
+		$("img.loading").show();		
+		// Get all the parameters and post them:
+		data = {};
+		$("input, select", this).each(function(){
+			data[$(this).attr("name")] = $(this).val();
+		});
+		// Textareas are done by ckEditor, so we must grab the data from ckEditor instead of the textarea itself.
+		$("textarea", this).each(function(){
+			instance = CKEDITOR.instances[$(this).attr("name")];
+			if(instance != undefined) {
+				// ckEditor instance:
+				data[instance.name] = instance.getData();
+			} else {
+				// Regular textarea:
+				data[$(this).attr("name")] = $(this).val();
+			}
+		});
+		// Set the ajax-parameter to true, so the admin-part knows not to redirect after storage:
+		data.ajax = true;
+		// Send POST:
+		$.post($(this).attr("action"), data, function(responseStr){
+			response = responseStr.split(';');
+			if(response.length==2) {
+				$("#message").html('<p class="ok">' + response[1] + '</p>').slideDown("slow");
+			} else {
+				alert(content_server_error);
+			}
+			$("input[type=submit]").removeAttr("disabled");
+			$("img.loading").hide();
+		});
+		// Return false:
+		return false;
+	});
+	
+	$("#message").click(function(){
+		$(this).slideUp("slow");
+	});
 });

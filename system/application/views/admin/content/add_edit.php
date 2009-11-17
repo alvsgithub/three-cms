@@ -1,5 +1,6 @@
 <div id="content">
 	<div id="innerContent">
+		<div id="message"></div>
         <h1><?php echo $title; ?></h1>
 		<form method="post" action="<?php echo site_url(array('admin', 'content', 'save')); ?>">
 			<table>
@@ -43,6 +44,7 @@
 				<tr>
 					<th><?php echo $lang->line('content_parent'); ?>:</th>
 					<td><input readonly="readonly" class="small" type="text" name="parent" value="<?php echo $contentData['id_content']; ?>" /> <a href="#" class="selectParent">Select parent <span></span></a></td>
+					<!-- TODO: Make it possible to move content to the root -->
 				</tr>
 				<tr>
 					<th><?php echo $lang->line('content_order'); ?>:</th>
@@ -101,7 +103,7 @@
 						$class		= 'language_'.$languageID;
 						foreach($item['value'] as $valueItem) {
 							if($languageID==0) {
-								if($valueItem['id_language']==DEFAULT_LANGUAGE_ID) {
+								if($valueItem['id_language']==$settings['default_language']) {
 									$value = $valueItem['value'];
 									break;
 								}
@@ -213,16 +215,17 @@
 					<th>&nbsp;</th>
 					<td>
 						<input type="hidden" name="id" value="<?php echo $contentData['id']; ?>" />
-						<input type="submit" value="<?php echo $lang->line('button_save'); ?>" />
+						<input type="submit" value="<?php echo $lang->line('button_save'); ?>" /> <img src="<?php echo base_url(); ?>system/application/views/admin/images/ajax-loader.gif" width="128" height="15" class="loading" />
 					</td>
 				</tr>
 			</table>			
 			<script type="text/javascript">
 				var language_ids     	     = [<?php echo $languagesString; ?>];
-				var default_language		 = <?php echo DEFAULT_LANGUAGE_ID; ?>;
+				var default_language		 = <?php echo $settings['default_language']; ?>;
 				var select_parent    	     = '<?php echo $lang->line('content_select_parent'); ?>';
 				var dialog_parent_same_id	 = '<?php echo $lang->line('dialog_parent_same_id'); ?>';
 				var dialog_parent_descendant = '<?php echo $lang->line('dialog_parent_descendant'); ?>';
+				var content_server_error     = '<?php echo $lang->line('content_server_error'); ?>';
 			</script>
 			<script type="text/javascript" src="<?php echo base_url(); ?>system/application/views/admin/js/content.js"></script>
 		</form>

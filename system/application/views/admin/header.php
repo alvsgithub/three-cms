@@ -71,4 +71,8 @@
                     <li class="logout"><a href="<?php echo site_url(array('admin', 'logout')); ?>"><?php echo $lang->line('menu_logout'); ?></a></li>
                 </ul>
             </div>
+			<div id="loading">
+				<img src="<?php echo base_url(); ?>system/application/views/admin/images/ajax-loader.gif" width="128" height="15" />
+				<p><?php echo $lang->line('default_one_moment'); ?></p>
+			</div>
 
