@@ -16,35 +16,14 @@
         <div id="body">
 			<div id="top">
 				<form method="post" enctype="multipart/form-data" action="<?php echo site_url(array('admin', 'browser', 'upload')); ?>">
-				<?php
-				/*
-				<a href="#" class="prev" title="<?php echo $lang->line('browser_previous'); ?>"><?php echo $lang->line('browser_previous'); ?></a>
-				<a href="#" class="next" title="<?php echo $lang->line('browser_next'); ?>"><?php echo $lang->line('browser_next'); ?></a>
-				<span class="delimiter"></span>
-				<a href="#" class="up" title="<?php echo $lang->line('browser_up'); ?>"><?php echo $lang->line('browser_up'); ?></a>
-				<a href="#" class="refresh" title="<?php echo $lang->line('browser_refresh'); ?>"><?php echo $lang->line('browser_refresh'); ?></a>
-				<a href="#" class="search" title="<?php echo $lang->line('browser_search'); ?>"><?php echo $lang->line('browser_search'); ?></a>
-				<input type="text" name="searchField" />
-				<span class="delimiter"></span>
-				*/
-				?>
 				<a href="#" class="newFile" title="<?php echo $lang->line('browser_new_file'); ?>"><?php echo $lang->line('browser_new_file'); ?></a>
 				<input type="file" name="uploadField" /><input type="submit" name="uploadButton" value="<?php echo $lang->line('button_upload'); ?>" />
 				<input type="hidden" name="folder" />
 				<a href="#" class="newFolder" title="<?php echo $lang->line('browser_new_folder'); ?>"><?php echo $lang->line('browser_new_folder'); ?></a>
-				<?php				
-					/* <a href="#" class="delete" title="<?php echo $lang->line('browser_delete'); ?>"><?php echo $lang->line('browser_delete'); ?></a> */
-				?>
 				</form>
 			</div>
 			<div id="tree">
 				<?php
-					// TODO: Implement previous-button functionality
-					// TODO: Implement next-button functionality
-					// TODO: Implement up-button functionality
-					// TODO: Implement refresh functionality
-					// TODO: Implement search functionality (AJAX)
-					// TODO: Implement upload new file functionality (AJAX / multiple files)
 					function buildTree($path)
 					{
 						$files = glob($path.'/*');

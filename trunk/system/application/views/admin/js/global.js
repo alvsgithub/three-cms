@@ -1,6 +1,7 @@
 var ajaxLoader = '<img src="'+baseURL+'system/application/views/admin/images/ajax-loader.gif" width="128" height="15" />';
 var inputField;
 var parentSelection = false;
+var moveAction = false;
 
 $(function(){
 	// Simple dropdown:
@@ -33,60 +34,105 @@ $(function(){
 	// Parent selection:
 	$("a.selectParent").click(function(){
 		$("span", this).text(select_parent);
-		$("#tree").css({backgroundColor: "#CCDDFF"}).animate({backgroundColor: "#FFFFFF"}, 1000);
-		parentSelection = true;
+		setParentSelection();
 		return false;		
 	});
 });
 
+function setParentSelection()
+{
+	$("#tree").css({backgroundColor: "#CCDDFF"}).animate({backgroundColor: "#FFFFFF"}, 1000);
+	parentSelection = true;
+}
+
 function initializeTree()
 {
-	$("#tree span.name").unbind("click");
-	$("#tree span.name").click(function(){
-		parent = $(this).parent();
-		id     = $('span.id:first var', parent).text();	// The ID of this content item		
-		if(!parentSelection) {
-			$("#tree span.name").removeClass("selected");
-			$(this).addClass("selected");
-			if(parent.hasClass("hasChildren")) {
-				// See if there is content:		
-				if($('div.innerTree', parent).length == 0) {
-					parent.append('<div class="innerTree">'+ajaxLoader+'</div>');
-					parent.addClass("open");
-					// Load the tree:
-					$.get(baseURL + 'index.php/admin/ajax/tree/'+id, function(data) {
-						$("div.innerTree", parent).html(data);
-						initializeTree();
-					});
-				} else {
-					// Close:
-					parent.removeClass("open");
-					$("div.innerTree", parent).remove();
-					$.get(baseURL + 'index.php/admin/ajax/treeclose/'+id);
-				}
-			}
-			$("#content").load(baseURL + 'index.php/admin/ajax/page_summary/'+id, function(){
-				$("td.content_actions a.delete").click(function(){
-					return confirm(dialog_delete_tree);
+	var iconClicked = false;
+	
+	$("#tree span.name, #tree span.icon").unbind("click");
+	$("#tree span.icon").click(function(){
+		// There is clicked on the icon. Expand the tree:
+		iconClicked = true;
+		parent = $(this).parent().parent();
+		id     = $('span.id:first var', parent).text();	// The ID of this content item
+		// See if this parent has children:
+		if(parent.hasClass("hasChildren")) {
+			// See if there is content:		
+			if($('div.innerTree', parent).length == 0) {
+				parent.append('<div class="innerTree">'+ajaxLoader+'</div>');
+				parent.addClass("open");
+				// Load the tree:
+				$.get(baseURL + 'index.php/admin/ajax/tree/'+id, function(data) {
+					$("div.innerTree", parent).html(data);
+					initializeTree();
 				});
-			});			
-		} else {
-			if(id==$("input[name=id]").val()) {
-				alert(dialog_parent_same_id);
-				return;
+			} else {
+				// Close:
+				parent.removeClass("open");
+				$("div.innerTree", parent).remove();
+				$.get(baseURL + 'index.php/admin/ajax/treeclose/'+id);
 			}
-			// Check if the parent is not a descendand of the current documents ID (AJAX)
-			$.get(baseURL + 'index.php/admin/ajax/checkdescendant/'+id+'/'+$("input[name=id]").val(), function(data){
-				if(data!='ok') {
-					alert(dialog_parent_descendant);					
-				} else {
-					// Set the parent:
-					$("input[name=parent]").val(id);
-					$("a.selectParent span").text('');
-					parentSelection = false;
+		}		
+	});
+	
+	$("#tree span.name").click(function(){
+		// Only select this item if there is not clicked on the icon:
+		if(!iconClicked) {
+			parent = $(this).parent();
+			id     = $('span.id:first var', parent).text();	// The ID of this content item
+			if(!parentSelection) {
+				$("#tree span.name").removeClass("selected");
+				$(this).addClass("selected");
+				// Load the summary of this page:
+				$("#loading").show();
+				$("#content").load(baseURL + 'index.php/admin/ajax/page_summary/'+id, function(){
+					$("td.content_actions a.delete").click(function(){
+						return confirm(dialog_delete_tree);
+					});
+					$("td.content_actions a.move").click(function(){
+						$(this).addClass("inactive");
+						setParentSelection();
+						moveAction = true;
+						return false;
+					});
+					$("#loading").hide();
+				});
+			} else {
+				if(id==$("input[name=id]").val()) {
+					alert(dialog_parent_same_id);
+					return;
 				}
-			});
+				// Check if the parent is not a descendand of the current documents ID (AJAX)
+				// TODO: Check if this page is allowed to be a child of the newly selected parent.
+				$.get(baseURL + 'index.php/admin/ajax/checkdescendant/'+id+'/'+$("input[name=id]").val(), function(data){
+					if(data!='ok') {
+						alert(dialog_parent_descendant);					
+					} else {
+						// Set the parent:
+						if(moveAction) {
+							// The action is done by the move-button in the summary-screen:
+							$("#loading").show();
+							$.post(baseURL + 'index.php/admin/content/move/' + $("span.idContent").text(), {id_content: id}, function(){
+								// Reload the tree:
+								$("#tree").load(baseURL + 'index.php/admin/ajax/fulltree #tree>*', function(){
+									initializeTree();
+									parentSelection = false;
+									moveAction      = false;
+									$("td.content_actions a.move").removeClass("inactive");
+									$("#loading").hide();
+								});
+							});
+						} else {
+							// The action is done by the add/edit-screen:
+							$("input[name=parent]").val(id);
+							$("a.selectParent span").text('');
+							parentSelection = false;
+						}
+					}
+				});
+			}			
 		}
+		// iconClicked = false;
 	});
 }
 

@@ -3,7 +3,7 @@
 	<table>
 		<tr>
 			<th width="10%"><?php echo $lang->line('content_id'); ?>:</th>
-			<td><?php echo $content['id']; ?></td>
+			<td><span class="idContent"><?php echo $content['id']; ?></span></td>
 		</tr>
 		<tr>
 			<th><?php echo $lang->line('content_name'); ?>:</th>
@@ -37,6 +37,7 @@
 				<a href="<?php echo site_url(array('admin', 'content', 'duplicate', $content['id'])); ?>" class="duplicate" title="<?php echo $duplicate.'">'.$duplicate; ?></a>
 				<a href="<?php echo site_url(array('admin', 'content', 'move', $content['id'])); ?>" class="move" title="<?php echo $move.'">'.$move; ?></a>
 				<a href="<?php echo site_url(array('admin', 'content', 'delete', $content['id'])); ?>" class="delete" title="<?php echo $delete.'">'.$delete; ?></a>
+				<input name="id" type="hidden" value="<?php echo $content['id']; ?>" />
 			</td>
 		</tr>
 		<tr class="delimiter">

@@ -23,7 +23,8 @@ class DataModel extends Model
 	var $options;		// An array holding the options of this data object and it's values
 	var $idContent;		// The ID of the content
 	var $idLanguage;	// The ID of the language
-	var $templateFile;	// The template file
+	var $templateFile;	// The template file	
+	var $settings;		// Settings object
 	
 	// The following parameters don't get set until a certain first function call
 	// This makes the dataModel load faster in case the parameter is not used.
@@ -44,8 +45,7 @@ class DataModel extends Model
 		$this->idLanguage	= $idLanguage;
 		$this->options		= array();
 		
-		// TODO: Add settings-object to the content
-		
+		$this->settings     = $this->getSettings();
 		
 		// Default settings:
 		$this->db->select('name,alias,order');
@@ -79,7 +79,7 @@ class DataModel extends Model
 			C.`id`              = B.`id_option` AND
 			D.`id_content`      = '.$idContent.' AND
 			D.`id_option`       = B.`id_option` AND
-			D.`id_language`     = IF(C.`multilanguage` = 1, '.$idLanguage.', '.DEFAULT_LANGUAGE_ID.');
+			D.`id_language`     = IF(C.`multilanguage` = 1, '.$idLanguage.', '.$this->settings['default_language'].');
 		';
 		$query = $this->db->query($sql);
 		
@@ -382,7 +382,7 @@ class DataModel extends Model
 		$smarty->assign('dataObject', $this);
 		
 		// Assign a reference to the settings:
-		$smarty->assign('settings', $this->getSettings());
+		$smarty->assign('settings', $this->settings);
 		
 		// Assign a reference to the locales:		
 		$smarty->assign('locale', $this->getLocales());
