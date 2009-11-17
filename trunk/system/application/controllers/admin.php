@@ -1053,7 +1053,7 @@ class Admin extends Controller
 	 */
 	function makeSafe($str)
 	{
-		return htmlentities(strip_tags($str), ENT_QUOTES);
+		return htmlentities(strip_tags($str), ENT_QUOTES, 'UTF-8');
 	}
 }
 ?>
