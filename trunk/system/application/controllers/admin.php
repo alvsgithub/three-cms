@@ -4,6 +4,7 @@ class Admin extends Controller
     private $loggedIn;
     private $rank;
 	private $settings;
+	private $messages;
 	
     function Admin()
     {
@@ -30,18 +31,24 @@ class Admin extends Controller
         
         // See if the user is logged in:
         $this->loggedIn = $this->session->userdata('loggedIn');
-		$this->rank     = $this->session->userdata('rank');
 		if(!$this->loggedIn) {
 			if($this->uri->segment(2)!='login') {
-				redirect(site_url(array('admin', 'login')));
+				redirect(site_url(array('admin', 'login')));		// TODO: In case of an AJAX call the whole site must be refreshed
 			}
-        }		
+        }
+		
+		// Get the rank of this user:
+		$this->rank     = $this->session->userdata('rank');
 		
         // Load the adminModel:
         $this->load->model('AdminModel', '', true);
 		
 		// Load the settings:
 		$this->settings = $this->AdminModel->getSettings();
+		
+		// Set the messages:
+		$this->messages = $this->session->userdata('messages');		
+		$this->session->set_userdata('messages', array());		
     }
     
 	/**
@@ -61,18 +68,24 @@ class Admin extends Controller
 	 */
 	function login()
 	{
+		$error = false;
 		if(isset($_POST['login'])) {
 			$username = $this->input->post('username');
 			$password = md5($this->input->post('password'));
 			$info     = $this->AdminModel->checkLogin($username, $password);
 			if($info==false) {
-				// TODO: Show error
+				$error = true;
+				sleep(3);	// Sleep 3 seconds (security)
 			} else {
 				$this->session->set_userdata(array('loggedIn'=>true, 'rank'=>$info['id_rank']));
 				redirect(site_url('admin'));
 			}
-		} 
-		$this->load->view('admin/login.php');
+		}
+		$data = array(
+			'lang'=>$this->lang,
+			'error'=>$error
+		);
+		$this->load->view('admin/login.php', $data);
 	}
 	
 	/**
@@ -203,7 +216,7 @@ class Admin extends Controller
 				{
 					// Delete
 					if($id!=false) {
-						$this->AdminModel->deleteData(array('templates'=>'id', 'content'=>'id_template'), $id);
+						$this->AdminModel->deleteData(array('templates'=>'id', 'content'=>'id_template', 'templates_ranks'=>'id_template'), $id);
 						redirect(site_url(array('admin', 'manage', 'templates')));
 					}
 					break;
@@ -582,6 +595,12 @@ class Admin extends Controller
 					}
 					break;
 				}
+			case 'keepalive' :
+				{
+					// This function is used to keep the session allive. It is called every 5 minutes.
+					echo '1';
+					break;
+				}
 		}
 	}
 	
@@ -849,6 +868,15 @@ class Admin extends Controller
         $this->load->view('admin/manage/notfound.php', $data);
 	}
 	
+	function showMessages()
+	{
+		
+		$data = array(
+			'messages'=>$this->messages
+		);		
+		$this->load->view('admin/messages.php', $data);		
+	}
+	
 	/**
 	 * Show the file browser:
 	 */
@@ -916,7 +944,7 @@ class Admin extends Controller
 				case 'save' :
 					{
 						$id = $this->input->post('id');
-						if($id!=false) {
+						if($id!==false) {
 							$data = $this->AdminModel->getData('users', $id);
 							$data['username'] = $this->makeSafe($this->input->post('username'));
 							$data['name']     = $this->makeSafe($this->input->post('name'));
@@ -925,17 +953,22 @@ class Admin extends Controller
 							if($this->input->post('password')!='') {
 								if($this->input->post('password')==$this->input->post('password_check')) {
 									$data['password'] = md5($this->input->post('password'));
+								} else {
+									// Passwords do not match!
+									$this->addMessage('error', 'passwords_no_match');
+									break;
 								}
 							} else {
 								// Password cannot be empty for a new user:
 								if($id==0) {
-									// TODO: Some sort of error handling
-									
+									$this->addMessage('error', 'empty_password');
+									break;
 								}
 							}
 							$this->AdminModel->saveData('users', $data, $id);
 						}
 						redirect(site_url(array('admin', 'users')));
+						break;
 					}
 				case 'add' :
 					{
@@ -954,18 +987,28 @@ class Admin extends Controller
 							$this->load->view('admin/users/add_edit.php', $data);
 						}
 						break;
-					}				
+					}
+				// Users cannot be duplicated, since this could lead to duplicate usernames.
+				/*
 				case 'duplicate' :
 					{
-						// TODO
+						$id = $this->uri->segment(4);
+						if($id!=false) {
+							$user = $this->AdminModel->getData('users', $id);
+							$user['id'] = 0;	// Set ID to 0 to indicate that this is a new user
+							$this->AdminModel->saveData('users', $user, 0);
+						}
+						redirect(site_url(array('admin', 'users')));
 						break;
 					}
+				*/
 				case 'delete' :
 					{
-						$id = $this->uri->segment(4);
-						// ID can also not be 1, because that is the administrators user ID:
+						$id = $this->uri->segment(4);						
 						if($id!=false && $id!=1) {
 							$this->AdminModel->deleteData(array('users'=>'id'), $id);
+						} else {
+							$this->addMessage('error', 'message_delete_admin');
 						}
 						redirect(site_url(array('admin', 'users')));
 						break;
@@ -987,6 +1030,7 @@ class Admin extends Controller
 	{
 		$this->showHeader();
 		$this->showTree();
+		$this->showMessages();
 		$data = array(
 			'lang'=>$this->lang			
 		);		
@@ -1016,22 +1060,42 @@ class Admin extends Controller
 				case 'edit' :
 					{
 						$id = $this->uri->segment(4);
-						$data['rank'] = $this->AdminModel->getData('ranks', $id);
-						$this->load->view('admin/ranks/add_edit.php', $data);
+						if($id!=false) {
+							$data['rank'] = $this->AdminModel->getData('ranks', $id);
+							$this->load->view('admin/ranks/add_edit.php', $data);
+						}
 						break;
 					}				
 				case 'duplicate' :
 					{
-						// TODO
+						$id = $this->uri->segment(4);
+						if($id!=false) {
+							// Duplicate the rank:
+							$rank = $this->AdminModel->getData('ranks', $id);
+							$rank['id'] = 0;	// Set ID to 0 to indicate that this is a new rank
+							$newId = $this->AdminModel->saveData('ranks', $rank, 0);							
+							// Duplicate the rights that are attached to this rank:
+							$templates = $this->AdminModel->getAllowedTemplates($id);
+							$this->AdminModel->saveAllowedTemplates($newId, $templates);
+						}
+						redirect(site_url(array('admin', 'ranks')));
 						break;
 					}
 				case 'delete' :
 					{
 						$id = $this->uri->segment(4);
-						// ID can also not be 1, because that is the administrators rank:
-						if($id!=false && $id!=1) {
-							// TODO: Check if there are no users currently using this rank
-							$this->AdminModel->deleteData(array('ranks'=>'id'), $id);
+						// ID can also not be 1, because that is the administrators rank:						
+						if($id!=false && $id!=1) {							
+							$users = $this->AdminModel->getUsersUsingRank($id);
+							if(count($users) == 0) {
+								$this->AdminModel->deleteData(array('ranks'=>'id', 'templates_ranks'=>'id_rank'), $id);
+							} else {
+								// Send message (There are users using this rank)
+								$this->addMessage('error', 'users_using_rank');
+							}
+						} else {
+							// Send message (Administrator rank cannot be deleted)
+							$this->addMessage('error', 'delete_admin_rank');
 						}
 						redirect(site_url(array('admin', 'ranks')));
 						break;
@@ -1054,6 +1118,18 @@ class Admin extends Controller
 	function makeSafe($str)
 	{
 		return htmlentities(strip_tags($str), ENT_QUOTES, 'UTF-8');
+	}
+	
+	/**
+	 * Add a message to the system
+	 * @param	$type		string	The type of message (info,ok,error)
+	 * @param	$message	string	The message itself (from admin_lang.php)
+	 */
+	function addMessage($type, $message)
+	{
+		$messages = $this->session->userdata('messages');
+		array_push($messages, array('type'=>$type, 'message'=>$this->lang->line('message_'.$message)));
+		$this->session->set_userdata('messages', $messages);		
 	}
 }
 ?>

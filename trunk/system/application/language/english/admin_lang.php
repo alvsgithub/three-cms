@@ -151,4 +151,18 @@
 	$lang['ranks_users']				= 'User can manage user accounts';
 	$lang['ranks_ranks']				= 'User can manage ranks';
 	$lang['ranks_configuration']		= 'User can edit the sites configuration';
+	
+	// Login:
+	$lang['login_title']				= 'Login';
+	$lang['login_username']				= 'Username';
+	$lang['login_password']				= 'Password';
+	$lang['login_submit_button']		= 'Login';
+	$lang['login_error']				= 'You entered the wrong username and/or password!';
+	
+	// Messages:
+	$lang['message_users_using_rank']	= 'You cannot delete this rank! There are still users using it!';
+	$lang['message_delete_admin_rank']	= 'You cannot delete the administrators rank!';
+	$lang['message_delete_admin']		= 'You cannot delete the administrators user!';
+	$lang['message_empty_password']		= 'User not saved: Password cannot be empty for a new user!';
+	$lang['message_passwords_no_match']	= 'User not saved: Supplied passwords do not match!';
 ?>

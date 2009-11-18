@@ -37,6 +37,9 @@ $(function(){
 		setParentSelection();
 		return false;		
 	});
+	
+	// Set interval to keep the session alive (runs each 5 minutes):
+	setInterval('keepAlive()', 300000);	// 300000 ms = 5 minutes
 });
 
 function setParentSelection()
@@ -134,6 +137,11 @@ function initializeTree()
 		}
 		// iconClicked = false;
 	});
+}
+
+function keepAlive()
+{
+	$.post(baseURL + 'index.php/admin/ajax/keepalive');
 }
 
 function setInputValue(val)

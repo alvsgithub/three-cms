@@ -886,6 +886,19 @@ class AdminModel extends Model
     }
     
     /**
+     * Save the templates that are allowed for this rank:
+     * @param   $id                 int     The ID of the rank
+     * @param   $allowedTemplates   array   An array with ID's
+     */
+    function saveAllowedTemplates($id, $allowedTemplates)
+    {
+        $this->db->delete('templates_ranks', array('id_rank'=>$id));
+        foreach($allowedTemplates as $idTemplate) {
+            $this->db->insert('templates_ranks', array('id_rank'=>$id, 'id_template'=>$idTemplate));
+        }
+    }
+    
+    /**
      * Save the ranks that are allowed to use this template
      * @param   $id             int     The ID of the template
      * @param   $allowedRanks   array   A 2-dimensional array with each rank, and if it's allowed to use the template
@@ -937,6 +950,23 @@ class AdminModel extends Model
         $query = $this->db->get('ranks');
         $info = $query->result_array();        
         return $info[0];
+    }
+    
+    /**
+     * Get a list of users that are currently using this rank
+     * @param   $id     int     The ID of the rank
+     * @return  array           A 2-dimensional array of users [[id, name], ...]
+     */
+    function getUsersUsingRank($id)
+    {
+        $users = array();
+        $this->db->select('id,name');
+        $this->db->where('id_rank', $id);        
+        $query = $this->db->get('users');
+        foreach($query->result() as $result) {
+            array_push($users, array('id'=>$result->id, 'name'=>$result->name));
+        }
+        return $users;
     }
 }
 ?>
