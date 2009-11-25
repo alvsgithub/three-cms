@@ -99,6 +99,9 @@
 	$lang['system_template_file']		= 'Template File';
 	$lang['system_template_ranks']		= 'Template is available for the following ranks';
 	$lang['system_template_root']		= 'Can be added to the root';
+	$lang['system_template_type']		= 'Type';
+	$lang['system_template_type_page']	= 'Page';
+	$lang['system_template_type_content'] = 'Content';
 	$lang['system_dataobject_name']		= 'Name';
 	$lang['system_dataobject_linked']	= 'Linked Options';
 

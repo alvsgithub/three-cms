@@ -14,7 +14,7 @@
                 <?php foreach($data as $value) { ?>
                 <td><?php
                     // TODO: Make options type mulitlingual
-                    echo $value;                    
+                    echo $value;
                     ?></td>
                 <?php } ?>
                 <td>

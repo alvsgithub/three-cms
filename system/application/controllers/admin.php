@@ -114,8 +114,8 @@ class Admin extends Controller
                     $title          = $this->lang->line('title_templates');
                     $name           = $this->lang->line('name_template');
                     $description    = $this->lang->line('desc_templates');
-                    $tableData      = $this->AdminModel->getTableData('templates', 'id,name,templatefile');
-                    $tableHeaders   = array('id', 'name', 'templatefile');
+                    $tableData      = $this->AdminModel->getTableData('templates', 'id,name,type,templatefile');
+                    $tableHeaders   = array('id', 'name', 'type', 'templatefile');
                     break;
                 }
             case 'dataobjects':
@@ -193,7 +193,8 @@ class Admin extends Controller
 						'name'=>$this->makeSafe($this->input->post('name')),
 						'id_dataobject'=>$this->input->post('id_dataobject'),
 						'templatefile'=>$this->input->post('templatefile'),
-						'root'=>$root
+						'root'=>$root,
+						'type'=>$this->input->post('type')
 					);
 					$id = $this->AdminModel->saveData('templates', $data, $this->input->post('id'));
 					// Save the allowed templates:
