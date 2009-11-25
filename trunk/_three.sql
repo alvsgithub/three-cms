@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 3.1.3.1
+-- version 3.2.0.1
 -- http://www.phpmyadmin.net
 --
--- Host: localhost
--- Generation Time: Nov 16, 2009 at 04:52 PM
--- Server version: 5.1.33
--- PHP Version: 5.2.9-2
+-- Machine: localhost
+-- Genereertijd: 25 Nov 2009 om 14:07
+-- Serverversie: 5.1.36
+-- PHP-Versie: 5.3.0
 
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 
@@ -22,7 +22,7 @@ SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 -- --------------------------------------------------------
 
 --
--- Table structure for table `three_content`
+-- Tabelstructuur voor tabel `three_content`
 --
 
 CREATE TABLE IF NOT EXISTS `three_content` (
@@ -33,10 +33,10 @@ CREATE TABLE IF NOT EXISTS `three_content` (
   `alias` tinytext NOT NULL,
   `order` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=56 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=58 ;
 
 --
--- Dumping data for table `three_content`
+-- Gegevens worden uitgevoerd voor tabel `three_content`
 --
 
 INSERT INTO `three_content` (`id`, `id_content`, `id_template`, `name`, `alias`, `order`) VALUES
@@ -45,32 +45,35 @@ INSERT INTO `three_content` (`id`, `id_content`, `id_template`, `name`, `alias`,
 (53, 52, 5, 'Value 1', 'value-1', 1),
 (50, 0, 1, 'Home', 'home', 0),
 (51, 0, 1, 'What is Three CMS', 'what-is-three-cms', 1),
-(55, 52, 5, 'Value 3', 'value-3', 3);
+(55, 52, 5, 'Value 3', 'value-3', 3),
+(56, 0, 7, 'News', 'news', 3),
+(57, 56, 8, 'New CMS', 'new-cms', 1);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `three_dataobjects`
+-- Tabelstructuur voor tabel `three_dataobjects`
 --
 
 CREATE TABLE IF NOT EXISTS `three_dataobjects` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` tinytext NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=6 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=7 ;
 
 --
--- Dumping data for table `three_dataobjects`
+-- Gegevens worden uitgevoerd voor tabel `three_dataobjects`
 --
 
 INSERT INTO `three_dataobjects` (`id`, `name`) VALUES
 (1, 'Default Page'),
-(5, 'Core Value');
+(5, 'Core Value'),
+(6, 'News Item');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `three_dataobjects_options`
+-- Tabelstructuur voor tabel `three_dataobjects_options`
 --
 
 CREATE TABLE IF NOT EXISTS `three_dataobjects_options` (
@@ -79,10 +82,10 @@ CREATE TABLE IF NOT EXISTS `three_dataobjects_options` (
   `id_option` int(11) NOT NULL,
   `order` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=94 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=103 ;
 
 --
--- Dumping data for table `three_dataobjects_options`
+-- Gegevens worden uitgevoerd voor tabel `three_dataobjects_options`
 --
 
 INSERT INTO `three_dataobjects_options` (`id`, `id_dataobject`, `id_option`, `order`) VALUES
@@ -93,12 +96,17 @@ INSERT INTO `three_dataobjects_options` (`id`, `id_dataobject`, `id_option`, `or
 (87, 1, 8, 1),
 (93, 5, 3, 1),
 (92, 5, 2, 0),
-(86, 1, 1, 0);
+(86, 1, 1, 0),
+(101, 6, 8, 3),
+(100, 6, 12, 2),
+(99, 6, 13, 1),
+(98, 6, 2, 0),
+(102, 6, 3, 4);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `three_languages`
+-- Tabelstructuur voor tabel `three_languages`
 --
 
 CREATE TABLE IF NOT EXISTS `three_languages` (
@@ -110,7 +118,7 @@ CREATE TABLE IF NOT EXISTS `three_languages` (
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=11 ;
 
 --
--- Dumping data for table `three_languages`
+-- Gegevens worden uitgevoerd voor tabel `three_languages`
 --
 
 INSERT INTO `three_languages` (`id`, `name`, `code`, `active`) VALUES
@@ -120,7 +128,7 @@ INSERT INTO `three_languages` (`id`, `name`, `code`, `active`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `three_locales`
+-- Tabelstructuur voor tabel `three_locales`
 --
 
 CREATE TABLE IF NOT EXISTS `three_locales` (
@@ -130,7 +138,7 @@ CREATE TABLE IF NOT EXISTS `three_locales` (
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=13 ;
 
 --
--- Dumping data for table `three_locales`
+-- Gegevens worden uitgevoerd voor tabel `three_locales`
 --
 
 INSERT INTO `three_locales` (`id`, `name`) VALUES
@@ -140,7 +148,7 @@ INSERT INTO `three_locales` (`id`, `name`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `three_locales_values`
+-- Tabelstructuur voor tabel `three_locales_values`
 --
 
 CREATE TABLE IF NOT EXISTS `three_locales_values` (
@@ -152,7 +160,7 @@ CREATE TABLE IF NOT EXISTS `three_locales_values` (
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=58 ;
 
 --
--- Dumping data for table `three_locales_values`
+-- Gegevens worden uitgevoerd voor tabel `three_locales_values`
 --
 
 INSERT INTO `three_locales_values` (`id`, `id_locale`, `id_language`, `value`) VALUES
@@ -164,7 +172,7 @@ INSERT INTO `three_locales_values` (`id`, `id_locale`, `id_language`, `value`) V
 -- --------------------------------------------------------
 
 --
--- Table structure for table `three_options`
+-- Tabelstructuur voor tabel `three_options`
 --
 
 CREATE TABLE IF NOT EXISTS `three_options` (
@@ -174,10 +182,10 @@ CREATE TABLE IF NOT EXISTS `three_options` (
   `default_value` text NOT NULL,
   `multilanguage` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=12 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=14 ;
 
 --
--- Dumping data for table `three_options`
+-- Gegevens worden uitgevoerd voor tabel `three_options`
 --
 
 INSERT INTO `three_options` (`id`, `name`, `type`, `default_value`, `multilanguage`) VALUES
@@ -186,12 +194,14 @@ INSERT INTO `three_options` (`id`, `name`, `type`, `default_value`, `multilangua
 (3, 'content', 'rich_text', '', 1),
 (6, 'headerImage', 'image', '', 0),
 (7, 'Show in menu', 'boolean', '', 0),
-(8, 'summary', 'large_text', '', 1);
+(8, 'summary', 'large_text', '', 1),
+(12, 'author', 'small_text', '', 0),
+(13, 'date', 'date', '', 0);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `three_ranks`
+-- Tabelstructuur voor tabel `three_ranks`
 --
 
 CREATE TABLE IF NOT EXISTS `three_ranks` (
@@ -205,7 +215,7 @@ CREATE TABLE IF NOT EXISTS `three_ranks` (
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
 
 --
--- Dumping data for table `three_ranks`
+-- Gegevens worden uitgevoerd voor tabel `three_ranks`
 --
 
 INSERT INTO `three_ranks` (`id`, `name`, `system`, `users`, `ranks`, `configuration`) VALUES
@@ -214,7 +224,7 @@ INSERT INTO `three_ranks` (`id`, `name`, `system`, `users`, `ranks`, `configurat
 -- --------------------------------------------------------
 
 --
--- Table structure for table `three_settings`
+-- Tabelstructuur voor tabel `three_settings`
 --
 
 CREATE TABLE IF NOT EXISTS `three_settings` (
@@ -225,7 +235,7 @@ CREATE TABLE IF NOT EXISTS `three_settings` (
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
 
 --
--- Dumping data for table `three_settings`
+-- Gegevens worden uitgevoerd voor tabel `three_settings`
 --
 
 INSERT INTO `three_settings` (`id`, `name`, `value`) VALUES
@@ -237,7 +247,7 @@ INSERT INTO `three_settings` (`id`, `name`, `value`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `three_templates`
+-- Tabelstructuur voor tabel `three_templates`
 --
 
 CREATE TABLE IF NOT EXISTS `three_templates` (
@@ -246,22 +256,25 @@ CREATE TABLE IF NOT EXISTS `three_templates` (
   `id_dataobject` int(11) NOT NULL,
   `templatefile` tinytext NOT NULL,
   `root` tinyint(1) NOT NULL,
+  `type` enum('page','content') NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=7 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=9 ;
 
 --
--- Dumping data for table `three_templates`
+-- Gegevens worden uitgevoerd voor tabel `three_templates`
 --
 
-INSERT INTO `three_templates` (`id`, `name`, `id_dataobject`, `templatefile`, `root`) VALUES
-(1, 'Default Template', 1, 'index.tpl', 1),
-(5, 'Single Core Value Template', 5, 'coreValue.tpl', 0),
-(6, 'Core Values Template', 1, 'coreValues.tpl', 1);
+INSERT INTO `three_templates` (`id`, `name`, `id_dataobject`, `templatefile`, `root`, `type`) VALUES
+(1, 'Default Template', 1, 'index.tpl', 1, 'page'),
+(5, 'Single Core Value Template', 5, 'coreValue.tpl', 0, 'content'),
+(6, 'Core Values Template', 1, 'coreValues.tpl', 1, 'page'),
+(7, 'News Template', 1, 'news.tpl', 1, 'page'),
+(8, 'News Item Template', 6, 'newsItem.tpl', 0, 'content');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `three_templates_allowed_children`
+-- Tabelstructuur voor tabel `three_templates_allowed_children`
 --
 
 CREATE TABLE IF NOT EXISTS `three_templates_allowed_children` (
@@ -269,10 +282,10 @@ CREATE TABLE IF NOT EXISTS `three_templates_allowed_children` (
   `id_template` int(11) NOT NULL,
   `id_child_template` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=42 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=44 ;
 
 --
--- Dumping data for table `three_templates_allowed_children`
+-- Gegevens worden uitgevoerd voor tabel `three_templates_allowed_children`
 --
 
 INSERT INTO `three_templates_allowed_children` (`id`, `id_template`, `id_child_template`) VALUES
@@ -281,12 +294,13 @@ INSERT INTO `three_templates_allowed_children` (`id`, `id_template`, `id_child_t
 (11, 4, 2),
 (12, 4, 1),
 (13, 4, 3),
-(41, 5, 6);
+(42, 5, 6),
+(43, 7, 8);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `three_templates_ranks`
+-- Tabelstructuur voor tabel `three_templates_ranks`
 --
 
 CREATE TABLE IF NOT EXISTS `three_templates_ranks` (
@@ -294,23 +308,25 @@ CREATE TABLE IF NOT EXISTS `three_templates_ranks` (
   `id_template` int(11) NOT NULL,
   `id_rank` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=11 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=15 ;
 
 --
--- Dumping data for table `three_templates_ranks`
+-- Gegevens worden uitgevoerd voor tabel `three_templates_ranks`
 --
 
 INSERT INTO `three_templates_ranks` (`id`, `id_template`, `id_rank`) VALUES
 (10, 1, 1),
 (3, 2, 1),
 (4, 3, 1),
-(9, 5, 1),
-(8, 6, 1);
+(11, 5, 1),
+(8, 6, 1),
+(14, 7, 1),
+(13, 8, 1);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `three_users`
+-- Tabelstructuur voor tabel `three_users`
 --
 
 CREATE TABLE IF NOT EXISTS `three_users` (
@@ -324,7 +340,7 @@ CREATE TABLE IF NOT EXISTS `three_users` (
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
 
 --
--- Dumping data for table `three_users`
+-- Gegevens worden uitgevoerd voor tabel `three_users`
 --
 
 INSERT INTO `three_users` (`id`, `username`, `password`, `name`, `email`, `id_rank`) VALUES
@@ -333,7 +349,7 @@ INSERT INTO `three_users` (`id`, `username`, `password`, `name`, `email`, `id_ra
 -- --------------------------------------------------------
 
 --
--- Table structure for table `three_values`
+-- Tabelstructuur voor tabel `three_values`
 --
 
 CREATE TABLE IF NOT EXISTS `three_values` (
@@ -343,10 +359,10 @@ CREATE TABLE IF NOT EXISTS `three_values` (
   `id_language` int(11) NOT NULL,
   `value` text NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=329 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=351 ;
 
 --
--- Dumping data for table `three_values`
+-- Gegevens worden uitgevoerd voor tabel `three_values`
 --
 
 INSERT INTO `three_values` (`id`, `id_content`, `id_option`, `id_language`, `value`) VALUES
@@ -397,4 +413,26 @@ INSERT INTO `three_values` (`id`, `id_content`, `id_option`, `id_language`, `val
 (325, 55, 2, 1, 'Kernwaarde 3'),
 (326, 55, 2, 2, 'Core Value 3'),
 (327, 55, 3, 1, '<p>\n	Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent aliquam, risus ut sollicitudin fermentum, sem ipsum auctor urna, a cursus velit nulla at lectus. Etiam odio nunc, ultrices ut hendrerit quis, convallis non ipsum. Vestibulum placerat, dui sit amet varius placerat, odio sapien volutpat est, at bibendum mauris lorem non massa. Maecenas augue justo, molestie at scelerisque at, gravida sit amet nibh.</p>\n'),
-(328, 55, 3, 2, '<p>\n	Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent aliquam, risus ut sollicitudin fermentum, sem ipsum auctor urna, a cursus velit nulla at lectus. Etiam odio nunc, ultrices ut hendrerit quis, convallis non ipsum. Vestibulum placerat, dui sit amet varius placerat, odio sapien volutpat est, at bibendum mauris lorem non massa. Maecenas augue justo, molestie at scelerisque at, gravida sit amet nibh.</p>\n');
+(328, 55, 3, 2, '<p>\n	Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent aliquam, risus ut sollicitudin fermentum, sem ipsum auctor urna, a cursus velit nulla at lectus. Etiam odio nunc, ultrices ut hendrerit quis, convallis non ipsum. Vestibulum placerat, dui sit amet varius placerat, odio sapien volutpat est, at bibendum mauris lorem non massa. Maecenas augue justo, molestie at scelerisque at, gravida sit amet nibh.</p>\n'),
+(329, 56, 1, 1, 'Nieuws'),
+(330, 56, 1, 2, 'News'),
+(331, 56, 8, 1, ''),
+(332, 56, 8, 2, ''),
+(333, 56, 7, 1, '1'),
+(334, 56, 7, 2, '1'),
+(335, 56, 2, 1, 'Nieuws'),
+(336, 56, 2, 2, 'News'),
+(337, 56, 3, 1, '<p>\n	Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec sollicitudin risus leo, bibendum semper mauris. Donec vel tellus vitae felis rutrum scelerisque. Cras luctus molestie tempor. Maecenas a porta metus. Pellentesque auctor mattis tincidunt. Proin porttitor nulla et turpis euismod egestas.</p>\n'),
+(338, 56, 3, 2, '<p>\n	Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec sollicitudin risus leo, bibendum semper mauris. Donec vel tellus vitae felis rutrum scelerisque. Cras luctus molestie tempor. Maecenas a porta metus. Pellentesque auctor mattis tincidunt. Proin porttitor nulla et turpis euismod egestas.</p>\n'),
+(339, 56, 6, 1, ''),
+(340, 56, 6, 2, ''),
+(341, 57, 2, 1, 'Nieuw CMS'),
+(342, 57, 2, 2, 'New CMS'),
+(343, 57, 13, 1, '25-11-2009'),
+(344, 57, 13, 2, '25-11-2009'),
+(345, 57, 12, 1, 'Giel Berkers'),
+(346, 57, 12, 2, 'Giel Berkers'),
+(347, 57, 3, 1, '<p>\n	Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec sollicitudin risus leo, bibendum semper mauris. Donec vel tellus vitae felis rutrum scelerisque. Cras luctus molestie tempor. Maecenas a porta metus. Pellentesque auctor mattis tincidunt. Proin porttitor nulla et turpis euismod egestas.</p>\n<p>\n	Maecenas sagittis commodo libero eu consectetur. Nulla et ante enim, a sollicitudin mi. Vestibulum lectus est, aliquet eu pharetra a, laoreet ut elit. Phasellus porttitor, eros eget adipiscing malesuada, massa nunc tincidunt elit, eget iaculis magna orci luctus eros.</p>\n'),
+(348, 57, 3, 2, '<p>\n	Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec sollicitudin risus leo, bibendum semper mauris. Donec vel tellus vitae felis rutrum scelerisque. Cras luctus molestie tempor. Maecenas a porta metus. Pellentesque auctor mattis tincidunt. Proin porttitor nulla et turpis euismod egestas.</p>\n<p>\n	Maecenas sagittis commodo libero eu consectetur. Nulla et ante enim, a sollicitudin mi. Vestibulum lectus est, aliquet eu pharetra a, laoreet ut elit. Phasellus porttitor, eros eget adipiscing malesuada, massa nunc tincidunt elit, eget iaculis magna orci luctus eros.</p>\n'),
+(349, 57, 8, 1, 'Sinds vandaag is er een nieuw CMS!'),
+(350, 57, 8, 2, 'Since today there is a new CMS!');

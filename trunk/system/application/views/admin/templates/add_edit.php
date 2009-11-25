@@ -29,6 +29,15 @@
 					<th><?php echo $lang->line('system_template_root'); ?>:</th>
 					<td><input type="checkbox" name="root" <?php echo $values['root']==1 ? ' checked="checked" ' : ''; ?> /></td>
 				</tr>
+				<tr>
+					<th><?php echo $lang->line('system_template_type'); ?>:</th>
+					<td>
+						<select name="type">
+							<option value="page" <?php echo $values['type']=='page' ? ' selected="selected" ' : ''; ?>><?php echo $lang->line('system_template_type_page'); ?></option>
+							<option value="content" <?php echo $values['type']=='content' ? ' selected="selected" ' : ''; ?>><?php echo $lang->line('system_template_type_content'); ?></option>
+						</select>
+					</td>
+				</tr>
 				<tr class="delimiter">
 					<td colspan="2">&nbsp;</td>
 				</tr>
