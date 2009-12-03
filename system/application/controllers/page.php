@@ -29,8 +29,10 @@ class Page extends Controller
 	function index()
 	{
 		// Set the page to load to default:
-		$idPage     = $this->settings['default_page_id'];
-		$idLanguage = $this->idLanguage;
+		$idPage         = $this->settings['default_page_id'];
+		$idLanguage     = $this->idLanguage;
+		$contentObjects = array();
+		$contentParams  = array();
 		// Read the parameters:
 		$parameters = $this->uri->segment_array();
 		// Reset numeral array keys, so they start counting at zero:
@@ -49,18 +51,18 @@ class Page extends Controller
 					// Don't shift the remaining parameters, because the first item could be a page item
 				}
 			}
-			// TODO: Get the correct ID of the content to load according to the parameters:
+			// Get the correct ID of the content to load according to the parameters:
 			if(count($parameters) > 0) {
 				// The URL is generated from one or more aliases.
-				// If there is only one parameter, get the ID of the page:
+				// If there is only one parameter, get the ID of the page:				
 				if(count($parameters)==1) {					
-					$id = $this->PageModel->getPageId($parameters[0]);	
+					$id = $this->PageModel->getPageId($parameters[0]);					
 					if($id!==false) {
 						$idPage = $id;
 					}
 				} else {
-					// TODO: If there are more parameters, get the ID of the last page:
-					// TODO: What about:
+					// If there are more parameters, get the ID of the last page:
+					// What about:
 					// website.com/about-us/mission			= single page
 					// website.com/news/2009/new-building	= single page? single content?
 					// website.com/news/2009                = single page? or the news page with as parameter '2009'?
@@ -85,6 +87,39 @@ class Page extends Controller
 					// AJAX functionality:
 					// website.com/alias/new-building    : Load only the content with the alias new-building.
 					
+					if($parameters[0]=='alias') {
+						// AJAX Functionality : Load the chunk:
+						$id = $this->PageModel->getPageId($parameters[1]);
+						if($id!==false) {
+							$idPage = $id;
+						}
+					} else {
+						// Loop from the right to the left through the parameters, halting when there is a type of 'page' detected.
+						for($i=count($parameters); $i>0; $i--) {
+							$id   = $this->PageModel->getPageId($parameters[$i-1]);
+							$type = $this->PageModel->getPageType($id);
+							switch($type) {
+								case 'content' :
+									{
+										// Content, add a new content-object to parse in the page:
+										array_push($contentObjects, $this->PageModel->getDataObject($id, $this->idLanguage));
+										break;
+									}
+								case 'page' :
+									{
+										// Page, also break the loop here:
+										$idPage = $id;
+										break 2;
+									}
+								default:
+									{
+										// Parameter:
+										array_push($contentParams, $parameters[$i-1]);
+										break;
+									}
+							}
+						}
+					}
 				}
 			}
 		} 
@@ -92,6 +127,8 @@ class Page extends Controller
 		if($this->PageModel->pageExists($idPage)) {		
 			// Create the data object:
 			$dataObject = $this->PageModel->getDataObject($idPage, $this->idLanguage);
+			$dataObject->parameters     = $contentParams;
+			$dataObject->contentObjects = $contentObjects;
 			// Render it:
 			$dataObject->render();
 		} else {

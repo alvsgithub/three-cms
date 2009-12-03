@@ -21,3 +21,7 @@ html { font-family: arial, helvetica, sans-serif; font-size: 62.5%; cursor: defa
 .coreValue h3 { color: #666; background: #eee; padding: 5px; font-size: 1em; text-transform: uppercase; }
 
 #footer { color: #fff; clear: both; }
+
+dl { margin-bottom: 1em; border-bottom: 1px solid #ccc; }
+dt { width: 120px; float: left; color: #666; }
+dd { font-weight: bold; }

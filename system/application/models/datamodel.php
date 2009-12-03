@@ -20,11 +20,13 @@
 
 class DataModel extends Model
 {
-	var $options;		// An array holding the options of this data object and it's values
-	var $idContent;		// The ID of the content
-	var $idLanguage;	// The ID of the language
-	var $templateFile;	// The template file	
-	var $settings;		// Settings object
+	var $options;			// An array holding the options of this data object and it's values
+	var $idContent;			// The ID of the content
+	var $idLanguage;		// The ID of the language
+	var $templateFile;		// The template file	
+	var $settings;			// Settings object
+	var $parameters;		// An array with parameters in the URL
+	var $contentObjects;	// An array with content objects
 	
 	// The following parameters don't get set until a certain first function call
 	// This makes the dataModel load faster in case the parameter is not used.
@@ -34,8 +36,13 @@ class DataModel extends Model
 	function DataModel()
 	{
 		parent::Model();
+		
 		// Load the URL helper:
 		$this->load->helper('url');
+		
+		// Default settings:
+		$this->parameters     = false;
+		$this->contentObjects = false;
 	}
 	
 	function load($idContent, $idLanguage)
@@ -386,6 +393,12 @@ class DataModel extends Model
 		
 		// Assign a reference to the locales:		
 		$smarty->assign('locale', $this->getLocales());
+		
+		// Assign the parameters:
+		$smarty->assign('parameters', $this->parameters);
+		
+		// Assign the contentObjects:
+		$smarty->assign('contentObjects', $this->contentObjects);
 		
 		// Render the page:		
 		$smarty->display($this->templateFile);

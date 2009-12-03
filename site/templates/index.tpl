@@ -14,7 +14,7 @@
 				<p>{$content}</p>
 			</div>
 			<div id="footer">
-				<p>&copy; {$smarty.now|date_format:"%Y"} || Powered by Three CMS</p>
+				<p>&copy; {$smarty.now|date_format:"%Y"} | Powered by Three CMS</p>
 			</div>
 		</div>
 	</body>
