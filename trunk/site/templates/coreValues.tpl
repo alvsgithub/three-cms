@@ -21,7 +21,7 @@
 			</div>
 			<div id="footer">
 				{* Simple use of all Smarty's core features: *}
-				<p>&copy; {$smarty.now|date_format:"%Y"} || Powered by Three CMS</p>
+				<p>&copy; {$smarty.now|date_format:"%Y"} | Powered by Three CMS</p>
 			</div>
 		</div>
 	</body>

@@ -75,9 +75,23 @@ class PageModel extends Model
 		$this->db->select('id');
 		$this->db->where('alias', strtolower($alias));
 		$query = $this->db->get('content');
-		if($this->db->count_all_results()==1) {
-			$result = $query->result();			
+		if($query->num_rows==1) {			
+			$result = $query->result();
 			return $result[0]->id;
+		} else {
+			return false;
+		}
+	}
+	
+	function getPageType($id)
+	{
+		$this->db->select('type');
+		$this->db->where('content.id', $id);
+		$this->db->join('templates', 'templates.id = id_template');		
+		$query = $this->db->get('content');
+		if($query->num_rows==1) {
+			$result = $query->result();
+			return $result[0]->type;
 		} else {
 			return false;
 		}

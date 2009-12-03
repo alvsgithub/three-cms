@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Machine: localhost
--- Genereertijd: 25 Nov 2009 om 14:07
+-- Genereertijd: 03 Dec 2009 om 16:18
 -- Serverversie: 5.1.36
 -- PHP-Versie: 5.3.0
 
@@ -135,7 +135,7 @@ CREATE TABLE IF NOT EXISTS `three_locales` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` tinytext NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=13 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=16 ;
 
 --
 -- Gegevens worden uitgevoerd voor tabel `three_locales`
@@ -143,7 +143,10 @@ CREATE TABLE IF NOT EXISTS `three_locales` (
 
 INSERT INTO `three_locales` (`id`, `name`) VALUES
 (12, 'coreValues'),
-(11, 'languagePicker');
+(11, 'languagePicker'),
+(13, 'readMore'),
+(14, 'date'),
+(15, 'author');
 
 -- --------------------------------------------------------
 
@@ -157,7 +160,7 @@ CREATE TABLE IF NOT EXISTS `three_locales_values` (
   `id_language` int(11) NOT NULL,
   `value` text NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=58 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=64 ;
 
 --
 -- Gegevens worden uitgevoerd voor tabel `three_locales_values`
@@ -167,7 +170,13 @@ INSERT INTO `three_locales_values` (`id`, `id_locale`, `id_language`, `value`) V
 (57, 12, 2, 'Core Values'),
 (54, 11, 1, 'Taal kiezer'),
 (55, 11, 2, 'Language picker'),
-(56, 12, 1, 'Kernwaarden');
+(56, 12, 1, 'Kernwaarden'),
+(58, 13, 1, 'lees verder'),
+(59, 13, 2, 'read more'),
+(60, 14, 1, 'Datum'),
+(61, 14, 2, 'Date'),
+(62, 15, 1, 'Auteur'),
+(63, 15, 2, 'Author');
 
 -- --------------------------------------------------------
 
