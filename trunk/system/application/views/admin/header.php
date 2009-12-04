@@ -18,12 +18,12 @@
         <div id="body">
             <div id="navigation">
                 <ul>
-                    <li><a href="<?php echo site_url(array('admin')); ?>"><?php echo $lang->line('menu_dashboard'); ?></a></li>
+                    <li><a class="dashboard" href="<?php echo site_url(array('admin')); ?>"><?php echo $lang->line('menu_dashboard'); ?></a></li>
                     <?php
                         if($rank['configuration']==1)
                         {
                     ?>                    
-                    <li><?php echo $lang->line('menu_configuration'); ?>
+                    <li><a class="configuration" href="#" class="noClick"><?php echo $lang->line('menu_configuration'); ?></a>
                         <ul>
                             <li><a href="<?php echo site_url(array('admin', 'settings')); ?>"><?php echo $lang->line('menu_site_settings'); ?></a></li>
                         </ul>
@@ -33,7 +33,7 @@
                         if($rank['users']==1 || $rank['ranks']==1)
                         {
                     ?>                    
-                    <li><?php echo $lang->line('menu_users'); ?>
+                    <li><a class="users" href="#" class="noClick"><?php echo $lang->line('menu_users'); ?></a>
                         <ul>
                             <?php
                                 if($rank['users']==1)
@@ -56,7 +56,7 @@
                         if($rank['system']==1)
                         {
                     ?>                    
-                    <li><?php echo $lang->line('menu_system'); ?>
+                    <li><a class="system" href="#" class="noClick"><?php echo $lang->line('menu_system'); ?></a>
                         <ul>
                             <li><a href="<?php echo site_url(array('admin', 'manage', 'templates')); ?>"><?php echo $lang->line('menu_templates'); ?></a></li>
                             <li><a href="<?php echo site_url(array('admin', 'manage', 'dataobjects')); ?>"><?php echo $lang->line('menu_data_objects'); ?></a></li>
@@ -68,7 +68,7 @@
                     <?php
                         }
                     ?>
-                    <li class="logout"><a href="<?php echo site_url(array('admin', 'logout')); ?>"><?php echo $lang->line('menu_logout'); ?></a></li>
+                    <li class="logout"><a class="logout" href="<?php echo site_url(array('admin', 'logout')); ?>"><?php echo $lang->line('menu_logout'); ?></a></li>
                 </ul>
             </div>
 			<div id="loading">

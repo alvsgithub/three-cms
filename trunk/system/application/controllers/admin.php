@@ -819,7 +819,8 @@ class Admin extends Controller
 	{
 		$data = array(
 			'lang'=>$this->lang,
-			'tree'=>$this->AdminModel->getTree()
+			'tree'=>$this->AdminModel->getTree(),
+			'sitename'=>$this->settings['site_name']
 		);
 		$this->load->view('admin/tree.php', $data);
 	}

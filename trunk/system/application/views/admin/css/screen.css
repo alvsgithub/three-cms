@@ -1,23 +1,25 @@
-/*
-	TODO: Make CSS3 rounded corners work with webkit, mozilla and CSS3 default selectors
-*/
-
 * { margin: 0; padding: 0; }
 
 html { font-family: arial, helvetica, sans-serif; font-size: 62.5%; cursor: default; }
 
-#top { height: 30px; border-bottom: 1px solid #666; }
-#navigation { background: #ccc; border-bottom: 1px solid #666; height: 30px; font-size: 1.6em; position: relative; z-index: 2; }
+#navigation { background: url(navigation.png) repeat-x; height: 100px; font-size: 1.6em; position: relative; z-index: 2; }
 #navigation ul { list-style-type: none; }
-#navigation ul li { padding: 5px; border-right: 1px solid #026; border-left: 1px solid #68b; float: left; background: #359; height: 20px; color: #fff; }
-#navigation a { color: #fff; text-decoration: none; }
-#navigation ul ul { position: absolute; margin-top: 6px; margin-left: -6px; display: none; border-bottom: 1px solid #666; }
-#navigation ul ul li { display: block; width: 140px; border: 1px solid #666; background: #ccc; clear: left; border-bottom: none; padding: 0; height: 28px; }
-#navigation ul ul li a { color: #000; text-decoration: none; padding: 5px; display: block; }
-#navigation ul ul li a:hover { color: #fff; background: #aaa; }
-#navigation li.logout { background: #9F4545; float: right; }
+#navigation ul li { float: left; }
+#navigation ul li a { color: #0084ff; text-decoration: none; display: block; height: 30px; padding: 0 10px; padding-top: 70px; min-width: 80px; text-align: center; }
+#navigation ul li a:hover { /* background: url(navigationHover.png) repeat-x; */ color: #fff; text-shadow: 0px 2px 5px #0084ff; }
+#navigation ul ul { position: absolute; display: none; border-bottom: 1px solid #A6D0E7; margin-top: -1px; }
+#navigation ul ul li { display: block; width: 180px; border: 1px solid #A6D0E7; background: #fff; clear: left; border-bottom: none; padding: 0; height: auto; }
+#navigation ul ul li a { color: #0084ff; text-decoration: none; padding: 5px 1em 5px 1em; height: auto; display: block; text-align: left; }
+#navigation ul ul li a:hover { color: #fff; background: #A6D0E7; }
+#navigation li.logout { float: right; }
+#navigation a.dashboard { background: url(menuDashboard.png) center 15px no-repeat; }
+#navigation a.configuration { background: url(menuConfiguration.png) center 15px no-repeat; }
+#navigation a.users { background: url(menuUsers.png) center 15px no-repeat; }
+#navigation a.system { background: url(menuSystem.png) center 15px no-repeat; }
+#navigation a.logout { background: url(menuLogout.png) center 15px no-repeat; }
+#navigation ul li.hover { background: url(navigationHover.png) repeat-x; }
 
-#tree { float: left; width: 25%; font-size: 1.6em; }
+#tree { float: left; width: 25%; font-size: 1.6em; outline: 1px solid #cfcfcf; background: url(tree.png) left bottom repeat-x; }
 #innerTree { padding: 10px; }
 #tree ul { list-style-type: none; }
 #tree li { padding: 5px 0; background: url(../images/icons/icon-content.png) 0 5px no-repeat; }
@@ -25,18 +27,22 @@ html { font-family: arial, helvetica, sans-serif; font-size: 62.5%; cursor: defa
 #tree li.hasChildren.open { background-image: url(../images/icons/icon-content-close.png); }
 #tree li span.name { padding-left: 4px; cursor: pointer; color: #359; }
 #tree li span.name span.icon { display: block; float: left; width: 22px; height: 22px; }
-#tree li span.name:hover { color: #000; }
+#tree li span.name:hover { color: #000; text-shadow: 0px 0px 5px #0084ff; }
 #tree li span.id { font-style: italic; color: #aaa; font-size: 0.8em;  }
-#tree li span.selected { font-weight: bold; color: #000; }
+#tree li span.selected { font-weight: bold; color: #335599; }
 #tree ul ul { margin-left: 1em; }
 .innerTree { margin-top: 5px; }
 .innerTree img { margin-left: 30px; }
+#tree strong { color: #335599; }
+#tree strong.root.hover { color: #000; text-shadow: 0px 0px 5px #0084ff; cursor: pointer; }
 
+#treeNavigation { height: 30px; background: url(footer.png) repeat-x; margin-top: -1px; }
 #treeNavigation li { background: none; }
-#treeNavigation li a { background-position: 3px 3px; }
+#treeNavigation li a { background-position: 3px 3px; padding: 0 0 0 25px; }
+#treeNavigation li a:hover { background-color: transparent; text-shadow: 0px 0px 5px #0084ff; }
 
 #content { float: left; width: 75%; }
-#innerContent { padding: 10px; }
+#innerContent { padding: 10px 20px; }
 
 h1, h2, h3 { font-size: 3em; font-weight: normal; color: #999; font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif; margin-bottom: .5em; }
 h2 { font-size: 2em; }
@@ -45,35 +51,52 @@ h3 { font-size: 1.6em; color: #000; }
 p.description { font-size: 1.6em; color: #999; font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif; margin-bottom: .5em; line-height: 1.6em; font-style: italic; }
 
 table { width: 100%; border-collapse: collapse; font-size: 1.4em; margin-bottom: 1em; }
-th { text-align: left; font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif; color: #fff; background: #359; border: 1px solid #026; padding: 5px; vertical-align: top; }
+th { text-align: left; /* font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif; */ color: #fff; background: #359; /* border: 1px solid #026; */ padding: 5px; vertical-align: top; font-weight: normal; color: #0084ff; background: #eee; border: 1px outset #ccc; }
 th.actions { width: 56px; }
-td { border: 1px outset #ccc; padding: 5px; vertical-align: top; }
+td { border: 1px solid #ccc; padding: 5px; vertical-align: top; }
 tr.delimiter td { height: 5px; padding: 0; font-size: 1px; border-left: none; border-right: none; }
+tr.option th { background: #A6D0E7; border: 1px solid #fff; }
 a.edit, a.duplicate, a.delete, a.move    { display: inline-block; width: 16px; height: 16px; text-indent: -1000em; outline: none; }
 table a.edit      { background: url(../images/icons/icon-edit.png); }
 table a.duplicate { background: url(../images/icons/icon-copy.png); }
 table a.delete    { background: url(../images/icons/icon-delete.png); }
 table a.move      { background: url(../images/icons/icon-move.png); }
 table a.move.inactive { background-color: #eee; border-color: #ccc; }
-td.content_actions a { text-indent: 0; padding: 5px; padding-left: 26px; width: auto; background-position: 5px 5px; background-repeat: no-repeat; margin-right: 5px; background-color: #ccc; color: #fff; font-weight: bold; text-shadow: #000000 0 0 3px; text-decoration: none; border: 1px solid #999; -moz-border-radius: 5px; }
+td.content_actions a { text-indent: 0; padding: 5px; padding-left: 26px; width: auto; background-position: 5px 5px; background-repeat: no-repeat; margin-right: 5px; background-color: #ccc; color: #fff; font-weight: bold; text-shadow: #000000 0 0 3px; text-decoration: none; border: 1px solid #999;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+}
 
 table input[type=text] { width: 300px; }
 textarea { width: 400px; height: 100px; }
 input[readonly] { color: #999; font-weight: bold; }
 table input.small { width: 50px; }
-a.selectParent { padding: 3px; background: #ccc; color: #fff; text-shadow: #000000 0 0 3px; text-decoration: none; border: 1px solid #999; -moz-border-radius: 5px; }
+a.selectParent { padding: 3px; background: #ccc; color: #fff; text-shadow: #000000 0 0 3px; text-decoration: none; border: 1px solid #999;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+}
 a.selectParent span { color: #000; text-shadow: none; font-style: italic; font-size: 0.8em; }
 
 a.add { margin: auto; display: block; width: 200px; height: 20px; outline: none; background: #359 url(../images/icons/icon-new.png) 7px 7px no-repeat; font-size: 1.6em; color: #fff; text-decoration: none; padding: 5px; padding-left: 30px; margin-bottom: 1em; font-weight: bold; text-shadow: #000000 0 0 5px; }
 a.addContent { display: block; width: auto; background: url(../images/icons/icon-add.png) no-repeat; color: #359; text-decoration: none; padding: 2px 0 2px 20px; text-indent: 0; }
 a.addContent:hover { color: #333; background-color: #eee; }
-a.switchLanguage { text-indent: 0; width: auto; color: #359; padding: 5px; margin: 0; margin-right: 5px; text-decoration: none; background-repeat: no-repeat; background-position: 5px 8px; -moz-border-radius: 5px; }
+a.switchLanguage { text-indent: 0; width: auto; color: #359; padding: 5px; margin: 0; margin-right: 5px; text-decoration: none; background-repeat: no-repeat; background-position: 5px 8px;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+}
 a.switchLanguage:hover { background-color: #ccc; }
 a.switchLanguage.active { color: #fff; background-color: #359; }
 
-a.orderSmaller, a.orderBigger { text-decoration: none; color: #fff; font-weight: bold; padding: 3px 5px; background: #ccc; border: 1px solid #999; -moz-border-radius: 5px; text-shadow: #000000 0 0 3px; }
+a.orderSmaller, a.orderBigger { text-decoration: none; color: #fff; font-weight: bold; padding: 3px 5px; background: #ccc; border: 1px solid #999; text-shadow: 0 0 3px #000000;
+	-moz-border-radius: 5px; 
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+}
 
-#footer { float: left; clear: both; height: 30px; border-top: 1px solid #666; width: 100%; }
+#footer { float: left; clear: both; height: 10px; background: url(footer.png) repeat-x; width: 100%; padding: 10px; }
 
 .addOption { border: 1px solid #999; padding: 5px; background: #ccc; }
 
@@ -87,8 +110,16 @@ a.orderSmaller, a.orderBigger { text-decoration: none; color: #fff; font-weight:
 
 label.allowed { margin-bottom: 5px; display: block; }
 
-#loading { text-align: center; font-size: 1.2em; width: 180px; padding: 10px; border: 1px solid #ccc; position: absolute; left: 50%; margin-left: -100px; top: 20%; display: none; background: #fff;  -moz-border-radius: 5px; }
-#message { background: #FFE87F; border: 1px solid #FFD100; padding: 10px; font-size: 1.2em; -moz-border-radius: 5px; float: left; display: none; }
+#loading { text-align: center; font-size: 1.2em; width: 180px; padding: 10px; border: 1px solid #ccc; position: absolute; left: 50%; margin-left: -100px; top: 20%; display: none; background: #fff;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+}
+#message { background: #FFE87F; border: 1px solid #FFD100; padding: 10px; font-size: 1.2em; /* float: left; */ display: none;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+}
 #messages { font-size: 1.2em; padding: 10px; position: relative; z-index: 1; }
 #messages ul { position: relative; left: 2em; list-style-type: square; }
 #messages li { font-weight: bold; }
