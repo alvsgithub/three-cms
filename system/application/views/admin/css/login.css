@@ -1,17 +1,18 @@
-/*
-	TODO: Make CSS3 rounded corners work with webkit, mozilla and CSS3 default selectors
-*/
-
 * { margin: 0; padding: 0; }
 
 html { font-family: arial, helvetica, sans-serif; font-size: 62.5%; cursor: default; background: #ccc; }
 
-#login { width: 300px; background: #fff; border: 1px solid #888; -moz-border-radius: 5px; padding: 10px; position: absolute; left: 50%; margin-left: -150px; top: 20%; }
+#login { width: 300px; background: #fff url(login.png) 12px 50px no-repeat; border: 1px solid #888; padding: 10px; position: absolute; left: 50%; margin-left: -150px; top: 20%;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;	
+}
 
 h1 { border-bottom: 1px dotted #ccc; margin-bottom: 10px; }
 label { display: block; font-size: 1.2em; float: left; width: 100px; padding-top: 2px; margin-bottom: 3px; }
+form { margin-left: 76px; }
 input { margin-bottom: 3px; }
-input.inputField { width: 196px; }
+input.inputField { width: 120px; }
 input.submit { margin-left: 100px; padding: 0 5px; }
 
 p.error { font-size: 1.2em; font-weight: bold; color: #800; margin-top: 10px; text-align: center; }

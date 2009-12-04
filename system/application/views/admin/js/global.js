@@ -40,6 +40,20 @@ $(function(){
 	
 	// Set interval to keep the session alive (runs each 5 minutes):
 	setInterval('keepAlive()', 300000);	// 300000 ms = 5 minutes
+	
+	// No Click-buttons in the top navigation:
+	$("a.noClick").click(function(){
+		return false;
+	});
+	
+	// Li-hover:
+	$("#navigation>ul>li").hover(function(){
+		$(this).addClass("hover");
+	}, function(){
+		$(this).removeClass("hover");
+	});
+	
+	
 });
 
 function setParentSelection()
@@ -136,6 +150,42 @@ function initializeTree()
 			}			
 		}
 		// iconClicked = false;
+	});
+	
+	// Root-selector:
+	$("#tree strong.root").click(function(){
+		if(parentSelection) {
+			id = 0;
+			if(moveAction) {
+				// The action is done by the move-button in the summary-screen:
+				$("#loading").show();
+				$.post(baseURL + 'index.php/admin/content/move/' + $("span.idContent").text(), {id_content: id}, function(){
+					// Reload the tree:
+					$("#tree").load(baseURL + 'index.php/admin/ajax/fulltree #tree>*', function(){
+						initializeTree();
+						parentSelection = false;
+						moveAction      = false;
+						$("td.content_actions a.move").removeClass("inactive");
+						$("#loading").hide();
+						$("#tree strong.root").removeClass("hover");
+					});
+				});
+			} else {
+				// The action is done by the add/edit-screen:
+				$("input[name=parent]").val(id);
+				$("a.selectParent span").text('');
+				$("#tree strong.root").removeClass("hover");
+				parentSelection = false;
+			}
+		}
+	}).hover(function(){
+		if(parentSelection) {
+			$(this).addClass("hover");
+		}
+	}, function(){
+		if(parentSelection) {
+			$(this).removeClass("hover");
+		}
 	});
 }
 

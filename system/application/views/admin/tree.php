@@ -4,11 +4,13 @@
 			<li><a href="<?php echo site_url(array('admin', 'content', 'root')); ?>" class="addContent"><?php echo $lang->line('tree_add'); ?></a></li>
 		</ul>
 	</div>
-	<div id="innerTree">
+	<div id="innerTree">		
 		<?php
+			echo '<strong class="root">'.$sitename.'</strong>';
 			// Function to draw the tree:
-			function drawTree($tree) {
-				echo '<ul>';
+			function drawTree($tree) {				
+				
+				echo '<ul>';				
 				foreach($tree as $item) {
 					if($item['tree']==null) {
 						$class = $item['numChildren'] > 0 ? ' class="hasChildren"' : '';

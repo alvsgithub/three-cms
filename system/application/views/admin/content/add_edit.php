@@ -1,6 +1,5 @@
 <div id="content">
 	<div id="innerContent">
-		<div id="message"></div>
         <h1><?php echo $title; ?></h1>
 		<form method="post" action="<?php echo site_url(array('admin', 'content', 'save')); ?>">
 			<table>
@@ -85,7 +84,7 @@
 					// Show the content fields:
 					foreach($contentData['content'] as $item) {
 				?>
-				<tr>
+				<tr class="option">
 					<th><?php echo ucfirst($item['name']); ?>:</th>
 					<td>
 				<?php
@@ -215,7 +214,7 @@
 					<th>&nbsp;</th>
 					<td>
 						<input type="hidden" name="id" value="<?php echo $contentData['id']; ?>" />
-						<input type="submit" value="<?php echo $lang->line('button_save'); ?>" /> <img src="<?php echo base_url(); ?>system/application/views/admin/images/ajax-loader.gif" width="128" height="15" class="loading" />
+						<input type="submit" value="<?php echo $lang->line('button_save'); ?>" /> <img src="<?php echo base_url(); ?>system/application/views/admin/images/ajax-loader.gif" width="128" height="15" class="loading" />		<div id="message"></div>
 					</td>
 				</tr>
 			</table>			
