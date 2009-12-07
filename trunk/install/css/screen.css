@@ -1,0 +1,40 @@
+* { margin: 0; padding: 0; }
+
+html { font-family: arial, helvetica, sans-serif; font-size: 62.5%; cursor: default; background: #ccc; }
+
+#body { width: 600px; height: 300px; background: #fff; border: 1px solid #888; padding: 10px; position: absolute; left: 50%; margin-left: -300px; top: 20%;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;	
+}
+
+h1 { border-bottom: 1px dotted #ccc; font-weight: normal; letter-spacing: -1px; font-size: 2em; margin-bottom: 5px; }
+
+.footer { position: absolute; left: 10px; bottom: 0px; height: 30px; border-top: 1px dotted #ccc; width: 600px; padding-top: 8px; }
+.footer p { text-align: center; padding-top: 5px; position: absolute; width: 200px; left: 200px; }
+
+.license { height: 160px; overflow: auto; padding: 5px; border: 1px solid #ccc; font-family: monospace; font-size: 1.2em; margin-bottom: 5px; }
+
+input.prev { float: left; padding: 0 20px; }
+input.next { float: right; padding: 0 20px; }
+
+#step2, #step3, #step4, #step5, #step6, #step7 { display: none; }
+
+label { display: block; float: left; width: 120px; font-size: 1.2em; }
+#step5 label { display: block; clear: both; margin-bottom: 5px; }
+
+.licenseLabel { display: inline; float: none; width: auto; }
+
+p { font-size: 1.2em; margin-bottom: 1em; }
+
+#dbmessage { padding: 5px 0; }
+p.error { background: #fbb; border: 1px solid #f00; padding: 5px; }
+p.ok { background: #bfb; border: 1px solid #0f0; padding: 5px; }
+
+var { display: none; }
+
+.descriptions { position: absolute; right: 10px; width: 400px; border-left: 1px dotted #ccc; padding: 0 10px; height: 190px; }
+
+dl { font-size: 1.2em; }
+dt { float: left; width: 200px; margin-bottom: 5px; }
+dd { margin-bottom: 5px; font-weight: bold; }
