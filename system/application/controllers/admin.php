@@ -21,10 +21,10 @@ class Admin extends Controller
 			$this->session->set_userdata('treeArray', array());
 		}
 		
-		// Load the URL helper:
-		$this->load->helper('url');
-		
-		$this->load->helper('stringencrypter');
+		// Load the Helpers:
+		$this->load->helper('url');		
+		$this->load->helper('stringencrypter');		
+		$this->load->helper('module');
 		
         // Load the Language Class:
         $this->lang->load('admin');
@@ -833,7 +833,8 @@ class Admin extends Controller
         $data = array(
             'lang'=>$this->lang,
 			'rank'=>$this->AdminModel->getRank($this->rank),
-        );
+			'modules'=>$this->AdminModel->getModules()
+        );		
 		$this->load->view('admin/header.php', $data);
     }
     
@@ -1132,6 +1133,48 @@ class Admin extends Controller
 		$messages = $this->session->userdata('messages');
 		array_push($messages, array('type'=>$type, 'message'=>$this->lang->line('message_'.$message)));
 		$this->session->set_userdata('messages', $messages);		
+	}
+	
+	/**
+	 * Show a module
+	 */
+	function module()
+	{
+		$this->showHeader();
+		$this->showTree();
+		$this->showMessages();
+		// Load the module:
+		$alias = $this->uri->segment(3);
+		
+		if($alias!=false) {
+			// Store the parameters:
+			$parameters    = array();
+			$totalSegments = $this->uri->total_segments();
+			if($totalSegments > 3) {
+				for($i=4; $i<=$totalSegments; $i++) {
+					array_push($parameters, $this->uri->segment($i));
+				}
+			}
+			// TODO: Optimize this?
+			$modules = $this->AdminModel->getModules();
+			foreach($modules as $module) {				
+				if($module['alias']==$alias) {
+					// Create dataobject:
+					$data = array(
+						'info'=>$module,
+						'parameters'=>$parameters,
+						'settings'=>$this->AdminModel->getSettings()
+					);
+					$this->load->view('admin/modules/top.php');
+					$this->load->view('../modules/'.$module['folder'].'/'.$module['file'], $data);
+					$this->load->view('admin/modules/bottom.php');
+				}
+			}
+		} else {
+			// TODO: Show 'module not found'-screen
+		}
+		// Show the footer:
+		$this->showFooter();
 	}
 }
 ?>

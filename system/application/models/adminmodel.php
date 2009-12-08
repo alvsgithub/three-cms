@@ -21,6 +21,8 @@
 
 class AdminModel extends Model
 {
+    var $modules;           // Modules var for caching
+    
     function AdminModel()
     {
         parent::Model();
@@ -967,6 +969,35 @@ class AdminModel extends Model
             array_push($users, array('id'=>$result->id, 'name'=>$result->name));
         }
         return $users;
+    }
+    
+    /**
+     * Get a list of modules
+     * @return  array       A 2-dimensional array with modules [[name, path]]
+     */
+    function getModules()
+    {
+        if(!isset($this->modules)) {
+            $modules = array();
+            // Modules get auto-detected according to the folders found in the modules-directory
+            $folders = glob('system/application/modules/*', GLOB_ONLYDIR);
+            foreach($folders as $folder) {            
+                if(file_exists($folder.'/name.php')) {
+                    include_once($folder.'/name.php');                
+                    if(isset($info)) {                    
+                        // This is a valid module. Add it to the list
+                        $info['alias']  = $this->makeAlias($info['name']);
+                        $info['path']   = $folder;
+                        $a = explode('/', $folder);
+                        $info['folder'] = $a[count($a)-1];
+                        array_push($modules, $info);
+                        unset($info);
+                    }
+                }
+            }
+            $this->modules = $modules;
+        }
+        return $this->modules;
     }
 }
 ?>

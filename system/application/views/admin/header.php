@@ -16,6 +16,18 @@
     </head>
     <body>
         <div id="body">
+			<?php
+				// Quick function to show the module-links:
+				
+				function moduleLink($current, $modules) {
+					foreach($modules as $module) {
+						if($module['menuposition'] == $current) {
+							echo '<li><a href="'.site_url(array('admin', 'module', $module['alias'])).'">'.$module['menu'].'</a></li>';
+						}
+					}
+				}
+				// End Quick function
+			?>
             <div id="navigation">
                 <ul>
                     <li><a class="dashboard" href="<?php echo site_url(array('admin')); ?>"><?php echo $lang->line('menu_dashboard'); ?></a></li>
@@ -26,6 +38,7 @@
                     <li><a class="configuration" href="#" class="noClick"><?php echo $lang->line('menu_configuration'); ?></a>
                         <ul>
                             <li><a href="<?php echo site_url(array('admin', 'settings')); ?>"><?php echo $lang->line('menu_site_settings'); ?></a></li>
+							<?php moduleLink('configuration', $modules); ?>
                         </ul>
                     </li>
                     <?php
@@ -49,6 +62,7 @@
                             <?php
                                 }
                             ?>
+							<?php moduleLink('users', $modules); ?>
                         </ul>
                     </li>
                     <?php
@@ -63,8 +77,10 @@
                             <li><a href="<?php echo site_url(array('admin', 'manage', 'options'));   ?>"><?php echo $lang->line('menu_options'); ?></a></li>
                             <li><a href="<?php echo site_url(array('admin', 'manage', 'languages')); ?>"><?php echo $lang->line('menu_languages'); ?></a></li>
                             <li><a href="<?php echo site_url(array('admin', 'manage', 'locales'));   ?>"><?php echo $lang->line('menu_locales'); ?></a></li>
+							<?php moduleLink('system', $modules); ?>
                         </ul>
                     </li>
+					<?php moduleLink('root', $modules); ?>
                     <?php
                         }
                     ?>
