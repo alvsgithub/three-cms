@@ -18,7 +18,7 @@ class PageModel extends Model
 {
 	function PageModel()
 	{
-		parent::Model();
+		parent::Model();		
 	}
 	
 	/**
@@ -83,6 +83,28 @@ class PageModel extends Model
 		}
 	}
 	
+	/**
+	 * Get the parent of this page
+	 * @param	$id		int		The ID of the page
+	 * @return 	int				The ID of the parent
+	 */
+	function getParent($id) {
+		$this->db->select('id_content');
+		$this->db->where('id', $id);
+		$query = $this->db->get('content');
+		if($query->num_rows==1) {			
+			$result = $query->result();
+			return $result[0]->id_content;
+		} else {
+			return false;
+		}
+	}
+	
+	/**
+	 * Get the type of the page
+	 * @param	$id		int		The ID of the page
+	 * @return	string			'content' or 'page'
+	 */
 	function getPageType($id)
 	{
 		$this->db->select('type');
@@ -139,6 +161,20 @@ class PageModel extends Model
 		$this->db->where('id', $id);
 		$this->db->from('content');
 		return $this->db->count_all_results() == 1;
+	}
+	
+	/**
+	 * Render a specific page
+	 * @param	$idPage		int		The ID of the page to render
+	 * @param	$idLanguage	int		The ID of the language to use
+	 * @param	$display	boolean	Display the page (true) or return it as a string (false)
+	 * @return	string				Empty string on success or a string with the content if display is false
+	 */
+	function renderPage($idPage, $idLanguage, $display = true)
+	{
+		$dataObject = $this->getDataObject($idPage, $idLanguage);
+		// Render it:		
+		return $dataObject->render($display);
 	}
 }
 ?>

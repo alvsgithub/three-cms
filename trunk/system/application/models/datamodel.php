@@ -360,8 +360,10 @@ class DataModel extends Model
 	
 	/**
 	 * Render this datamodel according to it's template
+	 * @param	$display	boolean		Display the page (true) or return it as a string (false)
+	 * @return	string					Empty string on success or a string with the content if display is false
 	 */
-	function render()
+	function render($display = true)
 	{
 		// Initialize smarty:
 		$smarty = new Smarty();
@@ -400,8 +402,13 @@ class DataModel extends Model
 		// Assign the contentObjects:
 		$smarty->assign('contentObjects', $this->contentObjects);
 		
-		// Render the page:		
-		$smarty->display($this->templateFile);
+		// Render the page:
+		if($display) {
+			$smarty->display($this->templateFile);
+			return '';
+		} else {
+			return $smarty->fetch($this->templateFile);
+		}
 	}
 }
 ?>

@@ -15,7 +15,12 @@
 ?>
 <p>This module will export your site to a static HTML version.</p>
 <p>The site will be stored in a folder called <em>'export'</em> on your server.</p>
-<p><a href="<?php echo moduleCreateLink(array('export', 'go')); ?>" class="button">Export the site</a></p>
+<form method="post" action="<?php echo moduleCreateLink(array('export', 'go')); ?>">
+	<label for="site_url">The URL of the destination site (with a trailing slash):</label>
+	<input type="text" name="site_url" id="site_url" value="http://" />
+	<input type="submit" value="Export the site" />
+</form>
+
 <?php
 	}
 ?>
