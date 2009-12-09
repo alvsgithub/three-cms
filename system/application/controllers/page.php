@@ -15,7 +15,7 @@ class Page extends Controller
 		// Load Smarty Template Engine:
 		include_once(SMARTY_DIR.'Smarty.class.php');
 		
-		// Load the page model:
+		// Load the page model:		
 		$this->load->model('PageModel', '', true);
 		
 		// Load DataModel Class:
