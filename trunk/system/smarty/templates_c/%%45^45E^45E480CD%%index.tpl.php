@@ -1,4 +1,4 @@
-<?php /* Smarty version 2.6.26, created on 2009-11-17 14:00:23
+<?php /* Smarty version 2.6.26, created on 2009-12-13 12:53:35
          compiled from index.tpl */ ?>
 <?php require_once(SMARTY_CORE_DIR . 'core.load_plugins.php');
 smarty_core_load_plugins(array('plugins' => array(array('modifier', 'date_format', 'index.tpl', 17, false),)), $this); ?>
@@ -30,7 +30,7 @@ unset($_smarty_tpl_vars);
 			</div>
 			<div id="footer">
 				<p>&copy; <?php echo ((is_array($_tmp=time())) ? $this->_run_mod_handler('date_format', true, $_tmp, "%Y") : smarty_modifier_date_format($_tmp, "%Y")); ?>
- || Powered by Three CMS</p>
+ | Powered by Three CMS</p>
 			</div>
 		</div>
 	</body>

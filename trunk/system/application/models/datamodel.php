@@ -40,6 +40,9 @@ class DataModel extends Model
 		// Load the URL helper:
 		$this->load->helper('url');
 		
+		// Load the session library:
+		$this->load->library('session');
+		
 		// Default settings:
 		$this->parameters     = false;
 		$this->contentObjects = false;
@@ -332,6 +335,7 @@ class DataModel extends Model
 	/**
 	 * Get the locales
 	 * @param	$idLanguage		int		The ID of the language, leave null to get the current language
+	 * @return	array
 	 */
 	function getLocales($idLanguage = null)
 	{
@@ -356,6 +360,23 @@ class DataModel extends Model
 			$locales[$locale->name] = $locale->value;
 		}
 		return $locales;
+	}
+	
+	/**
+	 * Execute a function from a module
+	 * @param	$name		string	The name of the module
+	 * @param	$function	string	The name of the function to execute
+	 */
+	function module($name)
+	{
+		$path = 'system/application/modules/'.$name.'/'.$name.'.frontend.php';
+		if(file_exists($path)) {
+			require_once('system/application/modules/moduleFrontend.php');
+			require_once($path);
+			// eval("\$object = new ".ucfirst($name)."(\$this->db, \$this->session);");
+			eval("\$object = new ".ucfirst($name)."();");
+			return $object;
+		}		
 	}
 	
 	/**

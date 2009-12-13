@@ -4,7 +4,7 @@
 	 * @param	$array	array	An array with parameters (where the first parameter is most commonly the name of the module)
 	 * @return	string			An URL
 	 */
-	function moduleCreateLink($array)
+	function moduleCreateLink($array = array())
 	{
 		array_unshift($array, 'module');
 		array_unshift($array, 'admin');
