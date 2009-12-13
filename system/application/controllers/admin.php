@@ -26,6 +26,9 @@ class Admin extends Controller
 		$this->load->helper('stringencrypter');		
 		$this->load->helper('module');
 		
+		// Load dbforge (in case some modules need it)
+		$this->load->dbforge();
+		
         // Load the Language Class:
         $this->lang->load('admin');
         

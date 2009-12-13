@@ -43,7 +43,6 @@
 				<tr>
 					<th><?php echo $lang->line('content_parent'); ?>:</th>
 					<td><input readonly="readonly" class="small" type="text" name="parent" value="<?php echo $contentData['id_content']; ?>" /> <a href="#" class="selectParent">Select parent <span></span></a></td>
-					<!-- TODO: Make it possible to move content to the root -->
 				</tr>
 				<tr>
 					<th><?php echo $lang->line('content_order'); ?>:</th>
