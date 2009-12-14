@@ -14,17 +14,13 @@
 		global $adminUser;
 		global $adminPass;
 		global $adminEmail;
-		
-		// [HTTP_REFERER] => http://localhost/three/install/
-		
-		// Auto-detect the sites' address:
-		$siteAddress = str_replace('/install', '', $_SERVER['HTTP_REFERER']);
+		global $base_url;
 		
 		$content = file_get_contents($fileName);
 		
 		$content = str_replace(
 			array('[[PREFIX]]', '[[ADMINUSER]]', '[[ADMINPASS]]', '[[ADMINEMAIL]]', '[[SITEADDRESS]]'),
-			array($dbPrefix, $adminUser, md5($adminPass), $adminEmail, $siteAddress),
+			array($dbPrefix, $adminUser, md5($adminPass), $adminEmail, $base_url),
 			$content
 		);
 		
@@ -37,6 +33,17 @@
 		}
 	}
 	
+	function parseFile($file, $newFile, $parameters)
+	{
+		$content = file_get_contents($fileName);
+		foreach($parameters as $key=>$value) {
+			$content = str_replace('[['.strtoupper($key).']]', $value, $content);
+		}
+		$handle = fopen($newFile, 'w');
+		fwrite($handle, $content);
+		fclose($handle);
+	}
+	
 	$dbName     = makeSafe($_POST['dbname']);
 	$dbHost     = makeSafe($_POST['dbhost']);
 	$dbUser     = makeSafe($_POST['dbuser']);
@@ -46,6 +53,8 @@
 	$adminPass  = makeSafe($_POST['adminpass']);
 	$adminEmail = makeSafe($_POST['adminemail']);
 	$setup      = makeSafe($_POST['setup']);
+	
+	$base_url   = str_replace('/install', '', $_SERVER['HTTP_REFERER']);
 	
 	$link = mysql_connect($dbHost, $dbUser, $dbPass);
 	mysql_select_db($dbName, $link);
@@ -75,5 +84,18 @@
 			break;
 	}
 	
+	// Write the configuration file:
+	$parameters = array(
+		'base_url'=>$base_url,
+		'dbname'=>$dbName,
+		'dbuser'=>$dbUser,
+		'dbpass'=>$dbPass,
+		'dbhost'=>$dbHost,
+		'dbprefix'=>$dbPrefix
+	);
+	
+	// TODO: Make sure to write this file on the correct location:
+	parseFile('files/config.php', 'config.php', $parameters);
+	parseFile('files/database.php', 'database.php', $parameters);
 	
 ?>

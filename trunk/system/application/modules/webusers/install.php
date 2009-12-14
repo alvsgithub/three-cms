@@ -9,6 +9,8 @@
 <?php
     } else {
         // Install:
+        
+        // Webusers table:
         $fields = array(
             'id' => array(
                 'type' => 'INT',
@@ -52,7 +54,39 @@
         // $this->load->dbforge(); // TODO: this function now loads in the admin controller, but it should be able to load at runtime.
         $this->dbforge->add_field($fields);
         $this->dbforge->add_key('id', true);
-        $this->dbforge->create_table('webusers');
+        $this->dbforge->create_table('webusers', true);
+        
+        // Webuser groups:
+        $fields = array(
+            'id' => array(
+                'type' => 'INT',
+                'auto_increment' => true
+            ),
+            'name' => array(
+                'type' => 'TINYTEXT'
+            )
+        );
+        $this->dbforge->add_field($fields);
+        $this->dbforge->add_key('id', true);
+        $this->dbforge->create_table('webusers_groups', true);
+        
+        // Linkage between webusers and webuser-groups:
+        $fields = array(
+            'id' => array(
+                'type' => 'INT',
+                'auto_increment' => true
+            ),
+            'id_user' => array(
+                'type' => 'INT'
+            ),
+            'id_group' => array(
+                'type' => 'INT'
+            )
+        );
+        $this->dbforge->add_field($fields);
+        $this->dbforge->add_key('id', true);
+        $this->dbforge->create_table('webusers_user_group', true);        
+        
         echo '<p>Module successfully installed...</p>';
         echo '<p><a href="'.moduleCreateLink(array('webusers')).'">Click here to go to the module</a></p>';
     }

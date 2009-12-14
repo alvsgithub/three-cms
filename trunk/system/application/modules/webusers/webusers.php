@@ -8,7 +8,8 @@
             include_once('main.php');
         } else {
             switch($parameters[0]) {
-                case 'add' :
+                // Users:
+                case 'adduser' :
                     $details = array(
                         'id' => 0,
                         'name' => '',
@@ -22,21 +23,44 @@
                         'username' => '',
                         'blocked' => 0
                     );
-                    include_once('form.php');
+                    include_once('formuser.php');
                     break;
-                case 'edit' :
+                case 'edituser' :
                     if(isset($parameters[1])) {
                         $this->db->where('id', $parameters[1]);
                         $query   = $this->db->get('webusers');
                         $details = $query->result_array();
                         if(count($details) == 1) {
                             $details = $details[0];
-                            include_once('form.php');
+                            include_once('formuser.php');
                         }
                     }
                     break;
-                case 'delete' :
-                    include_once('delete.php');
+                case 'deleteuser' :
+                    include_once('deleteuser.php');
+                    break;
+                
+                // Groups:
+                case 'addgroup' :
+                    $details = array(
+                        'id' => 0,
+                        'name' => ''
+                    );
+                    include_once('formgroup.php');
+                    break;
+                case 'editgroup' :
+                    if(isset($parameters[1])) {
+                        $this->db->where('id', $parameters[1]);
+                        $query   = $this->db->get('webusers_groups');
+                        $details = $query->result_array();
+                        if(count($details) == 1) {
+                            $details = $details[0];
+                            include_once('formgroup');
+                        }
+                    }
+                    break;
+                case 'deletegroup' :
+                    include_once('deletegroup.php');
                     break;
             }
         }
