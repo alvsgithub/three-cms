@@ -140,3 +140,16 @@ img.loading { position: relative; top: 3px; left: 3px; display: none; }
 .module li.error { color: #800; font-weight: bold; }
 .module label { font-size: 1.2em; display: block; }
 .module hr { border: none; border-bottom: 1px solid #ccc; margin-bottom: 1em; }
+.module ul.tabMenu { margin: 0; list-style-type: none; display: block; height: 26px; }
+.module ul.tabMenu li { float: left; margin-right: 5px; }
+.module ul.tabMenu li a { display: block; padding: 5px; border: 1px solid #ccc; color: #000; text-decoration: none; outline: none; background: #eee;
+	-moz-border-radius-topleft: 5px;
+	-moz-border-radius-topright: 5px;
+	-webkit-border-radius-topleft: 5px;
+	-webkit-border-radius-topright: 5px;
+	border-radius-topleft: 5px;
+	border-radius-topright: 5px;
+}
+.module ul.tabMenu li a:hover { color: #666; }
+.module ul.tabMenu li a.active { border-bottom: 1px solid #fff; background: #fff; }
+.module .tab { border: 1px solid #ccc; padding: 10px; }
