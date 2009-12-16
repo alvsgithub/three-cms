@@ -432,7 +432,9 @@ class DataModel extends Model
 			$path = $folder.'/'.$folderName.'.frontend.php';
 			if(file_exists($path)) {
 				require_once($path);			
-				eval("\$object = new ".ucfirst($folderName)."();");
+				// eval("\$object = new ".ucfirst($folderName)."();");
+				// eval = evil!
+				$object = new ucfirst($folderName);
 				$smarty->assign($folderName, $object);
 			}
 		}
