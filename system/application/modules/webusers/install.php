@@ -87,6 +87,25 @@
         $this->dbforge->add_key('id', true);
         $this->dbforge->create_table('webusers_user_group', true);        
         
+        // Linkage between groups and content:
+        $fields = array(
+            'id' => array(
+                'type' => 'INT',
+                'auto_increment' => true
+            ),
+            'id_content' => array(
+                'type' => 'INT'
+            ),
+            'id_group' => array(
+                'type' => 'INT'
+            )
+        );
+        $this->dbforge->add_field($fields);
+        $this->dbforge->add_key('id', true);
+        $this->dbforge->create_table('webusers_content_group', true);        
+        
+        
+        
         echo '<p>Module successfully installed...</p>';
         echo '<p><a href="'.moduleCreateLink(array('webusers')).'">Click here to go to the module</a></p>';
     }

@@ -367,17 +367,17 @@ class DataModel extends Model
 	 * @param	$name		string	The name of the module
 	 * @param	$function	string	The name of the function to execute
 	 */
+	/*
 	function module($name)
 	{
 		$path = 'system/application/modules/'.$name.'/'.$name.'.frontend.php';
-		if(file_exists($path)) {
-			require_once('system/application/modules/moduleFrontend.php');
-			require_once($path);
-			// eval("\$object = new ".ucfirst($name)."(\$this->db, \$this->session);");
+		if(file_exists($path)) {			
+			require_once($path);			
 			eval("\$object = new ".ucfirst($name)."();");
 			return $object;
 		}		
 	}
+	*/
 	
 	/**
 	 * Render this datamodel according to it's template
@@ -422,6 +422,20 @@ class DataModel extends Model
 		
 		// Assign the contentObjects:
 		$smarty->assign('contentObjects', $this->contentObjects);
+		
+		// Assign modules:
+		// Modules get auto-detected according to the folders found in the modules-directory
+        $folders = glob('system/application/modules/*', GLOB_ONLYDIR);
+		foreach($folders as $folder) {
+			$a = explode('/', $folder);
+			$folderName = $a[count($a)-1];
+			$path = $folder.'/'.$folderName.'.frontend.php';
+			if(file_exists($path)) {
+				require_once($path);			
+				eval("\$object = new ".ucfirst($folderName)."();");
+				$smarty->assign($folderName, $object);
+			}
+		}
 		
 		// Render the page:
 		if($display) {

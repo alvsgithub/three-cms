@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Machine: localhost
--- Genereertijd: 03 Dec 2009 om 16:18
+-- Genereertijd: 16 Dec 2009 om 11:01
 -- Serverversie: 5.1.36
 -- PHP-Versie: 5.3.0
 
@@ -33,7 +33,7 @@ CREATE TABLE IF NOT EXISTS `three_content` (
   `alias` tinytext NOT NULL,
   `order` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=58 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=60 ;
 
 --
 -- Gegevens worden uitgevoerd voor tabel `three_content`
@@ -47,7 +47,9 @@ INSERT INTO `three_content` (`id`, `id_content`, `id_template`, `name`, `alias`,
 (51, 0, 1, 'What is Three CMS', 'what-is-three-cms', 1),
 (55, 52, 5, 'Value 3', 'value-3', 3),
 (56, 0, 7, 'News', 'news', 3),
-(57, 56, 8, 'New CMS', 'new-cms', 1);
+(57, 56, 8, 'New CMS', 'new-cms', 1),
+(58, 56, 8, 'Public news item', 'public-news-item', 2),
+(59, 56, 8, 'Alleen voor groep B', 'alleen-voor-groep-b', 3);
 
 -- --------------------------------------------------------
 
@@ -233,6 +235,27 @@ INSERT INTO `three_ranks` (`id`, `name`, `system`, `users`, `ranks`, `configurat
 -- --------------------------------------------------------
 
 --
+-- Tabelstructuur voor tabel `three_ranks_modules`
+--
+
+CREATE TABLE IF NOT EXISTS `three_ranks_modules` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id_rank` int(11) NOT NULL,
+  `module` tinytext NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=7 ;
+
+--
+-- Gegevens worden uitgevoerd voor tabel `three_ranks_modules`
+--
+
+INSERT INTO `three_ranks_modules` (`id`, `id_rank`, `module`) VALUES
+(6, 1, 'webusers'),
+(5, 1, 'export');
+
+-- --------------------------------------------------------
+
+--
 -- Tabelstructuur voor tabel `three_settings`
 --
 
@@ -368,7 +391,7 @@ CREATE TABLE IF NOT EXISTS `three_values` (
   `id_language` int(11) NOT NULL,
   `value` text NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=351 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=371 ;
 
 --
 -- Gegevens worden uitgevoerd voor tabel `three_values`
@@ -444,4 +467,117 @@ INSERT INTO `three_values` (`id`, `id_content`, `id_option`, `id_language`, `val
 (347, 57, 3, 1, '<p>\n	Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec sollicitudin risus leo, bibendum semper mauris. Donec vel tellus vitae felis rutrum scelerisque. Cras luctus molestie tempor. Maecenas a porta metus. Pellentesque auctor mattis tincidunt. Proin porttitor nulla et turpis euismod egestas.</p>\n<p>\n	Maecenas sagittis commodo libero eu consectetur. Nulla et ante enim, a sollicitudin mi. Vestibulum lectus est, aliquet eu pharetra a, laoreet ut elit. Phasellus porttitor, eros eget adipiscing malesuada, massa nunc tincidunt elit, eget iaculis magna orci luctus eros.</p>\n'),
 (348, 57, 3, 2, '<p>\n	Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec sollicitudin risus leo, bibendum semper mauris. Donec vel tellus vitae felis rutrum scelerisque. Cras luctus molestie tempor. Maecenas a porta metus. Pellentesque auctor mattis tincidunt. Proin porttitor nulla et turpis euismod egestas.</p>\n<p>\n	Maecenas sagittis commodo libero eu consectetur. Nulla et ante enim, a sollicitudin mi. Vestibulum lectus est, aliquet eu pharetra a, laoreet ut elit. Phasellus porttitor, eros eget adipiscing malesuada, massa nunc tincidunt elit, eget iaculis magna orci luctus eros.</p>\n'),
 (349, 57, 8, 1, 'Sinds vandaag is er een nieuw CMS!'),
-(350, 57, 8, 2, 'Since today there is a new CMS!');
+(350, 57, 8, 2, 'Since today there is a new CMS!'),
+(351, 58, 2, 1, 'Publiek nieuws bericht'),
+(352, 58, 2, 2, 'Public news item'),
+(353, 58, 13, 1, ''),
+(354, 58, 13, 2, ''),
+(355, 58, 12, 1, 'Mr. Public'),
+(356, 58, 12, 2, 'Mr. Public'),
+(357, 58, 8, 1, 'Een korte introductie'),
+(358, 58, 8, 2, 'A short introduction'),
+(359, 58, 3, 1, '<p>\n	Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris nec risus mauris. Suspendisse consectetur tristique odio. Donec vitae ante a enim varius commodo. Cras non tortor eros, ac sollicitudin lectus. Curabitur nec leo ac sapien porttitor eleifend ac non nibh. Vestibulum egestas condimentum lectus et malesuada. Cras imperdiet malesuada tincidunt. Phasellus condimentum justo eu ipsum viverra suscipit pretium diam auctor. Curabitur consectetur odio vehicula ipsum posuere tempor nec at est. Vivamus arcu urna, semper ut condimentum et, commodo at mauris. Fusce nec libero turpis. Quisque dictum sagittis tincidunt. Maecenas sem dolor, sollicitudin ultricies pulvinar vel, ullamcorper id nisl. Donec suscipit elit eu justo commodo pretium. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.<br />\n	<br />\n	Donec pellentesque, sem ac aliquam convallis, lectus purus auctor odio, id rutrum felis neque sit amet metus. Nulla facilisi. Etiam at dapibus ligula. Morbi feugiat, massa in tempus tincidunt, diam mi egestas nibh, non sagittis lectus sem vel enim. Praesent luctus dolor et quam facilisis tristique. Pellentesque convallis elit quis leo malesuada condimentum. Integer mollis dui sit amet lorem mattis aliquet. Aenean tincidunt mattis aliquam. Praesent sed libero turpis. Nulla laoreet, erat ut pharetra pellentesque, lorem urna bibendum libero, non commodo purus nulla et massa. Fusce sagittis sapien in ipsum mattis rhoncus. Nunc ullamcorper porttitor quam, sit amet pulvinar magna fermentum et. Donec dictum aliquam nulla id iaculis. Fusce orci diam, rhoncus id volutpat ut, dignissim varius magna. Phasellus ullamcorper, purus sit amet malesuada mollis, magna libero laoreet nulla, sed convallis sem urna in augue. Vestibulum et tellus nunc, eu cursus sem. Sed iaculis sapien eget mauris posuere a pharetra turpis suscipit.<br />\n	<br />\n	Integer vitae velit eget risus viverra hendrerit nec ut ipsum. Donec sagittis sem vitae felis imperdiet non consequat orci tempor. Suspendisse vulputate, velit quis posuere ullamcorper, mauris urna accumsan nulla, eget mattis tortor elit ac magna. Ut ullamcorper purus eget nibh rhoncus sit amet cursus ante sagittis. Aliquam felis enim, aliquet et aliquam nec, dictum nec magna. Morbi in dui vel diam vulputate malesuada id vitae lectus. Nunc tincidunt bibendum vulputate. Vivamus eros ante, facilisis eget ultricies quis, fringilla ut odio. Ut ut lacus nec velit ultrices lacinia ac rutrum eros. Praesent sit amet erat at dolor porta facilisis. Donec posuere porta diam eget venenatis. Cras eleifend tristique urna, a scelerisque nisi cursus id.</p>\n'),
+(360, 58, 3, 2, '<p>\n	Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris nec risus mauris. Suspendisse consectetur tristique odio. Donec vitae ante a enim varius commodo. Cras non tortor eros, ac sollicitudin lectus. Curabitur nec leo ac sapien porttitor eleifend ac non nibh. Vestibulum egestas condimentum lectus et malesuada. Cras imperdiet malesuada tincidunt. Phasellus condimentum justo eu ipsum viverra suscipit pretium diam auctor. Curabitur consectetur odio vehicula ipsum posuere tempor nec at est. Vivamus arcu urna, semper ut condimentum et, commodo at mauris. Fusce nec libero turpis. Quisque dictum sagittis tincidunt. Maecenas sem dolor, sollicitudin ultricies pulvinar vel, ullamcorper id nisl. Donec suscipit elit eu justo commodo pretium. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.<br />\n	<br />\n	Donec pellentesque, sem ac aliquam convallis, lectus purus auctor odio, id rutrum felis neque sit amet metus. Nulla facilisi. Etiam at dapibus ligula. Morbi feugiat, massa in tempus tincidunt, diam mi egestas nibh, non sagittis lectus sem vel enim. Praesent luctus dolor et quam facilisis tristique. Pellentesque convallis elit quis leo malesuada condimentum. Integer mollis dui sit amet lorem mattis aliquet. Aenean tincidunt mattis aliquam. Praesent sed libero turpis. Nulla laoreet, erat ut pharetra pellentesque, lorem urna bibendum libero, non commodo purus nulla et massa. Fusce sagittis sapien in ipsum mattis rhoncus. Nunc ullamcorper porttitor quam, sit amet pulvinar magna fermentum et. Donec dictum aliquam nulla id iaculis. Fusce orci diam, rhoncus id volutpat ut, dignissim varius magna. Phasellus ullamcorper, purus sit amet malesuada mollis, magna libero laoreet nulla, sed convallis sem urna in augue. Vestibulum et tellus nunc, eu cursus sem. Sed iaculis sapien eget mauris posuere a pharetra turpis suscipit.<br />\n	<br />\n	Integer vitae velit eget risus viverra hendrerit nec ut ipsum. Donec sagittis sem vitae felis imperdiet non consequat orci tempor. Suspendisse vulputate, velit quis posuere ullamcorper, mauris urna accumsan nulla, eget mattis tortor elit ac magna. Ut ullamcorper purus eget nibh rhoncus sit amet cursus ante sagittis. Aliquam felis enim, aliquet et aliquam nec, dictum nec magna. Morbi in dui vel diam vulputate malesuada id vitae lectus. Nunc tincidunt bibendum vulputate. Vivamus eros ante, facilisis eget ultricies quis, fringilla ut odio. Ut ut lacus nec velit ultrices lacinia ac rutrum eros. Praesent sit amet erat at dolor porta facilisis. Donec posuere porta diam eget venenatis. Cras eleifend tristique urna, a scelerisque nisi cursus id.</p>\n'),
+(361, 59, 2, 1, 'Alleen voor groep B'),
+(362, 59, 2, 2, 'Only for group B'),
+(363, 59, 13, 1, ''),
+(364, 59, 13, 2, ''),
+(365, 59, 12, 1, ''),
+(366, 59, 12, 2, ''),
+(367, 59, 8, 1, 'Alleen groep B kan dit nieuwsbericht zien.'),
+(368, 59, 8, 2, 'Only Group B can view this news message.'),
+(369, 59, 3, 1, '<p>\n	Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris nec risus mauris. Suspendisse consectetur tristique odio. Donec vitae ante a enim varius commodo. Cras non tortor eros, ac sollicitudin lectus. Curabitur nec leo ac sapien porttitor eleifend ac non nibh. Vestibulum egestas condimentum lectus et malesuada. Cras imperdiet malesuada tincidunt. Phasellus condimentum justo eu ipsum viverra suscipit pretium diam auctor. Curabitur consectetur odio vehicula ipsum posuere tempor nec at est. Vivamus arcu urna, semper ut condimentum et, commodo at mauris. Fusce nec libero turpis. Quisque dictum sagittis tincidunt. Maecenas sem dolor, sollicitudin ultricies pulvinar vel, ullamcorper id nisl. Donec suscipit elit eu justo commodo pretium. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.</p>\n<p>\n	Donec pellentesque, sem ac aliquam convallis, lectus purus auctor odio, id rutrum felis neque sit amet metus. Nulla facilisi. Etiam at dapibus ligula. Morbi feugiat, massa in tempus tincidunt, diam mi egestas nibh, non sagittis lectus sem vel enim. Praesent luctus dolor et quam facilisis tristique. Pellentesque convallis elit quis leo malesuada condimentum. Integer mollis dui sit amet lorem mattis aliquet. Aenean tincidunt mattis aliquam. Praesent sed libero turpis. Nulla laoreet, erat ut pharetra pellentesque, lorem urna bibendum libero, non commodo purus nulla et massa. Fusce sagittis sapien in ipsum mattis rhoncus. Nunc ullamcorper porttitor quam, sit amet pulvinar magna fermentum et. Donec dictum aliquam nulla id iaculis. Fusce orci diam, rhoncus id volutpat ut, dignissim varius magna. Phasellus ullamcorper, purus sit amet malesuada mollis, magna libero laoreet nulla, sed convallis sem urna in augue. Vestibulum et tellus nunc, eu cursus sem. Sed iaculis sapien eget mauris posuere a pharetra turpis suscipit.</p>\n<p>\n	Integer vitae velit eget risus viverra hendrerit nec ut ipsum. Donec sagittis sem vitae felis imperdiet non consequat orci tempor. Suspendisse vulputate, velit quis posuere ullamcorper, mauris urna accumsan nulla, eget mattis tortor elit ac magna. Ut ullamcorper purus eget nibh rhoncus sit amet cursus ante sagittis. Aliquam felis enim, aliquet et aliquam nec, dictum nec magna. Morbi in dui vel diam vulputate malesuada id vitae lectus. Nunc tincidunt bibendum vulputate. Vivamus eros ante, facilisis eget ultricies quis, fringilla ut odio. Ut ut lacus nec velit ultrices lacinia ac rutrum eros. Praesent sit amet erat at dolor porta facilisis. Donec posuere porta diam eget venenatis. Cras eleifend tristique urna, a scelerisque nisi cursus id.</p>\n'),
+(370, 59, 3, 2, '<p>\n	Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris nec risus mauris. Suspendisse consectetur tristique odio. Donec vitae ante a enim varius commodo. Cras non tortor eros, ac sollicitudin lectus. Curabitur nec leo ac sapien porttitor eleifend ac non nibh. Vestibulum egestas condimentum lectus et malesuada. Cras imperdiet malesuada tincidunt. Phasellus condimentum justo eu ipsum viverra suscipit pretium diam auctor. Curabitur consectetur odio vehicula ipsum posuere tempor nec at est. Vivamus arcu urna, semper ut condimentum et, commodo at mauris. Fusce nec libero turpis. Quisque dictum sagittis tincidunt. Maecenas sem dolor, sollicitudin ultricies pulvinar vel, ullamcorper id nisl. Donec suscipit elit eu justo commodo pretium. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.</p>\n<p>\n	Donec pellentesque, sem ac aliquam convallis, lectus purus auctor odio, id rutrum felis neque sit amet metus. Nulla facilisi. Etiam at dapibus ligula. Morbi feugiat, massa in tempus tincidunt, diam mi egestas nibh, non sagittis lectus sem vel enim. Praesent luctus dolor et quam facilisis tristique. Pellentesque convallis elit quis leo malesuada condimentum. Integer mollis dui sit amet lorem mattis aliquet. Aenean tincidunt mattis aliquam. Praesent sed libero turpis. Nulla laoreet, erat ut pharetra pellentesque, lorem urna bibendum libero, non commodo purus nulla et massa. Fusce sagittis sapien in ipsum mattis rhoncus. Nunc ullamcorper porttitor quam, sit amet pulvinar magna fermentum et. Donec dictum aliquam nulla id iaculis. Fusce orci diam, rhoncus id volutpat ut, dignissim varius magna. Phasellus ullamcorper, purus sit amet malesuada mollis, magna libero laoreet nulla, sed convallis sem urna in augue. Vestibulum et tellus nunc, eu cursus sem. Sed iaculis sapien eget mauris posuere a pharetra turpis suscipit.</p>\n<p>\n	Integer vitae velit eget risus viverra hendrerit nec ut ipsum. Donec sagittis sem vitae felis imperdiet non consequat orci tempor. Suspendisse vulputate, velit quis posuere ullamcorper, mauris urna accumsan nulla, eget mattis tortor elit ac magna. Ut ullamcorper purus eget nibh rhoncus sit amet cursus ante sagittis. Aliquam felis enim, aliquet et aliquam nec, dictum nec magna. Morbi in dui vel diam vulputate malesuada id vitae lectus. Nunc tincidunt bibendum vulputate. Vivamus eros ante, facilisis eget ultricies quis, fringilla ut odio. Ut ut lacus nec velit ultrices lacinia ac rutrum eros. Praesent sit amet erat at dolor porta facilisis. Donec posuere porta diam eget venenatis. Cras eleifend tristique urna, a scelerisque nisi cursus id.</p>\n');
+
+-- --------------------------------------------------------
+
+--
+-- Tabelstructuur voor tabel `three_webusers`
+--
+
+CREATE TABLE IF NOT EXISTS `three_webusers` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` tinytext,
+  `address` tinytext,
+  `postalcode` tinytext,
+  `city` tinytext,
+  `country` tinytext,
+  `telephone` tinytext,
+  `mobile` tinytext,
+  `email` tinytext,
+  `username` tinytext,
+  `password` tinytext,
+  `blocked` tinyint(1) DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
+
+--
+-- Gegevens worden uitgevoerd voor tabel `three_webusers`
+--
+
+INSERT INTO `three_webusers` (`id`, `name`, `address`, `postalcode`, `city`, `country`, `telephone`, `mobile`, `email`, `username`, `password`, `blocked`) VALUES
+(1, 'Testuser', '', '', '', '', '', '', '', 'test', '81dc9bdb52d04dc20036dbd8313ed055', 0),
+(2, '', '', '', '', '', '', '', '', 'test2', '81dc9bdb52d04dc20036dbd8313ed055', 0);
+
+-- --------------------------------------------------------
+
+--
+-- Tabelstructuur voor tabel `three_webusers_content_group`
+--
+
+CREATE TABLE IF NOT EXISTS `three_webusers_content_group` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id_content` int(11) DEFAULT NULL,
+  `id_group` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6 ;
+
+--
+-- Gegevens worden uitgevoerd voor tabel `three_webusers_content_group`
+--
+
+INSERT INTO `three_webusers_content_group` (`id`, `id_content`, `id_group`) VALUES
+(5, 59, 2),
+(4, 57, 1);
+
+-- --------------------------------------------------------
+
+--
+-- Tabelstructuur voor tabel `three_webusers_groups`
+--
+
+CREATE TABLE IF NOT EXISTS `three_webusers_groups` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` tinytext,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
+
+--
+-- Gegevens worden uitgevoerd voor tabel `three_webusers_groups`
+--
+
+INSERT INTO `three_webusers_groups` (`id`, `name`) VALUES
+(1, 'Group A'),
+(2, 'Group B');
+
+-- --------------------------------------------------------
+
+--
+-- Tabelstructuur voor tabel `three_webusers_user_group`
+--
+
+CREATE TABLE IF NOT EXISTS `three_webusers_user_group` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id_user` int(11) DEFAULT NULL,
+  `id_group` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
+
+--
+-- Gegevens worden uitgevoerd voor tabel `three_webusers_user_group`
+--
+
+INSERT INTO `three_webusers_user_group` (`id`, `id_user`, `id_group`) VALUES
+(3, 1, 1),
+(2, 2, 2),
+(4, 1, 2);

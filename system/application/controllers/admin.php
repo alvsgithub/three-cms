@@ -690,6 +690,15 @@ class Admin extends Controller
 					}
 					// All the values are retreived, now save the data:
 					$idContent = $this->AdminModel->saveContentData($idContent, $contentData);
+					// Execute external module-commands:
+					$modules   = $this->AdminModel->getModules();
+					foreach($modules as $module) {
+						$moduleName = strtolower($module['name']);
+						$path = 'system/application/modules/'.$moduleName.'/'.$moduleName.'.content.save.php';
+						if(file_exists($path)) {			
+							include_once($path);			
+						}
+					}
 					// See if this action was send using ajax:
 					if(isset($_POST['ajax'])) {
 						echo '1;'.$this->lang->line('content_stored');
@@ -714,7 +723,8 @@ class Admin extends Controller
 							'templates'=>$this->AdminModel->getAvailableTemplates($id, true),
 							'title'=>$this->lang->line('title_add_content'),
 							'allowedTemplates'=>$this->AdminModel->getAllowedTemplates($this->rank),
-							'settings'=>$this->settings
+							'settings'=>$this->settings,
+							'modules'=>$this->AdminModel->getModules()
 						);
 						$this->load->view('admin/content/add_edit.php', $data);
 					}
@@ -732,7 +742,8 @@ class Admin extends Controller
 							'templates'=>$this->AdminModel->getAvailableTemplates($id),
 							'title'=>$this->lang->line('title_modify_content'),
 							'allowedTemplates'=>$this->AdminModel->getAllowedTemplates($this->rank),
-							'settings'=>$this->settings
+							'settings'=>$this->settings,
+							'modules'=>$this->AdminModel->getModules()
 						);
 						$this->load->view('admin/content/add_edit.php', $data);
 					}
@@ -836,7 +847,8 @@ class Admin extends Controller
         $data = array(
             'lang'=>$this->lang,
 			'rank'=>$this->AdminModel->getRank($this->rank),
-			'modules'=>$this->AdminModel->getModules()
+			'modules'=>$this->AdminModel->getModules(),
+			'allowedModules'=>$this->AdminModel->getRankModules($this->rank)
         );		
 		$this->load->view('admin/header.php', $data);
     }
@@ -994,20 +1006,6 @@ class Admin extends Controller
 						}
 						break;
 					}
-				// Users cannot be duplicated, since this could lead to duplicate usernames.
-				/*
-				case 'duplicate' :
-					{
-						$id = $this->uri->segment(4);
-						if($id!=false) {
-							$user = $this->AdminModel->getData('users', $id);
-							$user['id'] = 0;	// Set ID to 0 to indicate that this is a new user
-							$this->AdminModel->saveData('users', $user, 0);
-						}
-						redirect(site_url(array('admin', 'users')));
-						break;
-					}
-				*/
 				case 'delete' :
 					{
 						$id = $this->uri->segment(4);						
@@ -1054,12 +1052,24 @@ class Admin extends Controller
 						$data['ranks'] = isset($_POST['ranks']) ? 1 : 0;
 						$data['configuration'] = isset($_POST['configuration']) ? 1 : 0;
 						// Store the data:
-						$this->AdminModel->saveData('ranks', $data, $id);
+						$id = $this->AdminModel->saveData('ranks', $data, $id);
+						// Save the modules-links:
+						$modules = array();
+						foreach($_POST as $key=>$value) {
+							if(substr($key, 0, 7)=='module_') {
+								$a = explode('_', $key);
+								array_push($modules, $a[1]);
+							}
+						}
+						$this->AdminModel->saveRankModules($id, $modules);
+						// Redirect:
 						redirect(site_url(array('admin', 'ranks')));
+						break;
 					}
 				case 'add' :
 					{
-						$data['rank'] = $this->AdminModel->getData('ranks', 0);
+						$data['rank']    = $this->AdminModel->getData('ranks', 0);
+						$data['modules'] = $this->AdminModel->getModules();
 						$this->load->view('admin/ranks/add_edit.php', $data);
 						break;
 					}
@@ -1067,7 +1077,8 @@ class Admin extends Controller
 					{
 						$id = $this->uri->segment(4);
 						if($id!=false) {
-							$data['rank'] = $this->AdminModel->getData('ranks', $id);
+							$data['rank']    = $this->AdminModel->getData('ranks', $id);
+							$data['modules'] = $this->AdminModel->getModules();
 							$this->load->view('admin/ranks/add_edit.php', $data);
 						}
 						break;

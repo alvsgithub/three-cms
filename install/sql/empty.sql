@@ -24,6 +24,9 @@ CREATE TABLE IF NOT EXISTS `[[PREFIX]]options` (`id` int(11) NOT NULL AUTO_INCRE
 CREATE TABLE IF NOT EXISTS `[[PREFIX]]ranks` (`id` int(11) NOT NULL AUTO_INCREMENT, `name` tinytext NOT NULL, `system` tinyint(1) NOT NULL, `users` tinyint(1) NOT NULL, `ranks` tinyint(1) NOT NULL, `configuration` tinyint(1) NOT NULL, PRIMARY KEY (`id`));
 INSERT INTO `[[PREFIX]]ranks` (`id`, `name`, `system`, `users`, `ranks`, `configuration`) VALUES (1, 'Administrator', 1, 1, 1, 1);
 
+-- Ranks modules
+CREATE TABLE IF NOT EXISTS `[[PREFIX]]ranks_modules` (`id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY, `id_rank` INT NOT NULL, `module` TINYTEXT NOT NULL);
+
 -- Settings (+default settings):
 CREATE TABLE IF NOT EXISTS `[[PREFIX]]settings` (`id` int(11) NOT NULL AUTO_INCREMENT, `name` tinytext NOT NULL, `value` text NOT NULL, PRIMARY KEY (`id`));
 INSERT INTO `[[PREFIX]]settings` (`id`, `name`, `value`) VALUES (1, 'default_language', '1'), (2, 'default_page_id', '1'), (3, 'site_name', 'Empty site'), (4, 'base_url', '[[SITEADDRESS]]');

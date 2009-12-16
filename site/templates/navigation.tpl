@@ -19,7 +19,6 @@
 	</ul>
 	
 	{* The power of external modules: *}
-	{assign var='webusers' value=$dataObject->module('webusers')}
 	{$webusers->checkLogin()}
 	{if $webusers->loggedIn()}
 		<p>Hallo {$webusers->userInfo('name')}!</p>

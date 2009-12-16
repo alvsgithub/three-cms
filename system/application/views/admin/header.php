@@ -17,12 +17,13 @@
     <body>
         <div id="body">
 			<?php
-				// Quick function to show the module-links:
-				
-				function moduleLink($current, $modules) {
+				// Quick function to show the module-links:				
+				function moduleLink($current, $modules, $allowedModules) {
 					foreach($modules as $module) {
-						if($module['menuposition'] == $current) {
-							echo '<li><a href="'.site_url(array('admin', 'module', $module['alias'])).'">'.$module['menu'].'</a></li>';
+						if(in_array(strtolower($module['name']), $allowedModules)) {
+							if($module['menuposition'] == $current) {
+								echo '<li><a href="'.site_url(array('admin', 'module', $module['alias'])).'">'.$module['menu'].'</a></li>';
+							}
 						}
 					}
 				}
@@ -38,7 +39,7 @@
                     <li><a class="configuration" href="#" class="noClick"><?php echo $lang->line('menu_configuration'); ?></a>
                         <ul>
                             <li><a href="<?php echo site_url(array('admin', 'settings')); ?>"><?php echo $lang->line('menu_site_settings'); ?></a></li>
-							<?php moduleLink('configuration', $modules); ?>
+							<?php moduleLink('configuration', $modules, $allowedModules); ?>
                         </ul>
                     </li>
                     <?php
@@ -62,7 +63,7 @@
                             <?php
                                 }
                             ?>
-							<?php moduleLink('users', $modules); ?>
+							<?php moduleLink('users', $modules, $allowedModules); ?>
                         </ul>
                     </li>
                     <?php
@@ -77,10 +78,10 @@
                             <li><a href="<?php echo site_url(array('admin', 'manage', 'options'));   ?>"><?php echo $lang->line('menu_options'); ?></a></li>
                             <li><a href="<?php echo site_url(array('admin', 'manage', 'languages')); ?>"><?php echo $lang->line('menu_languages'); ?></a></li>
                             <li><a href="<?php echo site_url(array('admin', 'manage', 'locales'));   ?>"><?php echo $lang->line('menu_locales'); ?></a></li>
-							<?php moduleLink('system', $modules); ?>
+							<?php moduleLink('system', $modules, $allowedModules); ?>
                         </ul>
                     </li>
-					<?php moduleLink('root', $modules); ?>
+					<?php moduleLink('root', $modules, $allowedModules); ?>
                     <?php
                         }
                     ?>
