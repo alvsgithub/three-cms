@@ -47,7 +47,14 @@ $(function(){
 		// Get all the parameters and post them:
 		data = {};
 		$("input, select", this).each(function(){
-			data[$(this).attr("name")] = $(this).val();
+			// Workaround for checkboxes:
+			if($(this).attr("type")=="checkbox") {
+				if($(this).attr("checked")) {
+					data[$(this).attr("name")] = $(this).val();
+				}
+			} else {
+				data[$(this).attr("name")] = $(this).val();
+			}
 		});
 		// Textareas are done by ckEditor, so we must grab the data from ckEditor instead of the textarea itself.
 		$("textarea", this).each(function(){

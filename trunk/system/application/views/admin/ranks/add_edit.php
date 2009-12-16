@@ -30,6 +30,27 @@
 					<td colspan="2">&nbsp;</td>
 				</tr>
 				<tr>
+					<th><?php echo $lang->line('ranks_modules'); ?>:</th>
+					<td>
+						<?php
+							if(count($modules)==0) {
+								echo '<em>'.$lang->line('ranks_no_modules').'</em>';
+							} else {
+								foreach($modules as $module) {
+									$query = $this->db->get_where('ranks_modules', array('id_rank'=>$rank['id'], 'module'=>strtolower($module['name'])));
+									$checked = $query->num_rows >= 1 ? ' checked="checked" ' : '';
+									echo '
+										<input type="checkbox" name="module_'.strtolower($module['name']).'" '.$checked.' /> '.$module['name'].'<br />
+									';
+								}
+							}
+						?>
+					</td>
+				</tr>
+				<tr class="delimiter">
+					<td colspan="2">&nbsp;</td>
+				</tr>
+				<tr>
 					<th>&nbsp;</th>
 					<td>
 						<input type="hidden" name="id" value="<?php echo $rank['id']; ?>" />

@@ -154,6 +154,8 @@
 	$lang['ranks_users']				= 'User can manage user accounts';
 	$lang['ranks_ranks']				= 'User can manage ranks';
 	$lang['ranks_configuration']		= 'User can edit the sites configuration';
+	$lang['ranks_modules']				= 'Allowed modules';
+	$lang['ranks_no_modules']			= 'No modules found!';
 	
 	// Login:
 	$lang['login_title']				= 'Login';

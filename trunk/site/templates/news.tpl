@@ -11,17 +11,21 @@
 			{include file="navigation.tpl"}
 			<div id="content">
 				{if $contentObjects neq false}
-					{$contentObjects[0]->render()}
+					{if $webusers->allowed($contentObjects[0]->get('idContent'))}
+						{$contentObjects[0]->render()}
+					{/if}
 				{else}
 					<h1>{$header}</h1>
-					<p>{$content}</p>
+					<p>{$content}</p>					
 					{foreach from=$dataObject->children() item=child}
+						{if $webusers->allowed($child->get('idContent'))}
 						{* See how all attributes of each child are available: *}
 						<div class="newsItem">
 							<h2>{$child->get('header')}</h2>
 							<p>{$child->get('summary')}</p>
 							<p class="readmore"><a href="{$child->getUrl()}">{$locale.readMore}</a>
 						</div>
+						{/if}
 					{/foreach}
 				{/if}
 			</div>

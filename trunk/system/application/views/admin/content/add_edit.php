@@ -209,6 +209,26 @@
 				<tr class="delimiter">
 					<td colspan="2">&nbsp;</td>
 				</tr>
+				<?php
+					// See if there are any modules to execute here:
+					$moduleFound = false;
+					foreach($modules as $module) {
+						$moduleName = strtolower($module['name']);
+						$path = 'system/application/modules/'.$moduleName.'/'.$moduleName.'.content.edit.php';
+						if(file_exists($path)) {
+							include_once($path);
+							$moduleFound = true;
+						}
+					}
+					if($moduleFound) {
+						// Add an extra delimiter:
+						echo '
+							<tr class="delimiter">
+								<td colspan="2">&nbsp;</td>
+							</tr>
+						';
+					}
+				?>
 				<tr>
 					<th>&nbsp;</th>
 					<td>

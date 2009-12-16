@@ -999,5 +999,37 @@ class AdminModel extends Model
         }
         return $this->modules;
     }
+    
+    /**
+     * Save the link between ranks and modules
+     * @param   $idRank     int     The ID of the rank
+     * @param   $modules    array   An array with the names of the modules
+     */
+    function saveRankModules($idRank, $modules)
+    {
+        // First delete all existing links:
+        $this->db->delete('ranks_modules', array('id_rank'=>$idRank));
+        // Then insert new links:
+        foreach($modules as $module) {
+            $this->db->insert('ranks_modules', array('id_rank'=>$idRank, 'module'=>$module));
+        }
+    }
+    
+    /**
+     * Get an array of allowed modules
+     * @param   $idRank     int     The ID of the rank
+     * @return              array   An array with the names of the modules
+     */
+    function getRankModules($idRank)
+    {
+        $modules = array();
+        $this->db->select('module');
+        $this->db->where('id_rank', $idRank);
+        $query = $this->db->get('ranks_modules');
+        foreach($query->result() as $result) {
+            array_push($modules, $result->module);
+        }
+        return $modules;
+    }
 }
 ?>
