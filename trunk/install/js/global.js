@@ -93,7 +93,7 @@ $(function(){
 		vars.adminuser  = $("input[name=adminuser]").val();
 		vars.adminpass  = $("input[name=adminpass]").val();
 		vars.adminemail = $("input[name=adminemail]").val();
-		vars.setup      = $("input[name=setup]").val();
+		vars.setup      = $("input[name=setup]:checked").val();
 		if($("input[name=license]").attr("checked")) {
 			vars.license = 'true';
 		}

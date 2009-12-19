@@ -115,8 +115,8 @@
 					<p>There are different types of predefined installations available, please select the one which you would want to install:</p>
 					<label><input type="radio" name="setup" value="1" /> Empty installation</label>
 					<label><input type="radio" name="setup" value="2" checked="checked" /> Default website</label>
-					<label><input type="radio" name="setup" value="3" /> Example site</label>
-					<label><input type="radio" name="setup" value="4" /> Example blog</label>
+					<label><input type="radio" name="setup" value="3" disabled="disabled" /> Example site</label>
+					<label><input type="radio" name="setup" value="4" disabled="disabled" /> Example blog</label>
 					<div class="descriptions">
 						<p class="description1">This is an empty site with no predefined content types, templates or pages.<br /><br />Use this setup if you want to create a site completely form scratch.</p>
 						<p class="description2">This is an empty site with one page and one basic template. The template provides general options for default pages, such as a header, a summary and a content area.<br /><br />Use this setup if you want a quick setup for a simple site.</p>
