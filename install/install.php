@@ -35,13 +35,33 @@
 	
 	function parseFile($file, $newFile, $parameters)
 	{
-		$content = file_get_contents($fileName);
+		$content = file_get_contents($file);
 		foreach($parameters as $key=>$value) {
 			$content = str_replace('[['.strtoupper($key).']]', $value, $content);
 		}
 		$handle = fopen($newFile, 'w');
 		fwrite($handle, $content);
 		fclose($handle);
+	}
+	
+	function copyDir($dirsource, $dirdest) 
+	{
+		// recursive function to copy all subdirectories and contents: 
+		if(is_dir($dirsource)) {
+			$dir_handle = opendir($dirsource);
+			// mkdir($dirdest."/".$dirsource, 0750); 
+			while($file = readdir($dir_handle)) { 
+				if($file != "." && $file != "..") { 
+					if(!is_dir($dirsource."/".$file)) {
+						copy($dirsource."/".$file, $dirdest."/".$file);
+					} else {
+						@mkdir($dirdest.'/'.$file);
+						copyDir($dirsource."/".$file, $dirdest.'/'.$file); 
+					}
+				}
+			}
+			closedir($dir_handle); 
+		}
 	}
 	
 	$dbName     = makeSafe($_POST['dbname']);
@@ -67,7 +87,10 @@
 			break;
 		case 2:
 			parseSqlFile('sql/empty.sql');
-			// TODO: Insert default website template:
+			// Insert default website template:
+			parseSqlFile('sql/default.sql');
+			// Copy files:
+			copyDir('sites/default', '../site');
 			echo '<p class="ok">Three CMS installed with default website template.</p>';
 			break;
 		case 3:
@@ -95,7 +118,7 @@
 	);
 	
 	// TODO: Make sure to write this file on the correct location:
-	parseFile('files/config.php', 'config.php', $parameters);
-	parseFile('files/database.php', 'database.php', $parameters);
+	parseFile('files/config.php', '../system/application/config/config.php', $parameters);
+	parseFile('files/database.php', '../system/application/config/database.php', $parameters);
 	
 ?>

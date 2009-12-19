@@ -434,7 +434,8 @@ class DataModel extends Model
 				require_once($path);			
 				// eval("\$object = new ".ucfirst($folderName)."();");
 				// eval = evil!
-				$object = new ucfirst($folderName);
+				$objectName = ucfirst($folderName);
+				$object = new $objectName;
 				$smarty->assign($folderName, $object);
 			}
 		}

@@ -1,4 +1,13 @@
 <?php
+/**
+ * Three CMS: See if the config file exists, if not, run the install:
+ */
+if(!file_exists('system/application/config/config.php')) {
+	if(file_exists('./install/index.php')) {
+		header('Location: ./install/');
+	}
+}
+
 /*
 |---------------------------------------------------------------
 | PHP ERROR REPORTING LEVEL
