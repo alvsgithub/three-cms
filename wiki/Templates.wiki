@@ -124,8 +124,8 @@ Example:
 
 Create a tree of this dataModel and all it's children (recursive).
 
-*$startID:* The ID to see as te root parent. Set to null to use the current dataModel's ID.
-*$templates:* An array containing the ID's of the templates to allow in this tree. Set to null to allow all templates.
+*$startID:* The ID to see as te root parent. Set to null to use the current dataModel's ID.<br />
+*$templates:* An array containing the ID's of the templates to allow in this tree. Set to null to allow all templates.<br />
 *$optionConditions:* An associated array holding the name of the options and their value to which the content should be filterd. Set to null to allow all content
 
 *Returns:* A multi-dimensional array of the whole tree
