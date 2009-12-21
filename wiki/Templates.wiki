@@ -1,0 +1,33 @@
+#summary Template design and development
+#labels Phase-Implementation,Phase-Deploy
+
+= Introduction =
+
+First of all, Three CMS uses the Smarty template engine for template parsing. For documentation on this template engine, please read the documentation on [http://www.smarty.net the Smarty website].
+
+= Creating templates =
+
+== Default parameters ==
+
+When creating templates, each option of a page is a parameter you can use. For instance, if your page has a header, an introtext and a content-part with the names 'header', 'introtext' and 'content', your template could look something like this:
+
+{{{
+<html>
+  <head>
+    <title>{$header}</title>
+  </head>
+  <body>
+    <h1>{$header}</h1>
+    <p class="intro">{$introtext}</p>
+    {$content}
+  </body>
+</html>
+}}}
+
+== Predefined parameters ==
+
+There are some predefined parameters. These are:
+
+=== Setings ===
+
+The settings are the main settings as defined in the CMS. These can be called with the `{$settings}`-tag. To get a single setting you can use `{$settings._setting_}`, where `_setting_` is the name of your setting. For example, to display the site name you can use: `{$settings.site_name}`.
