@@ -112,10 +112,11 @@ class DataModel extends Model
 	
 	/**
 	 * Get the children of this dataModel
-	 * @param	$idContent	int	The ID of the parent to get the children from. If ID is set to null (default), the current dataobjects' ID is used
+	 * @param	$idContent	int		The ID of the parent to get the children from. If ID is set to null (default), the current dataobjects' ID is used
+	 * @param	$where		array	An array with options to use as filter
 	 * @return	array		An array with dataModels
 	 */
-	function children($idContent = null)
+	function children($idContent = null, $options = null)
 	{
 		$idContent = $idContent !== null ? $idContent : $this->idContent;
 		if(isset($this->childrenArray[$idContent])) {
@@ -123,10 +124,27 @@ class DataModel extends Model
 		} else {
 			// Retrieve the children of this data object:
 			$children = array();		
-			$this->db->select('id');
-			$this->db->where('id_content', $idContent);
-			$this->db->order_by('order', 'asc');
-			$query = $this->db->get('content');		
+			$this->db->select('a.id');
+			$this->db->where('a.`id_content`', $idContent, false);
+			$this->db->from('content a');
+			if($options != null) {
+				// Create an associated array:
+				if(is_string($options)) {
+					$options = $this->stringToAssocArray($options);
+				}
+				// Adjust the query:
+				$this->db->from('options b');
+				$this->db->from('values c');
+				foreach($options as $key=>$value) {
+					$this->db->where('b.`name`', '\''.$key.'\'', false);
+					$this->db->where('c.`id_option`', 'b.`id`', false);
+					$this->db->where('c.`value`', '\''.$value.'\'', false);
+					$this->db->where('c.`id_content`', 'a.`id`', false);
+				}
+			}
+			$this->db->order_by('a.order', 'asc');
+			$query = $this->db->get();
+			// echo $this->db->last_query();
 			foreach($query->result() as $result) {
 				$dataObject = new DataModel();
 				$dataObject->load($result->id, $this->idLanguage);
@@ -134,8 +152,26 @@ class DataModel extends Model
 			}
 			// Store for optimization:
 			$this->childrenArray[$idContent] = $children;
-		}		
+		}
 		return $children;
+	}
+	
+	/**
+	 * Convert a string to an associated array
+	 * @param	$str	string	The string to convert
+	 * @return	array			An associated array
+	 */
+	function stringToAssocArray($str)
+	{
+		$array = array();
+		$items = explode(',', $str);
+		foreach($items as $item) {
+			$itemArray = explode('=>', $item);
+			if(count($itemArray)==2) {
+				$array[$itemArray[0]] = $itemArray[1];
+			}
+		}
+		return $array;
 	}
 	
 	/**
@@ -198,9 +234,26 @@ class DataModel extends Model
 		{
 			array_push($aliases, $parentObject->get('alias'));
 		}
-		array_push($aliases, $this->get('alias'));
-		// print_r($aliases);
+		if($idContent != $this->idContent) {			
+			array_push($aliases, $this->getAlias($idContent));
+		} else {
+			array_push($aliases, $this->get('alias'));
+		}
 		return site_url($aliases);
+	}
+	
+	/**
+	 * Get the alias of a given content ID
+	 * @param	$idContent	int		The ID of the content to get the alias from
+	 * @return	string				The alias
+	 */
+	function getAlias($idContent)
+	{
+		$this->db->select('alias');
+		$this->db->where('id', $idContent);
+		$query = $this->db->get('content');
+		$result = $query->result();		
+		return $result[0]->alias;
 	}
 	
 	/**
