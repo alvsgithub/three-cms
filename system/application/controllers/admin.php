@@ -1180,7 +1180,7 @@ class Admin extends Controller
 						'settings'=>$this->AdminModel->getSettings()
 					);
 					$this->load->view('admin/modules/top.php');
-					$this->load->view('../modules/'.$module['folder'].'/'.$module['file'], $data);
+					$this->load->view('../../../assets/modules/'.$module['folder'].'/'.$module['file'], $data);
 					$this->load->view('admin/modules/bottom.php');
 				}
 			}

@@ -980,7 +980,7 @@ class AdminModel extends Model
         if(!isset($this->modules)) {
             $modules = array();
             // Modules get auto-detected according to the folders found in the modules-directory
-            $folders = glob('system/application/modules/*', GLOB_ONLYDIR);
+            $folders = glob('assets/modules/*', GLOB_ONLYDIR);
             foreach($folders as $folder) {            
                 if(file_exists($folder.'/name.php')) {
                     include_once($folder.'/name.php');                
