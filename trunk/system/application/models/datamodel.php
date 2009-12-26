@@ -497,11 +497,11 @@ class DataModel extends Model
 		foreach($folders as $folder) {
 			$a = explode('/', $folder);
 			$folderName = $a[count($a)-1];
-			$path = $folder.'/'.$folderName.'/'.ucfirst($folderName).'.php';
+			$path = $folder.'/'.$folderName.'.php';			
 			if(file_exists($path)) {
 				require_once($path);
 				$objectName = ucfirst($folderName);
-				$object = new $objectName;
+				$object = new $objectName;				
 				$smarty->assign($folderName, $object);
 			}
 		}
