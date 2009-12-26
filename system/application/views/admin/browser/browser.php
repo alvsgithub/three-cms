@@ -30,12 +30,15 @@
 						if(count($files) > 0) {
 							echo '<ul>';
 							foreach($files as $file) {
-								if(is_dir($file)) {
+								if(is_dir($file)) {									
 									$a = explode('/', $file);
 									$name = $a[count($a)-1];
-									echo '<li class="folder"><span rel="'.str_replace('/', '-', $file).'">'.$name.'</span>';
-									buildTree($file);
-									echo '</li>';
+									// Make sure it is not the modules or plugins-folder:
+									if($file != 'assets/modules' && $file != 'assets/plugins') {
+										echo '<li class="folder"><span rel="'.str_replace('/', '-', $file).'">'.$name.'</span>';
+										buildTree($file);
+										echo '</li>';
+									}
 								} 
 							}
 							echo '</ul>';

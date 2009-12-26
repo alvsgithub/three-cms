@@ -632,6 +632,7 @@ class Admin extends Controller
 					$contentData['name']        = $this->makeSafe($this->input->post('name'));
 					$contentData['alias']       = $this->input->post('alias');
 					$contentData['order']		= $this->input->post('order');
+					if(empty($contentData['name'])) { $contentData['name'] = 'Untitled'; }
 					// Check if the parent is not a descendant of this content and if the parent is not itself:					
 					if(!$this->AdminModel->checkDescendant($idContent, $idParent) && $idContent != $idParent) {
 						$contentData['id_content']  = $idParent;		// id_content is the parent of this content
