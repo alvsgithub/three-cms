@@ -99,20 +99,32 @@ A data object also has some functions to use:
 
 === children() ===
 
-*`function children($idContent = null)`*
+*`function children($idContent = null, $options = null)`*
 
 Get the children of this dataModel.
 
-*$idContent*: The ID of the parent to get the children from. If ID is set to null (default), the current dataobjects' ID is used
+*$idContent:* The ID of the parent to get the children from. If ID is set to null (default), the current dataobjects' ID is used
+
+*$options:* An associated array with options to use as filter. Because Smarty doesn't natively accept arrays, arrays should be formatted as a string. See the below examples how this works.
 
 This function returns an array with dataModels.
 
-Example:
+Example 1:
 
 {{{
 {* Create a simple menu: *}
 <ul>
   {foreach from=$dataObject->children() item=child}
+    <li><a href="{$child->getUrl()}">{$child->get('header')}</a></li>
+  {/foreach}
+</ul>
+}}}
+
+Example 2, only show pages which are placed on the root (id=0), and have the `show in menu`-option to on (1):
+{{{
+{* Create a simple menu: *}
+<ul>
+  {foreach from=$dataObject->children(0, 'show in menu=>1') item=child}
     <li><a href="{$child->getUrl()}">{$child->get('header')}</a></li>
   {/foreach}
 </ul>
