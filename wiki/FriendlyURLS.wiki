@@ -1,5 +1,6 @@
 #summary How to setup friendly URL's with Three CMS
 #labels Phase-Implementation,Phase-Deploy
+#sidebar TableOfContents
 
 = Setting up friendly URL's =
 
