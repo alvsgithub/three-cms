@@ -1,5 +1,6 @@
 #summary How to create plugins for Three CMS.
 #labels Phase-Implementation,Phase-Deploy
+#sidebar TableOfContents
 
 = Introduction =
 
