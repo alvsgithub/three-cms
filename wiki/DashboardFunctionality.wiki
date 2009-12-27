@@ -1,5 +1,6 @@
 #labels dashboard
 =Dashboard Functionality=
+#sidebar TableOfContents
 
 The dashboard is to add functionality to the CMS to do specific actions quickly. For instance: If someone would like to add a news item, instead of creating a new content-object under 'news', this can be done instantly from within the dashboard.
 
