@@ -7,3 +7,4 @@
     * [FriendlyURLS How to setup friendly URLS]
     * [PluginDevelopment Plugin Development]
     * [ModuleDevelopment Module Development]
+    * [Snippets Snippets to use in your templates]
