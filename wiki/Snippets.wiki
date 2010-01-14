@@ -1,0 +1,35 @@
+#summary Handy code snippets to use
+#labels Phase-Implementation,Phase-Deploy
+#sidebar TableOfContents
+
+= Introduction =
+
+Here are some snippets you can use in your template
+
+== Simple navigation ==
+
+A simple navigation in an unordered list where the link of the current page gets a class called 'active':
+
+{{{
+<ul>
+  {foreach from=$dataObject->children(0) item=child}
+    <li>
+      <a {if $child->get('idContent') eq $idContent}class="active" {/if}href="{$child->getUrl()}">{$child->get('header')}</a>
+    </li>
+  {/foreach}
+</ul>
+}}}
+
+== Language picker ==
+
+A simple language picker which leads to the homepage of the selected language. The current language gets a class called 'active':
+
+{{{
+<ul class="language">
+  {foreach from=$dataObject->getLanguages() item=language}
+    <li>
+      <a {if $language.id eq $idLanguage}class="active" {/if}href="{$language.url}">{$language.name}</a>
+    </li>
+  {/foreach}
+</ul>
+}}}
