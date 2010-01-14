@@ -1,5 +1,8 @@
             <div id="footer">
-                <a href="#">Three</a>
+                <p>
+                    <a target="_blank" href="http://www.threecms.com">&copy; <?php echo date('Y'); ?> - Three CMS</a>
+                    <span><?php echo $version; ?></span>
+                </p>
             </div>
         </div>
     </body>
