@@ -1,5 +1,8 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
+// Set version number:
+$config['version'] = 'beta 3';
+
 /*
 |--------------------------------------------------------------------------
 | Base Site URL

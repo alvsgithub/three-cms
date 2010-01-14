@@ -871,7 +871,8 @@ class Admin extends Controller
     function showFooter()
     {
         $data = array(
-            'lang'=>$this->lang
+            'lang'=>$this->lang,
+			'version'=>$this->config->item('version')
         );
 		$this->load->view('admin/footer.php', $data);
     }
