@@ -224,12 +224,14 @@ class DataModel extends Model
 	/**
 	 * Create the url to this dataobject.
 	 * @param	$idContent	int		The ID of the content to create the URL of, if left empty, the URL of the current page is returned.
+	 * @param	$idLanguage	int		The ID of the language to use for this URL. null for current language
 	 */
-	function getUrl($idContent = null)
+	function getUrl($idContent = null, $idLanguage = null)
 	{
-		$idContent = $idContent !== null ? $idContent : $this->idContent;
-		$parents = $this->parents($idContent);
-		$aliases = array($this->getLanguageCode());
+		$idContent    = $idContent !== null ? $idContent : $this->idContent;
+		$parents      = $this->parents($idContent);
+		$languageCode = $this->getLanguageCode($idLanguage);
+		$aliases      = array($languageCode);
 		foreach($parents as $parentObject)
 		{
 			array_push($aliases, $parentObject->get('alias'));
@@ -327,7 +329,8 @@ class DataModel extends Model
 		$query = $this->db->where('active', 1);
 		$query = $this->db->get('languages');
 		foreach($query->result_array() as $language) {
-			$language['url'] = site_url($language['code']);
+			$language['url']        = site_url($language['code']);
+			$language['currentUrl'] = $this->getUrl($this->idContent, $language['id']);
 			array_push($languages, $language);
 		}
 		return $languages;

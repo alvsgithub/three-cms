@@ -468,12 +468,20 @@ class Admin extends Controller
 						'name'=>$this->makeSafe($this->input->post('name'))
 					);
 					$id = $this->AdminModel->saveData('locales', $data, $this->input->post('id'));
-					echo $id;					
 					// Save the language-entries:
 					$locales = $this->AdminModel->getLocaleValues($id);
-					for($i=0; $i < count($locales); $i++) {
-						$locales[$i]['value'] = $this->makeSafe($this->input->post('language_'.$locales[$i]['id']));
+					for($i=0; $i < count($locales); $i++) {						
+						// $locales[$i]['value'] = $this->makeSafe($_POST['language_'.$locales[$i]['id']]);
+						// $locales[$i]['value'] = $this->makeSafe($this->input->post('language_'.$locales[$i]['id']));
+						
+						// TODO: Weird issue: when the makeSafe()-function is used, an empty string returns when characters like ä or é are present. But when saving regular content, the makeSafe()-function works just fine.
+						$locales[$i]['value'] = htmlentities($this->input->post('language_'.$locales[$i]['id']), ENT_QUOTES, 'ISO-8859-15');
+						// echo htmlentities($this->input->post('language_'.$locales[$i]['id']), ENT_QUOTES, 'ISO-8859-15');
 					}
+					
+					// print_r($locales);
+					// die();
+					
 					$this->AdminModel->saveLocaleValues($id, $locales);
 					redirect(site_url(array('admin', 'manage', 'locales')));					
 					break;
