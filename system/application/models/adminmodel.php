@@ -981,17 +981,19 @@ class AdminModel extends Model
             $modules = array();
             // Modules get auto-detected according to the folders found in the modules-directory
             $folders = glob('assets/modules/*', GLOB_ONLYDIR);
-            foreach($folders as $folder) {            
-                if(file_exists($folder.'/name.php')) {
-                    include_once($folder.'/name.php');                
-                    if(isset($info)) {                    
-                        // This is a valid module. Add it to the list
-                        $info['alias']  = $this->makeAlias($info['name']);
-                        $info['path']   = $folder;
-                        $a = explode('/', $folder);
-                        $info['folder'] = $a[count($a)-1];
-                        array_push($modules, $info);
-                        unset($info);
+            if($folders != false) {
+                foreach($folders as $folder) {            
+                    if(file_exists($folder.'/name.php')) {
+                        include_once($folder.'/name.php');                
+                        if(isset($info)) {                    
+                            // This is a valid module. Add it to the list
+                            $info['alias']  = $this->makeAlias($info['name']);
+                            $info['path']   = $folder;
+                            $a = explode('/', $folder);
+                            $info['folder'] = $a[count($a)-1];
+                            array_push($modules, $info);
+                            unset($info);
+                        }
                     }
                 }
             }

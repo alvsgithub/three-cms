@@ -482,30 +482,34 @@ class DataModel extends Model
 		// Assign modules:
 		// Modules get auto-detected according to the folders found in the modules-directory
         $folders = glob('assets/modules/*', GLOB_ONLYDIR);
-		foreach($folders as $folder) {
-			$a = explode('/', $folder);
-			$folderName = $a[count($a)-1];
-			$path = $folder.'/'.$folderName.'.frontend.php';
-			if(file_exists($path)) {
-				require_once($path);			
-				$objectName = ucfirst($folderName);
-				$object = new $objectName;
-				$smarty->assign($folderName, $object);
+		if($folders != false) {
+			foreach($folders as $folder) {
+				$a = explode('/', $folder);
+				$folderName = $a[count($a)-1];
+				$path = $folder.'/'.$folderName.'.frontend.php';
+				if(file_exists($path)) {
+					require_once($path);			
+					$objectName = ucfirst($folderName);
+					$object = new $objectName;
+					$smarty->assign($folderName, $object);
+				}
 			}
 		}
 		
 		// Assign plugins:
 		// Plugins are the same as modules, only the exist of one file and are only available on the frontend:
 		$folders = glob('assets/plugins/*', GLOB_ONLYDIR);
-		foreach($folders as $folder) {
-			$a = explode('/', $folder);
-			$folderName = $a[count($a)-1];
-			$path = $folder.'/'.$folderName.'.php';			
-			if(file_exists($path)) {
-				require_once($path);
-				$objectName = ucfirst($folderName);
-				$object = new $objectName;				
-				$smarty->assign($folderName, $object);
+		if($folders != false) {
+			foreach($folders as $folder) {
+				$a = explode('/', $folder);
+				$folderName = $a[count($a)-1];
+				$path = $folder.'/'.$folderName.'.php';			
+				if(file_exists($path)) {
+					require_once($path);
+					$objectName = ucfirst($folderName);
+					$object = new $objectName;				
+					$smarty->assign($folderName, $object);
+				}
 			}
 		}
 		
