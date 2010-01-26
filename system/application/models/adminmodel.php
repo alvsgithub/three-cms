@@ -506,7 +506,7 @@ class AdminModel extends Model
         
         // TODO: Make this query Active Record Style:
         $pf = $this->db->dbprefix;
-        $sql = 'SELECT A.`id_option`, C.`name`, C.`type`, C.`default_value`, C.`multilanguage` FROM
+        $sql = 'SELECT A.`id_option`, C.`name`, C.`description`, C.`tooltip`, C.`type`, C.`options`, C.`default_value`, C.`multilanguage` FROM
             `'.$pf.'dataobjects_options` A,
             `'.$pf.'templates` B,
             `'.$pf.'options` C

@@ -62,9 +62,6 @@ $(function(){
 		return false;
 	});
 	$(".module ul.tabMenu li:first a").click();
-	
-	// Datepicker:
-	$(".datePicker").dynDateTime();
 });
 
 function setParentSelection()
