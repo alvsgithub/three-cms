@@ -180,7 +180,7 @@
 							case 'date' :
 								{
 									// TODO: Add a datapicker
-									echo '<input type="text" name="'.$name.'" value="'.$value.'" class="'.$class.'" />';
+									echo '<input type="text" name="'.$name.'" value="'.$value.'" class="'.$class.' datePicker" />';
 									break;
 								}
 							case 'time' :
