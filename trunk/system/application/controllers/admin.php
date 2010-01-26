@@ -341,10 +341,14 @@ class Admin extends Controller
 				{
 					$data = array(
 						'name'=>$this->makeSafe($this->input->post('name')),
+						'description'=>$this->makeSafe($this->input->post('description')),
+						'tooltip'=>$this->makeSafe($this->input->post('tooltip')),
 						'type'=>$this->input->post('type'),
+						'options'=>$this->makeSafe($this->input->post('options')),
 						'default_value'=>$this->makeSafe($this->input->post('default_value')),
 						'multilanguage'=>isset($_POST['multilanguage']) ? 1 : 0
 					);
+					if(empty($data['description'])) { $data['description'] = ucfirst($data['name']); }
 					$this->AdminModel->saveData('options', $data, $this->input->post('id'));
 					redirect(site_url(array('admin', 'manage', 'options')));
 					break;
@@ -611,6 +615,12 @@ class Admin extends Controller
 				{
 					// This function is used to keep the session allive. It is called every 5 minutes.
 					echo '1';
+					break;
+				}
+			case 'loadoptions' :
+				{
+					$idTemplate = $this->input->post('template');
+					echo $idTemplate;
 					break;
 				}
 		}

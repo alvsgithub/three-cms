@@ -68,6 +68,7 @@
 	$lang['dialog_parent_descendant']	= 'You cannot set a descendant of this document as the parent of this document!';
 	$lang['dialog_new_folder']			= 'Please enter the name of the new folder:';
 	$lang['dialog_no_folder']			= 'Please select a folder to perform this action.';
+	$lang['dialog_change_template']     = 'Are you sure you want to change the template of this page? Options that do not correspondent with the chosen template will be lost!';
 	
 	// Options:
 	$lang['option_small_text']			= 'Small Text';
@@ -90,6 +91,9 @@
 	$lang['system_language_active']		= 'Active';
 	$lang['system_locale_name']			= 'Name';
 	$lang['system_options_name']		= 'Name';
+	$lang['system_options_description']	= 'Description';
+	$lang['system_options_tooltip']		= 'Tooltip';
+	$lang['system_options_options']		= 'Options';
 	$lang['system_options_type']		= 'Type';
 	$lang['system_options_default']		= 'Default Value';
 	$lang['system_options_multi']		= 'Multilingual';

@@ -8,6 +8,14 @@
 					<td><input type="text" name="name" value="<?php echo $values['name']; ?>" /></td>
 				</tr>
 				<tr>
+					<th><?php echo $lang->line('system_options_description'); ?></th>
+					<td><input type="text" name="description" value="<?php echo $values['description']; ?>" /></td>
+				</tr>
+				<tr>
+					<th><?php echo $lang->line('system_options_tooltip'); ?></th>
+					<td><input type="text" name="tooltip" value="<?php echo $values['tooltip']; ?>" /></td>
+				</tr>
+				<tr>
 					<th><?php echo $lang->line('system_options_type'); ?></th>
 					<td>
 						<select name="type">
@@ -29,12 +37,19 @@
 								drawOption('selectbox', $lang, $values['type']);
 								drawOption('date', $lang, $values['type']);
 								drawOption('time', $lang, $values['type']);
-								drawOption('content', $lang, $values['type']);
-								drawOption('content_of_type', $lang, $values['type']);
+								
+								// TODO: Custom options:
+								
+								// drawOption('content', $lang, $values['type']);
+								// drawOption('content_of_type', $lang, $values['type']);								
 							?>
 						</select>
 					</td>
 				</tr>
+				<tr>
+					<th><?php echo $lang->line('system_options_options'); ?></th>
+					<td><textarea name="options"><?php echo $values['options']; ?></textarea>
+				<tr>
 				<tr>
 					<th><?php echo $lang->line('system_options_default'); ?></th>
 					<td><textarea name="default_value"><?php echo $values['default_value']; ?></textarea>

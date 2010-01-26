@@ -91,4 +91,35 @@ $(function(){
 	$("#message").click(function(){
 		$(this).slideUp("slow");
 	});
+	
+	// Datepicker:
+	$(".datePicker").dynDateTime();
+	
+	// Tooltips:
+	$("span.tooltip").hover(function(){
+		pos = $(this).position();
+		$(this).next().css({left: pos.left - 205, top: pos.top}).show();
+	}, function(){
+		$(this).next().hide();
+	});
+	
+	// TODO: When changing template, load the options according to the chosen template:
+	/*
+	$("select[name=template]").change(function(){		
+		var ok = confirm(change_template);
+		if(ok) {
+			idTemplate = $(this).val();
+			// AJAX-call to load the correct options:			
+			$("#loading").show();
+			$("tr.option").remove();
+			$.post(baseURL + 'index.php/admin/ajax/loadoptions', {template: idTemplate}, function(data){
+				$("#loading").hide();
+				$("tr.optionsStart").after(data);				
+			});
+		} else {
+			
+		}
+		return ok;
+	});
+	*/
 });

@@ -74,19 +74,20 @@
 						?>
 					</td>
 				</tr>
-				<tr class="delimiter">
+				<tr class="delimiter optionsStart">
 					<td colspan="2">&nbsp;</td>
 				</tr>
 				<?php
 					// TODO: Some serious optimization here. There are now 3 foreach-loops stacked in each other!
 					
 					// Show the content fields:
-					foreach($contentData['content'] as $item) {
-				?>
-				<tr class="option">
-					<th><?php echo ucfirst($item['name']); ?>:</th>
-					<td>
-				<?php
+					foreach($contentData['content'] as $item) {						
+						echo '<tr class="option"><th>';
+						echo ucfirst($item['description']).':';
+						if(!empty($item['tooltip'])) {
+							echo '<span class="tooltip">?</span><span class="tooltipContent">'.$item['tooltip'].'</span></th>';
+						}
+						echo '<td>';
 					$optionID = $item['id_option'];
 					// See if this item is multilingual:
 					if($item['multilanguage']==1) {
@@ -152,7 +153,7 @@
 								}
 							case 'dropdown' :
 								{
-									$values = explode('||', $item['default_value']);
+									$values = explode('||', $item['options']);
 									echo '<select name="'.$name.'">';
 									foreach($values as $option) {
 										$optionArray = explode('==', $option);
@@ -166,7 +167,7 @@
 								}
 							case 'selectbox' :
 								{
-									$values = explode('||', $item['default_value']);
+									$values = explode('||', $item['options']);
 									$valueArray = explode(';', $value);
 									foreach($values as $option) {
 										$optionArray = explode('==', $option);
@@ -189,6 +190,10 @@
 									echo '<input type="text" name="'.$name.'" value="'.$value.'" class="'.$class.'" />';
 									break;
 								}
+							
+							// TODO: Custom options:
+							
+							/*
 							case 'content' :
 								{
 									// TODO: Add a dropdown where to select a content type
@@ -199,6 +204,7 @@
 									// TODO: Add a dropdown where te select content of a specific dataObject
 									break;
 								}
+							*/
 						}
 					}
 				?>
@@ -228,7 +234,7 @@
 							</tr>
 						';
 					}
-				?>
+				?>				
 				<tr>
 					<th>&nbsp;</th>
 					<td>
@@ -244,6 +250,7 @@
 				var dialog_parent_same_id	 = '<?php echo $lang->line('dialog_parent_same_id'); ?>';
 				var dialog_parent_descendant = '<?php echo $lang->line('dialog_parent_descendant'); ?>';
 				var content_server_error     = '<?php echo $lang->line('content_server_error'); ?>';
+				var change_template          = '<?php echo $lang->line('dialog_change_template'); ?>';
 			</script>
 			<script type="text/javascript" src="<?php echo base_url(); ?>system/application/views/admin/js/content.js"></script>
 		</form>
