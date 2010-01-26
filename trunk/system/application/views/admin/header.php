@@ -3,7 +3,10 @@
     <head>
         <title>Three CMS :: <?php echo $lang->line('default_admin_panel'); ?></title>
         <link rel="stylesheet" type="text/css" media="screen,tv,projection" href="<?php echo base_url(); ?>system/application/views/admin/css/screen.css" />
+		<link rel="stylesheet" type="text/css" media="screen,tv,projection" href="<?php echo base_url(); ?>system/application/views/admin/css/calendar-blue.css" />
         <script type="text/javascript" src="<?php echo base_url(); ?>system/application/views/admin/js/jquery-1.3.2.min.js"></script>
+		<script type="text/javascript" src="<?php echo base_url(); ?>system/application/views/admin/js/jquery.dynDateTime.min.js"></script>
+		<script type="text/javascript" src="<?php echo base_url(); ?>system/application/views/admin/js/calendar-en.js"></script>
 		<script type="text/javascript" src="<?php echo base_url(); ?>system/application/views/admin/js/jquery.color.js"></script>
         <script type="text/javascript" src="<?php echo base_url(); ?>system/application/views/admin/ckeditor/ckeditor.js"></script>
         <script type="text/javascript">
