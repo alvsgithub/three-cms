@@ -93,7 +93,16 @@ $(function(){
 	});
 	
 	// Datepicker:
-	$(".datePicker").dynDateTime();
+	$(".datePicker").dynDateTime({
+		ifFormat: date_format,
+		daFormat: date_format		
+	});
+	
+	$(".timePicker").dynDateTime({
+		ifFormat: "%H:%M",
+		daFormat: "%H:%M",
+		showsTime: true
+	});
 	
 	// Tooltips:
 	$("span.tooltip").hover(function(){

@@ -51,6 +51,10 @@
 					<th>Default page ID:</th>
 					<td><input type="text" name="default_page_id" value="<?php settingValue($settings, 'default_page_id'); ?>" /></td>
 				</tr>
+				<tr>
+					<th>Date format:</th>
+					<td><input type="text" name="date_format" value="<?php settingValue($settings, 'date_format'); ?>" /></td>
+				</tr>
 				<tr class="delimiter">
 					<td colspan="2">&nbsp;</td>
 				</tr>

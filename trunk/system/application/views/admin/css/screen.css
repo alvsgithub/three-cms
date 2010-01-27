@@ -72,6 +72,9 @@ td.content_actions a { text-indent: 0; padding: 5px; padding-left: 26px; width: 
 span.tooltip { float: right; display: block; padding: 0 3px; border: 1px solid #0084ff; font-size: 0.8em; margin-left: 10px; cursor: help; }
 span.tooltipContent { position: absolute; color: #999; background: #fff; border: 1px solid #999; padding: 5px; font-size: 0.8em; right: 0; width: 200px; display: none; }
 
+/* Datepicker: */
+input.datePicker { background: url(calendar.png) 283px 0 no-repeat; }
+
 table input[type=text] { width: 300px; }
 textarea { width: 400px; height: 100px; }
 input[readonly] { color: #999; font-weight: bold; }

@@ -29,7 +29,7 @@ CREATE TABLE IF NOT EXISTS `[[PREFIX]]ranks_modules` (`id` INT(11) NOT NULL AUTO
 
 -- Settings (+default settings):
 CREATE TABLE IF NOT EXISTS `[[PREFIX]]settings` (`id` int(11) NOT NULL AUTO_INCREMENT, `name` tinytext NOT NULL, `value` text NOT NULL, PRIMARY KEY (`id`));
-INSERT INTO `[[PREFIX]]settings` (`id`, `name`, `value`) VALUES (1, 'default_language', '1'), (2, 'default_page_id', '1'), (3, 'site_name', 'Empty site'), (4, 'base_url', '[[SITEADDRESS]]');
+INSERT INTO `[[PREFIX]]settings` (`id`, `name`, `value`) VALUES (1, 'default_language', '1'), (2, 'default_page_id', '1'), (3, 'site_name', 'Empty site'), (4, 'base_url', '[[SITEADDRESS]]'), (5, 'date_format', '%m/%d/%Y');
 
 -- Templates:
 CREATE TABLE IF NOT EXISTS `[[PREFIX]]templates` (`id` int(11) NOT NULL AUTO_INCREMENT, `name` tinytext NOT NULL, `id_dataobject` int(11) NOT NULL, `templatefile` tinytext NOT NULL, `root` tinyint(1) NOT NULL, `type` enum('page','content') NOT NULL, PRIMARY KEY (`id`));
