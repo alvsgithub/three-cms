@@ -696,6 +696,12 @@ class Admin extends Controller
 											$value = isset($_POST[$name]) ? $this->input->post($name) : '';											
 											break;
 										}
+										case 'date' :
+										{
+											// TODO: Should date be formatted to timestamp?
+											$value = isset($_POST[$name]) ? $this->makeSafe($this->input->post($name)) : '';
+											break;
+										}										
 										default:
 										{
 											$value = isset($_POST[$name]) ? $this->makeSafe($this->input->post($name)) : '';

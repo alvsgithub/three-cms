@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Machine: localhost
--- Genereertijd: 16 Dec 2009 om 11:01
+-- Genereertijd: 27 Jan 2010 om 11:10
 -- Serverversie: 5.1.36
 -- PHP-Versie: 5.3.0
 
@@ -84,7 +84,7 @@ CREATE TABLE IF NOT EXISTS `three_dataobjects_options` (
   `id_option` int(11) NOT NULL,
   `order` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=103 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=109 ;
 
 --
 -- Gegevens worden uitgevoerd voor tabel `three_dataobjects_options`
@@ -99,11 +99,12 @@ INSERT INTO `three_dataobjects_options` (`id`, `id_dataobject`, `id_option`, `or
 (93, 5, 3, 1),
 (92, 5, 2, 0),
 (86, 1, 1, 0),
-(101, 6, 8, 3),
-(100, 6, 12, 2),
-(99, 6, 13, 1),
-(98, 6, 2, 0),
-(102, 6, 3, 4);
+(107, 6, 8, 4),
+(106, 6, 12, 3),
+(105, 6, 14, 2),
+(104, 6, 13, 1),
+(103, 6, 2, 0),
+(108, 6, 3, 5);
 
 -- --------------------------------------------------------
 
@@ -189,25 +190,29 @@ INSERT INTO `three_locales_values` (`id`, `id_locale`, `id_language`, `value`) V
 CREATE TABLE IF NOT EXISTS `three_options` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` tinytext NOT NULL,
+  `description` tinytext NOT NULL,
+  `tooltip` tinytext NOT NULL,
   `type` enum('small_text','large_text','rich_text','url','image','file','boolean','dropdown','selectbox','date','time','content','content_of_type') NOT NULL,
+  `options` text NOT NULL,
   `default_value` text NOT NULL,
   `multilanguage` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=14 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=15 ;
 
 --
 -- Gegevens worden uitgevoerd voor tabel `three_options`
 --
 
-INSERT INTO `three_options` (`id`, `name`, `type`, `default_value`, `multilanguage`) VALUES
-(1, 'title', 'small_text', '', 1),
-(2, 'header', 'small_text', '', 1),
-(3, 'content', 'rich_text', '', 1),
-(6, 'headerImage', 'image', '', 0),
-(7, 'Show in menu', 'boolean', '', 0),
-(8, 'summary', 'large_text', '', 1),
-(12, 'author', 'small_text', '', 0),
-(13, 'date', 'date', '', 0);
+INSERT INTO `three_options` (`id`, `name`, `description`, `tooltip`, `type`, `options`, `default_value`, `multilanguage`) VALUES
+(1, 'title', 'Title', '', 'small_text', '', '', 1),
+(2, 'header', 'Header', '', 'small_text', '', '', 1),
+(3, 'content', 'Content', '', 'rich_text', '', '', 1),
+(6, 'headerImage', 'HeaderImage', '', 'image', '', '', 0),
+(7, 'Show in menu', 'Show in menu', '', 'boolean', '', '', 0),
+(8, 'summary', 'Summary', '', 'large_text', '', '', 1),
+(12, 'author', 'Author', '', 'small_text', '', '', 0),
+(13, 'date', 'Date', '', 'date', '', '', 0),
+(14, 'time', 'Time', 'The time of this item', 'time', '', '', 0);
 
 -- --------------------------------------------------------
 
@@ -264,7 +269,7 @@ CREATE TABLE IF NOT EXISTS `three_settings` (
   `name` tinytext NOT NULL,
   `value` text NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=6 ;
 
 --
 -- Gegevens worden uitgevoerd voor tabel `three_settings`
@@ -274,7 +279,8 @@ INSERT INTO `three_settings` (`id`, `name`, `value`) VALUES
 (1, 'default_language', '1'),
 (2, 'default_page_id', '50'),
 (3, 'site_name', 'Three Test Site'),
-(4, 'base_url', 'http://localhost/three/');
+(4, 'base_url', 'http://localhost/three/'),
+(5, 'date_format', '%m/%d/%Y');
 
 -- --------------------------------------------------------
 
@@ -460,8 +466,8 @@ INSERT INTO `three_values` (`id`, `id_content`, `id_option`, `id_language`, `val
 (340, 56, 6, 2, ''),
 (341, 57, 2, 1, 'Nieuw CMS'),
 (342, 57, 2, 2, 'New CMS'),
-(343, 57, 13, 1, '25-11-2009'),
-(344, 57, 13, 2, '25-11-2009'),
+(343, 57, 13, 1, '01/27/2010'),
+(344, 57, 13, 2, '01/27/2010'),
 (345, 57, 12, 1, 'Giel Berkers'),
 (346, 57, 12, 2, 'Giel Berkers'),
 (347, 57, 3, 1, '<p>\n	Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec sollicitudin risus leo, bibendum semper mauris. Donec vel tellus vitae felis rutrum scelerisque. Cras luctus molestie tempor. Maecenas a porta metus. Pellentesque auctor mattis tincidunt. Proin porttitor nulla et turpis euismod egestas.</p>\n<p>\n	Maecenas sagittis commodo libero eu consectetur. Nulla et ante enim, a sollicitudin mi. Vestibulum lectus est, aliquet eu pharetra a, laoreet ut elit. Phasellus porttitor, eros eget adipiscing malesuada, massa nunc tincidunt elit, eget iaculis magna orci luctus eros.</p>\n'),

@@ -187,7 +187,7 @@
 							case 'time' :
 								{
 									// TODO: Add a timepicker
-									echo '<input type="text" name="'.$name.'" value="'.$value.'" class="'.$class.'" />';
+									echo '<input type="text" name="'.$name.'" value="'.$value.'" class="'.$class.' timePicker" />';
 									break;
 								}
 							
@@ -251,6 +251,7 @@
 				var dialog_parent_descendant = '<?php echo $lang->line('dialog_parent_descendant'); ?>';
 				var content_server_error     = '<?php echo $lang->line('content_server_error'); ?>';
 				var change_template          = '<?php echo $lang->line('dialog_change_template'); ?>';
+				var date_format              = '<?php echo $settings['date_format']; ?>';
 			</script>
 			<script type="text/javascript" src="<?php echo base_url(); ?>system/application/views/admin/js/content.js"></script>
 		</form>
