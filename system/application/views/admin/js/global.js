@@ -78,7 +78,7 @@ function initializeTree()
 	$("#tree span.icon").click(function(){
 		// There is clicked on the icon. Expand the tree:
 		iconClicked = true;
-		parent = $(this).parent().parent();
+		var parent = $(this).parent().parent();
 		id     = $('span.id:first var', parent).text();	// The ID of this content item
 		// See if this parent has children:
 		if(parent.hasClass("hasChildren")) {
@@ -103,7 +103,7 @@ function initializeTree()
 	$("#tree span.name").click(function(){
 		// Only select this item if there is not clicked on the icon:
 		if(!iconClicked) {
-			parent = $(this).parent();
+			var parent = $(this).parent();
 			id     = $('span.id:first var', parent).text();	// The ID of this content item
 			if(!parentSelection) {
 				$("#tree span.name").removeClass("selected");

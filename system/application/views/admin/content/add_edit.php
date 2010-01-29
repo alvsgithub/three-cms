@@ -5,7 +5,7 @@
 			<table>
 				<tr>
 					<th><?php echo $lang->line('content_name'); ?>:</th>
-					<td><input type="text" name="name" value="<?php echo $contentData['name']; ?>" /></td>
+					<td><input type="text" name="name" class="required" value="<?php echo $contentData['name']; ?>" /></td>
 				</tr>
 				<tr>
 					<th><?php echo $lang->line('content_alias'); ?>:</th>
@@ -84,6 +84,7 @@
 					foreach($contentData['content'] as $item) {						
 						echo '<tr class="option"><th>';
 						echo ucfirst($item['description']).':';
+						// The tooltip:
 						if(!empty($item['tooltip'])) {
 							echo '<span class="tooltip">?</span><span class="tooltipContent">'.$item['tooltip'].'</span></th>';
 						}
@@ -99,7 +100,8 @@
 						$languageID = $item['multilanguage']==1 ? $contentData['languages'][$i]['id'] : 0;	// 0 stands for non-multilanguage
 						$name       = 'input_'.$optionID.'_'.$languageID;
 						$value      = '';
-						$class		= 'language_'.$languageID;
+						$class		= 'language_'.$languageID;						
+						if($item['required']==1) { $class .= ' required'; }						
 						foreach($item['value'] as $valueItem) {
 							if($languageID==0) {
 								if($valueItem['id_language']==$settings['default_language']) {
@@ -180,13 +182,13 @@
 								}
 							case 'date' :
 								{
-									// TODO: Add a datapicker
+									// Add a datapicker
 									echo '<input type="text" name="'.$name.'" value="'.$value.'" class="'.$class.' datePicker" />';
 									break;
 								}
 							case 'time' :
 								{
-									// TODO: Add a timepicker
+									// Add a timepicker
 									echo '<input type="text" name="'.$name.'" value="'.$value.'" class="'.$class.' timePicker" />';
 									break;
 								}
@@ -220,7 +222,7 @@
 					$moduleFound = false;
 					foreach($modules as $module) {
 						$moduleName = strtolower($module['name']);
-						$path = 'system/application/modules/'.$moduleName.'/'.$moduleName.'.content.edit.php';
+						$path = $module['path'].'/'.$moduleName.'.content.edit.php';
 						if(file_exists($path)) {
 							include_once($path);
 							$moduleFound = true;
@@ -252,6 +254,7 @@
 				var content_server_error     = '<?php echo $lang->line('content_server_error'); ?>';
 				var change_template          = '<?php echo $lang->line('dialog_change_template'); ?>';
 				var date_format              = '<?php echo $settings['date_format']; ?>';
+				var dialog_required			 = '<?php echo $lang->line('dialog_required'); ?>';
 			</script>
 			<script type="text/javascript" src="<?php echo base_url(); ?>system/application/views/admin/js/content.js"></script>
 		</form>

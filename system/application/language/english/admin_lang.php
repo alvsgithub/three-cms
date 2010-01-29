@@ -69,6 +69,7 @@
 	$lang['dialog_new_folder']			= 'Please enter the name of the new folder:';
 	$lang['dialog_no_folder']			= 'Please select a folder to perform this action.';
 	$lang['dialog_change_template']     = 'Are you sure you want to change the template of this page? Options that do not correspondent with the chosen template will be lost!';
+	$lang['dialog_required']			= 'Some required fields are left empty!';
 	
 	// Options:
 	$lang['option_small_text']			= 'Small Text';
@@ -97,6 +98,7 @@
 	$lang['system_options_type']		= 'Type';
 	$lang['system_options_default']		= 'Default Value';
 	$lang['system_options_multi']		= 'Multilingual';
+	$lang['system_options_required']	= 'Required';
 	$lang['system_template_allowed']	= 'Allowed Child Templates';
 	$lang['system_template_name']		= 'Name';
 	$lang['system_template_dataobject'] = 'Data Object';
