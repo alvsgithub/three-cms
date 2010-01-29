@@ -75,6 +75,9 @@ span.tooltipContent { position: absolute; color: #999; background: #fff; border:
 /* Datepicker: */
 input.datePicker { background: url(calendar.png) 283px 0 no-repeat; }
 
+/* Required fields: */
+input.error { border-color: #f00; background: #fee; }
+
 table input[type=text] { width: 300px; }
 textarea { width: 400px; height: 100px; }
 input[readonly] { color: #999; font-weight: bold; }

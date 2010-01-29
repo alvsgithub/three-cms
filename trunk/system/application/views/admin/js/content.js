@@ -41,49 +41,62 @@ $(function(){
 	
 	// Override submit-function for ajax-functionality:
 	$("form").submit(function(){
-		// Disable the submit button, and make the loading bar visible:
-		$("input[type=submit]", this).attr("disabled", "disabled");
-		$("img.loading").show();		
-		// Get all the parameters and post them:
-		data = {};
-		$("input, select", this).each(function(){
-			// Workaround for checkboxes:
-			if($(this).attr("type")=="checkbox") {
-				if($(this).attr("checked")) {
+		// Check if all required fields are filled in:
+		ok = true;
+		$(".required", this).each(function(){			
+			$(this).removeClass("error");
+			if($(this).val()=='') {
+				$(this).addClass("error");
+				ok = false;
+			}
+		});
+		if(ok) {
+			// Disable the submit button, and make the loading bar visible:
+			$("input[type=submit]", this).attr("disabled", "disabled");
+			$("img.loading").show();		
+			// Get all the parameters and post them:
+			data = {};
+			$("input, select", this).each(function(){
+				// Workaround for checkboxes:
+				if($(this).attr("type")=="checkbox") {
+					if($(this).attr("checked")) {
+						data[$(this).attr("name")] = $(this).val();
+					}
+				} else {
 					data[$(this).attr("name")] = $(this).val();
 				}
-			} else {
-				data[$(this).attr("name")] = $(this).val();
-			}
-		});
-		// Textareas are done by ckEditor, so we must grab the data from ckEditor instead of the textarea itself.
-		$("textarea", this).each(function(){
-			instance = CKEDITOR.instances[$(this).attr("name")];
-			if(instance != undefined) {
-				// ckEditor instance:
-				data[instance.name] = instance.getData();
-			} else {
-				// Regular textarea:
-				data[$(this).attr("name")] = $(this).val();
-			}
-		});
-		// Set the ajax-parameter to true, so the admin-part knows not to redirect after storage:
-		data.ajax = true;
-		// Send POST:
-		$.post($(this).attr("action"), data, function(responseStr){
-			response = responseStr.split(';');
-			if(response.length==2) {
-				// Reload the tree:
-				$("#tree").load(baseURL + 'index.php/admin/ajax/fulltree #tree>*', function(){
-					initializeTree();
-				});
-				$("#message").html('<p class="ok">' + response[1] + '</p>').slideDown("slow");				
-			} else {
-				alert(content_server_error);
-			}
-			$("input[type=submit]").removeAttr("disabled");
-			$("img.loading").hide();
-		});
+			});
+			// Textareas are done by ckEditor, so we must grab the data from ckEditor instead of the textarea itself.
+			$("textarea", this).each(function(){
+				instance = CKEDITOR.instances[$(this).attr("name")];
+				if(instance != undefined) {
+					// ckEditor instance:
+					data[instance.name] = instance.getData();
+				} else {
+					// Regular textarea:
+					data[$(this).attr("name")] = $(this).val();
+				}
+			});
+			// Set the ajax-parameter to true, so the admin-part knows not to redirect after storage:
+			data.ajax = true;
+			// Send POST:
+			$.post($(this).attr("action"), data, function(responseStr){
+				response = responseStr.split(';');
+				if(response.length==2) {
+					// Reload the tree:
+					$("#tree").load(baseURL + 'index.php/admin/ajax/fulltree #tree>*', function(){
+						initializeTree();
+					});
+					$("#message").html('<p class="ok">' + response[1] + '</p>').slideDown("slow");				
+				} else {
+					alert(content_server_error);
+				}
+				$("input[type=submit]").removeAttr("disabled");
+				$("img.loading").hide();
+			});
+		} else {
+			alert(dialog_required);
+		}
 		// Return false:
 		return false;
 	});

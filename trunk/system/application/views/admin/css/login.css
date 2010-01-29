@@ -9,11 +9,11 @@ html { font-family: arial, helvetica, sans-serif; font-size: 62.5%; cursor: defa
 }
 
 h1 { border-bottom: 1px dotted #ccc; margin-bottom: 10px; }
-label { display: block; font-size: 1.2em; float: left; width: 100px; padding-top: 2px; margin-bottom: 3px; }
+label { clear: left; display: block; font-size: 1.2em; float: left; width: 100px; padding-top: 2px; margin-bottom: 3px; height: 17px; }
 form { margin-left: 76px; }
-input { margin-bottom: 3px; }
+input { margin-bottom: 3px; height: 17px; }
 input.inputField { width: 120px; }
-input.submit { margin-left: 100px; padding: 0 5px; }
+input.submit { margin-left: 100px; padding: 0 5px; height: auto; }
 
 p.error { font-size: 1.2em; font-weight: bold; color: #800; margin-top: 10px; text-align: center; }
 

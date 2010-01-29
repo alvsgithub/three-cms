@@ -22,6 +22,8 @@
 class AdminModel extends Model
 {
     var $modules;           // Modules var for caching
+    // TODO: Make Singleton of settings?
+    var $settings;          // Settings var for caching
     
     function AdminModel()
     {
@@ -506,7 +508,7 @@ class AdminModel extends Model
         
         // TODO: Make this query Active Record Style:
         $pf = $this->db->dbprefix;
-        $sql = 'SELECT A.`id_option`, C.`name`, C.`description`, C.`tooltip`, C.`type`, C.`options`, C.`default_value`, C.`multilanguage` FROM
+        $sql = 'SELECT A.`id_option`, C.`name`, C.`description`, C.`tooltip`, C.`type`, C.`options`, C.`default_value`, C.`multilanguage`, C.`required` FROM
             `'.$pf.'dataobjects_options` A,
             `'.$pf.'templates` B,
             `'.$pf.'options` C
@@ -598,34 +600,44 @@ class AdminModel extends Model
         }
         // Store the optionValues:
         foreach($contentData['content'] as $item) {
-            $idOption = $item['id_option'];
+            $idOption     = $item['id_option'];
+            $multiLingual = $item['multilanguage']==1;
             foreach($item['value'] as $valueItem) {
                 $idLanguage = $valueItem['id_language'];
-                $value      = $valueItem['value'];
-                // Now we have idContent, idOption, idLanguage and the value. Enough to store this item in the database:
-                // See if this value already exists in the database. If so, update it, else insert a new value.
-                // Don't default delete all values and insert new ones, because if there would be an error when inserting
-                // new data, the original data will be lost. Although this is not bound to happen, it still feels safe to
-                // have a little extra safety... ;-)
-                $this->db->where('id_content', $idContent);
-                $this->db->where('id_option', $idOption);
-                $this->db->where('id_language', $idLanguage);
-                $this->db->from('values');                
-                if($this->db->count_all_results()==0) {
-                    // Insert:
-                    $valueArray = array(
-                        'id_content'=>$idContent,
-                        'id_option'=>$idOption,
-                        'id_language'=>$idLanguage,
-                        'value'=>$value
-                    );
-                    $this->db->insert('values', $valueArray);
+                // See if this item is multilingual, if not, it should only be saved with the default language:
+                if($multiLingual) {
+                    $ok = true;
                 } else {
-                    // Update:
+                    $settings = $this->getSettings();
+                    $ok = $idLanguage == $settings['default_language'];
+                }
+                if($ok) {
+                    $value      = $valueItem['value'];
+                    // Now we have idContent, idOption, idLanguage and the value. Enough to store this item in the database:
+                    // See if this value already exists in the database. If so, update it, else insert a new value.
+                    // Don't default delete all values and insert new ones, because if there would be an error when inserting
+                    // new data, the original data will be lost. Although this is not bound to happen, it still feels safe to
+                    // have a little extra safety... ;-)
                     $this->db->where('id_content', $idContent);
                     $this->db->where('id_option', $idOption);
                     $this->db->where('id_language', $idLanguage);
-                    $this->db->update('values', array('value'=>$value));
+                    $this->db->from('values');                
+                    if($this->db->count_all_results()==0) {
+                        // Insert:
+                        $valueArray = array(
+                            'id_content'=>$idContent,
+                            'id_option'=>$idOption,
+                            'id_language'=>$idLanguage,
+                            'value'=>$value
+                        );
+                        $this->db->insert('values', $valueArray);
+                    } else {
+                        // Update:
+                        $this->db->where('id_content', $idContent);
+                        $this->db->where('id_option', $idOption);
+                        $this->db->where('id_language', $idLanguage);
+                        $this->db->update('values', array('value'=>$value));
+                    }
                 }
             }
         }
@@ -713,13 +725,15 @@ class AdminModel extends Model
      */
     function getSettings()
     {
-        $settings = array();
-        $this->db->select('name,value');
-        $query = $this->db->get('settings');
-        foreach($query->result() as $setting) {
-            $settings[$setting->name] = $setting->value;
+        if(!isset($this->settings)) {
+            $this->settings = array();
+            $this->db->select('name,value');
+            $query = $this->db->get('settings');
+            foreach($query->result() as $setting) {
+                $this->settings[$setting->name] = $setting->value;
+            }
         }
-        return $settings;
+        return $this->settings;
     }
     
     /**
@@ -980,7 +994,7 @@ class AdminModel extends Model
         if(!isset($this->modules)) {
             $modules = array();
             // Modules get auto-detected according to the folders found in the modules-directory
-            $folders = glob('assets/modules/*', GLOB_ONLYDIR);
+            $folders = glob('assets/modules/*', GLOB_ONLYDIR);            
             if($folders != false) {
                 foreach($folders as $folder) {            
                     if(file_exists($folder.'/name.php')) {
@@ -997,7 +1011,7 @@ class AdminModel extends Model
                     }
                 }
             }
-            $this->modules = $modules;
+            $this->modules = $modules;            
         }
         return $this->modules;
     }

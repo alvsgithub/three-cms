@@ -60,6 +60,13 @@
 						<input type="checkbox" name="multilanguage" <?php echo $checked; ?> />
 					</td>
 				</tr>
+				<tr>
+					<th><?php echo $lang->line('system_options_required'); ?></th>
+					<td>
+						<?php $checked = $values['required']==1 ? 'checked="checked"' : ''; ?>
+						<input type="checkbox" name="required" <?php echo $checked; ?> />
+					</td>
+				</tr>
 				<tr class="delimiter">
 					<td colspan="2">&nbsp;</td>
 				</tr>

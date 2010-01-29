@@ -346,7 +346,8 @@ class Admin extends Controller
 						'type'=>$this->input->post('type'),
 						'options'=>$this->makeSafe($this->input->post('options')),
 						'default_value'=>$this->makeSafe($this->input->post('default_value')),
-						'multilanguage'=>isset($_POST['multilanguage']) ? 1 : 0
+						'multilanguage'=>isset($_POST['multilanguage']) ? 1 : 0,
+						'required'=>isset($_POST['required']) ? 1 : 0
 					);
 					if(empty($data['description'])) { $data['description'] = ucfirst($data['name']); }
 					$this->AdminModel->saveData('options', $data, $this->input->post('id'));
@@ -382,7 +383,7 @@ class Admin extends Controller
 						'lang'=>$this->lang,
 						'title'=>$title,
 						'values'=>$this->AdminModel->getData('options', $id)
-					);
+					);					
 					$this->showHeader();
 					$this->showTree();
 					$this->load->view('admin/options/add_edit.php', $data);
