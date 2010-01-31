@@ -113,15 +113,16 @@ class DataModel extends Model
 	/**
 	 * Get the children of this dataModel
 	 * @param	$idContent	int		The ID of the parent to get the children from. If ID is set to null (default), the current dataobjects' ID is used
-	 * @param	$where		array	An array with options to use as filter
+	 * @param	$options	array	An array with options to use as filter
+	 * @param	$limit		array	An array with one ore two values for the limit-options
 	 * @return	array		An array with dataModels
 	 */
-	function children($idContent = null, $options = null)
+	function children($idContent = null, $options = null, $limit = null)
 	{
 		$idContent = $idContent !== null ? $idContent : $this->idContent;
-		if(isset($this->childrenArray[$idContent])) {
-			$children = $this->childrenArray[$idContent];
-		} else {
+		//if(isset($this->childrenArray[$idContent])) {
+		//	$children = $this->childrenArray[$idContent];
+		// } else {
 			// Retrieve the children of this data object:
 			$children = array();		
 			$this->db->select('a.id');
@@ -143,6 +144,16 @@ class DataModel extends Model
 				}
 			}
 			$this->db->order_by('a.order', 'asc');
+			if($limit!=null) {
+				if(is_string($limit)) {					
+					$limit = $this->stringToAssocArray($limit);
+				}
+				if(count($limit)==1) {
+					$this->db->limit($limit[0]);
+				} else {
+					$this->db->limit($limit[0], $limit[1]);
+				}
+			}
 			$query = $this->db->get();
 			// echo $this->db->last_query();
 			foreach($query->result() as $result) {
@@ -152,7 +163,7 @@ class DataModel extends Model
 			}
 			// Store for optimization:
 			$this->childrenArray[$idContent] = $children;
-		}
+		// }
 		return $children;
 	}
 	
@@ -169,6 +180,8 @@ class DataModel extends Model
 			$itemArray = explode('=>', $item);
 			if(count($itemArray)==2) {
 				$array[$itemArray[0]] = $itemArray[1];
+			} else {
+				array_push($array, $item);
 			}
 		}
 		return $array;
@@ -176,13 +189,19 @@ class DataModel extends Model
 	
 	/**
 	 * Get a specific child of this dataModel
-	 * @param	$num	int	The number of the child to retrieve
-	 * @return	DataModel	A single datamodel
+	 * @param	$idContent	int		The ID of the parent to get the children from. If ID is set to null (default), the current dataobjects' ID is used
+	 * @param	$options	array	An array with options to use as filter
+	 * @param	$num	    int		The number of the child to retrieve (default=the first)
+	 * @return	DataModel	A single datamodel or false of no model is found
 	 */
-	function child($num)
+	function child($idContent = null, $options = null, $num = 0)
 	{
-		// TODO (what is this function supposed to do anyway?)
-		
+		$docs = $this->children($idContent, $options, array(1, $num));
+		if(count($docs)>0) {
+			return $docs[0];
+		} else {
+			return false;
+		}
 	}
 	
 	/**
@@ -466,6 +485,7 @@ class DataModel extends Model
 		
 		// Assign a reference to the dataObject:
 		$smarty->assign('dataObject', $this);
+		$smarty->assign('this', $this);
 		
 		// Assign a reference to the settings:
 		$smarty->assign('settings', $this->settings);
@@ -497,17 +517,17 @@ class DataModel extends Model
 		}
 		
 		// Assign plugins:
-		// Plugins are the same as modules, only the exist of one file and are only available on the frontend:
+		// Plugins are the same as modules, only they exist of one file and are only available on the frontend:
 		$folders = glob('assets/plugins/*', GLOB_ONLYDIR);
 		if($folders != false) {
 			foreach($folders as $folder) {
 				$a = explode('/', $folder);
 				$folderName = $a[count($a)-1];
-				$path = $folder.'/'.$folderName.'.php';			
+				$path = $folder.'/'.$folderName.'.php';
 				if(file_exists($path)) {
 					require_once($path);
 					$objectName = ucfirst($folderName);
-					$object = new $objectName;				
+					$object = new $objectName;
 					$smarty->assign($folderName, $object);
 				}
 			}
