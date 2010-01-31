@@ -6,8 +6,9 @@
 
 class Form
 {
-	var $form;
-	var $action;
+	var $formArr     = array();
+	var $action      = '/';
+	var $labelSuffix = '';
 	
 	/**
 	 * Create a new form
@@ -15,8 +16,18 @@ class Form
 	 */
 	function newForm($action = '/')
 	{
-		$this->form   = array();
-		$this->action = $action;
+		$this->formArr     = array();
+		$this->action      = $action;
+		$this->labelSuffix = '';		
+	}
+	
+	/**
+	 * Set the label suffix
+	 * @param	$suffix	string	The suffix to use
+	 */
+	function suffix($suffix)
+	{
+		$this->labelSuffix = $suffix;
 	}
 	
 	/**
@@ -26,14 +37,14 @@ class Form
 	 */
 	function add($type, $name, $label = '', $class = '', $value = '')
 	{
-		if($this->form == null) {			
-			$this->newForm();
-		}
+		// if($this->form == null) {			
+			// $this->newForm();
+		// }
 		// If the label is empty, create one:
 		if(empty($label)) {
 			$label = ucfirst($name);
 		}
-		array_push($this->form, array($type, $name, $label, $class, $value));
+		array_push($this->formArr, array($type, $name, $label, $class, $value));
 	}
 	
 	/**
@@ -42,21 +53,22 @@ class Form
 	function render()
 	{
 		echo '<form method="post" action="'.$this->action.'">';
-		foreach($this->form as $item) {
+		foreach($this->formArr as $item) {
 			$class = !empty($item[3]) ? 'class="'.$item[3].'" ' : '';
 			$value = !empty($item[4]) ? 'value="'.$item[4].'" ' : '';
+			if($item[0]!='hidden' && !empty($item[2])) {				
+				echo '<label for="'.$item[1].'">'.$item[2].$this->labelSuffix.'</label>';
+			}
 			switch($item[0]) {
 				case 'textarea' :
 					{
 						// Textarea:
-						echo '<label for="'.$item[1].'">'.$item[2].'</label>';
 						echo '<textarea name="'.$item[1].'" id="'.$item[1].' '.$class.$value.'"></textarea>';
 						break;
 					}
 				default:
 					{
 						// Default input-tag:
-						echo '<label for="'.$item[1].'">'.$item[2].'</label>';
 						echo '<input type="'.$item[0].'" name="'.$item[1].'" id="'.$item[1].'" '.$class.$value.'/>';
 						break;
 					}

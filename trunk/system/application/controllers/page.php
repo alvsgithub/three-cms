@@ -89,7 +89,7 @@ class Page extends Controller
 					
 					if($parameters[0]=='alias') {
 						// AJAX Functionality : Load the chunk:
-						$id = $this->PageModel->getPageId($parameters[1]);
+						$id = !is_numeric($parameters[1]) ? $this->PageModel->getPageId($parameters[1]) : intval($parameters[1]);
 						if($id!==false) {
 							$idPage = $id;
 						}
