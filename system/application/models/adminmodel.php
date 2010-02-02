@@ -488,6 +488,10 @@ class AdminModel extends Model
     {
         if($id!=0 && $id!=false) {
             $contentData = $this->getData('content', $id);
+            // See if $idTemplate isn't null, because if it isn't, it means there is an AJAX-call which changes te template:
+            if($idTemplate!=null) {
+                $contentData['id_template'] = $idTemplate;
+            }
         } else {
             if($idTemplate!=null && $idParent!=null) {
                 $contentData = $this->getData('content');
@@ -497,7 +501,7 @@ class AdminModel extends Model
                 show_error('Error: No parent and/or template supplied when creating new content.<br /><br />AdminModel :: getContentData()');
                 return false;
             }
-        }
+        }        
         
         // Get the languages:
         $languages = $this->getLanguages();

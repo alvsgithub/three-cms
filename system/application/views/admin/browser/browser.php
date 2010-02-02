@@ -3,7 +3,7 @@
     <head>
         <title>Browse server</title>
         <link rel="stylesheet" type="text/css" media="screen,tv,projection" href="<?php echo base_url(); ?>system/application/views/admin/browser/browser.css" />
-        <script type="text/javascript" src="<?php echo base_url(); ?>system/application/views/admin/js/jquery-1.3.2.min.js"></script>
+        <script type="text/javascript" src="<?php echo base_url(); ?>system/application/views/admin/js/jquery-1.4.1.min.js"></script>
 		<script type="text/javascript">
             var baseURL              = '<?php echo base_url(); ?>';
 			var deleteFile  		 = '<?php echo $lang->line('dialog_delete'); ?>';

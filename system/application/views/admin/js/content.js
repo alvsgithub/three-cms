@@ -1,13 +1,11 @@
+var currentTemplate;
+var currentLanguage;
+var CKeditors = [];
+
 $(function(){
-	// First hide all the languages:
-	for(i=0; i<language_ids.length; i++) {
-		$(".language_" + language_ids[i]).hide();
-	}
-	// Show the default languages:
-	$(".language_" + default_language).show();
-	$(".l_" + default_language).addClass("active");
+	currentLanguage = default_language;
 	
-	// Bind the functions:
+	// Languagepicker:
 	$("a.switchLanguage").click(function(){
 		$("a.switchLanguage").removeClass("active");
 		$(this).addClass("active");
@@ -20,6 +18,7 @@ $(function(){
 			$(".language_" + language_ids[i]).hide();
 		}
 		$(".language_" + id).show();
+		currentLanguage = id;
 		return false;
 	});
 	
@@ -105,16 +104,57 @@ $(function(){
 		$(this).slideUp("slow");
 	});
 	
+	// TODO: When changing template, load the options according to the chosen template:
+	$("select[name=template]").click(function(){
+		currentTemplate = $(this).val();
+	}).change(function(){
+		var ok = confirm(change_template);
+		if(ok) {
+			idTemplate = $(this).val();
+			idParent   = $("input[name=parent]").val();
+			idContent  = $("input[name=id]").val();
+			// AJAX-call to load the correct options:			
+			$("#loading").show();
+			$("tr.option").remove();
+			$.post(baseURL + 'index.php/admin/ajax/loadoptions', {template: idTemplate, parent: idParent, id: idContent}, function(data){
+				$("#loading").hide();
+				$("tr.optionsStart").after(data);
+				setupContent();
+			});
+		} else {
+			$(this).val(currentTemplate);
+		}
+		return ok;
+	});
+	
+	setupContent();
+});
+
+// Add all functionality:
+function setupContent()
+{
+	// First hide all the languages:
+	for(i=0; i<language_ids.length; i++) {
+		$(".language_" + language_ids[i]).hide();
+	}
+	// Show the default languages:
+	$(".language_" + currentLanguage).show();
+	$(".l_" + currentLanguage).addClass("active");
+	
 	// Datepicker:
 	$(".datePicker").dynDateTime({
 		ifFormat: date_format,
 		daFormat: date_format		
 	});
 	
-	$(".timePicker").dynDateTime({
-		ifFormat: "%H:%M",
-		daFormat: "%H:%M",
-		showsTime: true
+	// Timepicker:
+	$(".timePicker").timeEntry({
+		show24Hours: true,
+		useMouseWheel: true,
+		spinnerImage: baseURL + 'system/application/views/admin/css/spinnerUpDown.png',
+		spinnerSize: [15, 16, 0],
+		spinnerIncDecOnly: true,
+		spinnerRepeat: [250, 125]
 	});
 	
 	// Tooltips:
@@ -123,25 +163,23 @@ $(function(){
 		$(this).next().css({left: pos.left - 205, top: pos.top}).show();
 	}, function(){
 		$(this).next().hide();
+	});	
+	
+	// TextArea's with the class 'richtext' should be ckeditors:
+	// Remove all instances of previous declared CK-Editors:
+	for(i=0; i<CKeditors.length; i++) {
+		CKEDITOR.remove(CKeditors[i]);
+	}
+	CKeditors = []; // Hold an array with references
+	$("textarea.richtext").each(function(){
+		CKeditors.push(CKEDITOR.replace($(this).attr("name"), {filebrowserBrowseUrl: baseURL + "index.php/admin/browser"}));		
 	});
 	
-	// TODO: When changing template, load the options according to the chosen template:
-	/*
-	$("select[name=template]").change(function(){		
-		var ok = confirm(change_template);
-		if(ok) {
-			idTemplate = $(this).val();
-			// AJAX-call to load the correct options:			
-			$("#loading").show();
-			$("tr.option").remove();
-			$.post(baseURL + 'index.php/admin/ajax/loadoptions', {template: idTemplate}, function(data){
-				$("#loading").hide();
-				$("tr.optionsStart").after(data);				
-			});
-		} else {
-			
-		}
-		return ok;
-	});
-	*/
-});
+	// Browse-button
+	$("input[name=browse]").click(function(){
+		inputField = $(this).prev();
+		var left = screen.width/2 - 400;
+		var top  = screen.height/2 - 300;
+		window.open(baseURL + 'index.php/admin/browser', 'File browser', 'toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width=800,height=600,left='+left+',top='+top);
+	});	
+}

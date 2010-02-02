@@ -19,18 +19,6 @@ $(function(){
 		return confirm(dialog_delete);
 	});
 	
-	// TextArea's with the class 'richtext' should be ckeditors:
-	$("textarea.richtext").each(function(){
-		CKEDITOR.replace($(this).attr('name'), {filebrowserBrowseUrl: baseURL + "index.php/admin/browser"});	
-	});
-	
-	$("input[name=browse]").click(function(){
-		inputField = $(this).prev();
-		var left = screen.width/2 - 400;
-		var top  = screen.height/2 - 300;
-		window.open(baseURL + 'index.php/admin/browser', 'File browser', 'toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width=800,height=600,left='+left+',top='+top);
-	});
-	
 	// Parent selection:
 	$("a.selectParent").click(function(){
 		$("span", this).text(select_parent);
