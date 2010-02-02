@@ -68,7 +68,7 @@
 	$lang['dialog_parent_descendant']	= 'You cannot set a descendant of this document as the parent of this document!';
 	$lang['dialog_new_folder']			= 'Please enter the name of the new folder:';
 	$lang['dialog_no_folder']			= 'Please select a folder to perform this action.';
-	$lang['dialog_change_template']     = 'Are you sure you want to change the template of this page? Options that do not correspondent with the chosen template will be lost!';
+	$lang['dialog_change_template']     = 'Are you sure you want to change the template of this page? All changes you have made to this template after the last time you saved will be lost!';
 	$lang['dialog_required']			= 'Some required fields are left empty!';
 	
 	// Options:

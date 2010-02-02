@@ -621,7 +621,18 @@ class Admin extends Controller
 			case 'loadoptions' :
 				{
 					$idTemplate = $this->input->post('template');
-					echo $idTemplate;
+					$idParent   = $this->input->post('parent');
+					$idContent  = $this->input->post('id');
+					if($idTemplate!=false) {
+						// Get ContentData, according to chosen template:
+						$contentData = $this->AdminModel->getContentData($idContent, $idParent, $idTemplate);
+						$data = array(
+							'lang'=>$this->lang,
+							'contentData'=>$contentData,
+							'settings'=>$this->settings
+						);
+						$this->load->view('admin/content/options_field.php', $data);
+					}
 					break;
 				}
 		}
@@ -632,6 +643,7 @@ class Admin extends Controller
 	 */
 	function content()
 	{
+		// TODO: If content is added, saved and saved again, it gets stored as a new item again
 		if(!isset($_POST['ajax'])) {
 			$this->showHeader();
 		}

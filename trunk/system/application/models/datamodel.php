@@ -76,7 +76,7 @@ class DataModel extends Model
 		// and it retrieves the objects correct values according to the given language, or
 		// if the object isn't multilanguage, it returns it's defaults language value.
 		$pf = $this->db->dbprefix;
-		$sql = 'SELECT C.`name`, D.`value` FROM
+		$sql = 'SELECT C.`type`, C.`name`, D.`value` FROM
 			`'.$pf.'content` A,
 			`'.$pf.'dataobjects_options` B,
 			`'.$pf.'options` C,
@@ -95,7 +95,17 @@ class DataModel extends Model
 		
 		// Fill the dataObject with the values:
 		foreach($query->result() as $result) {
-			$this->options[$result->name] = $result->value;
+			// If type is rich_text, replace id:-links with the correct URL:
+			if($result->type=='rich_text') {
+				$value = $result->value;
+				preg_match_all('/href="id:(.*)"/', $value, $matches);
+				for($i=0; $i<count($matches[0]); $i++) {
+					$value = str_replace($matches[0][$i], 'href="'.$this->getUrl($matches[1][$i]).'"', $value);
+				}
+				$this->options[$result->name] = $value;
+			} else {		
+				$this->options[$result->name] = $result->value;
+			}
 		}
 		
 		// Retrieve the template file:
