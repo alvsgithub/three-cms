@@ -5,11 +5,11 @@
 			<table>
 				<tr>
 					<th><?php echo $lang->line('content_name'); ?>:</th>
-					<td><input type="text" name="name" class="required" value="<?php echo $contentData['name']; ?>" /></td>
+					<td><input type="text" name="name" class="required" value="<?php echo $contentData['name']; ?>" /> <a href="#" class="showAlias"><?php echo $lang->line('content_show_alias'); ?></a></td>
 				</tr>
-				<tr>
+				<tr class="alias">
 					<th><?php echo $lang->line('content_alias'); ?>:</th>
-					<td><input type="text" name="alias" value="<?php echo $contentData['alias']; ?>" /></td>
+					<td><input type="text" name="alias" value="<?php echo $contentData['alias']; ?>" /> <em><?php echo $lang->line('content_auto_alias'); ?></em></td>
 				</tr>
 				<tr>
 					<th><?php echo $lang->line('content_template'); ?>:</th>
@@ -48,6 +48,10 @@
 					<th><?php echo $lang->line('content_order'); ?>:</th>
 					<td><input class="small" type="text" name="order" value="<?php echo $contentData['order']; ?>" /> <a href="#" class="orderSmaller">&laquo;</a> <a href="#" class="orderBigger">&raquo;</a></td>
 				</tr>				
+				<?php
+					// Only show the language picker if there is more than one language:
+					if(count($contentData['languages']) > 1) {
+				?>
 				<tr class="delimiter">
 					<td colspan="2">&nbsp;</td>
 				</tr>
@@ -74,6 +78,9 @@
 						?>
 					</td>
 				</tr>
+				<?php
+					} // End count languages
+				?>
 				<tr class="delimiter optionsStart">
 					<td colspan="2">&nbsp;</td>
 				</tr>

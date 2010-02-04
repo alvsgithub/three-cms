@@ -67,6 +67,8 @@ td.content_actions a { text-indent: 0; padding: 5px; padding-left: 26px; width: 
 	-webkit-border-radius: 5px;
 	border-radius: 5px;
 }
+tr.alias { display: none; }
+a.showAlias { color: #888; font-size: 0.8em; }
 
 /* Tooltip: */
 span.tooltip { float: right; display: block; padding: 0 3px; border: 1px solid #0084ff; font-size: 0.8em; margin-left: 10px; cursor: help; }

@@ -124,6 +124,8 @@
 	$lang['content_stored']				= 'Content succesfully stored';
 	$lang['content_server_error']		= 'Content not saved due to an internal server error!';
 	$lang['content_moved']				= 'Content successfully moved!';
+	$lang['content_show_alias']			= 'show alias';
+	$lang['content_auto_alias']			= 'if no alias is supplied, one will be generated automaticly';
 
     // Default text chunks:
     $lang['default_actions']        	= 'Actions';
