@@ -104,7 +104,7 @@ $(function(){
 		$(this).slideUp("slow");
 	});
 	
-	// TODO: When changing template, load the options according to the chosen template:
+	// When changing template, load the options according to the chosen template:
 	$("select[name=template]").click(function(){
 		currentTemplate = $(this).val();
 	}).change(function(){
@@ -127,7 +127,13 @@ $(function(){
 		return ok;
 	});
 	
+	// Setup the content:
 	setupContent();
+	
+	$("a.showAlias").click(function(){
+		$("tr.alias").show();
+		return false;
+	});
 });
 
 // Add all functionality:
