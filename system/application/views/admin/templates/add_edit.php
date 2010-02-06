@@ -57,12 +57,32 @@
 				</tr>
 				<tr>
 					<th><?php echo $lang->line('system_template_ranks'); ?>:</th>
-					<td>
+					<td class="templateRanks">
 						<?php
+							// print_r($ranks);
+							function chk($val)
+							{
+								if($val==1) {
+									return ' checked="checked" ';
+								} else {
+									return false;
+								}
+							}
+							
 							foreach($ranks as $rank) {
+								/*
 								$checked  = $rank['allowed'] ? ' checked="checked"' : '';
 								$readonly = $rank['id']==1 ? ' disabled="disabled"' : '';
 								echo '<label class="allowed"><input type="checkbox" name="allow_rank_'.$rank['id'].'" '.$checked.$readonly.' /> '.$rank['name'].'</label>';
+								*/
+								$a = $rank['allowed'][0];
+								echo '<strong>'.$rank['name'].':</strong><br />';
+								echo '<label><input type="checkbox" name="visible_'.$rank['id'].'" '.  chk($a['visible']).' /> '.  $lang->line('action_visible').' </label>';
+								echo '<label><input type="checkbox" name="add_'.$rank['id'].'" '.      chk($a['add']).' /> '.      $lang->line('action_add').' </label>';
+								echo '<label><input type="checkbox" name="modify_'.$rank['id'].'" '.   chk($a['modify']).' /> '.   $lang->line('action_modify').' </label>';
+								echo '<label><input type="checkbox" name="duplicate_'.$rank['id'].'" '.chk($a['duplicate']).' /> '.$lang->line('action_duplicate').' </label>';
+								echo '<label><input type="checkbox" name="move_'.$rank['id'].'" '.     chk($a['move']).' /> '.     $lang->line('action_move').' </label>';
+								echo '<label><input type="checkbox" name="delete_'.$rank['id'].'" '.   chk($a['delete']).' /> '.   $lang->line('action_delete').' </label>';
 							}
 						?>
 					</td>
