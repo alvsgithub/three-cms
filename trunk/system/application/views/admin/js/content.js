@@ -50,6 +50,10 @@ $(function(){
 			}
 		});
 		if(ok) {
+			// See if ID isn't 0, because if so, this is new content and it should be saved with a refresh:
+			if($("input[name=id]").val()==0) {
+				return true;
+			}
 			// Disable the submit button, and make the loading bar visible:
 			$("input[type=submit]", this).attr("disabled", "disabled");
 			$("img.loading").show();		

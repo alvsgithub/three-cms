@@ -53,6 +53,7 @@
     $lang['action_delete']         		= 'Delete';
 	$lang['action_move']				= 'Move';
 	$lang['action_add_type']			= 'Add new content of the type \'%s\'...';
+    $lang['action_visible']          	= 'Visible';
     
     // Button titles:
     $lang['button_add_new_item']   		= 'Add a new %s...';    

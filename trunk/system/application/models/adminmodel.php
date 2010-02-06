@@ -452,7 +452,21 @@ class AdminModel extends Model
         // Then add new ones:
         foreach($templates as $item) {
             if($item['allowed']) {
-                $this->db->insert('templates_allowed_children', array('id_template'=>$id, 'id_child_template'=>$item['id']));
+                $data = array(
+                    'id_template'       => $id,
+                    'id_child_template' => $item['id']
+                );
+            /*
+            ,
+                'visible'           => $item['allowed']['visible'],
+                'add'               => $item['allowed']['add'],
+                'modify'            => $item['allowed']['modify'],
+                'duplicate'         => $item['allowed']['duplicate'],
+                'move'              => $item['allowed']['move'],
+                'delete'            => $item['allowed']['delete']
+            );
+            */
+                $this->db->insert('templates_allowed_children', $data);
             }
         }
     }
@@ -719,7 +733,7 @@ class AdminModel extends Model
         $string = preg_replace('`&(amp;)?#?[a-z0-9]+;`i', '-', $string);
         $string = htmlentities($string, ENT_COMPAT, 'utf-8');
         $string = preg_replace("`&([a-z])(acute|uml|circ|grave|ring|cedil|slash|tilde|caron|lig|quot|rsquo);`i","\\1", $string);
-        $string = preg_replace(array("`[^a-z0-9]`i","`[-]+`") , "-", $string);
+        $string = preg_replace(array("`[^a-z0-9]`i","`[-]+`") , "-", $string);        
         return strtolower(trim($string, '-'));
     }
     
@@ -807,6 +821,7 @@ class AdminModel extends Model
     function createFolder($name)
     {
         mkdir($name);
+        @chmod($name, 0777);
     }
     
     /**
@@ -874,14 +889,20 @@ class AdminModel extends Model
                 $this->db->where('id_template', $id);
                 $this->db->where('id_rank', $rank['id']);
                 $this->db->from('templates_ranks');
-                $allowed = $this->db->count_all_results()==1;
+                // $allowed = $this->db->count_all_results()==1;
+                $allowedQuery = $this->db->get();
+                $allowed      = $allowedQuery->result_array();
+                /*
             } else {
                 $allowed = false;
+                */
             }
             // Administrators rank (id=1) is always allowed:
+            /*
             if($rank['id'] == 1) {
                 $allowed = true;
             }
+            */
             $rank['allowed'] = $allowed;
             array_push($ranks, $rank);
         }
@@ -928,15 +949,44 @@ class AdminModel extends Model
         // First delete all links
         $this->db->delete('templates_ranks', array('id_template'=>$id));
         // Then add new ones:
-        foreach($allowedRanks as $rank) {
+        foreach($allowedRanks as $item) {
             // Administrators rank (id=1) is always allowed:
+            /*
             if($rank['id']==1) {
                 $rank['allowed'] = true;
             }
-            if($rank['allowed']) {
-                $this->db->insert('templates_ranks', array('id_template'=>$id, 'id_rank'=>$rank['id']));
-            }
+            */            
+            // if($rank['allowed']) {
+                $data = array(
+                'id_template' => $id,
+                'id_rank'     => $item['id'],
+                'visible'     => $item['allowed']['visible'],
+                'add'         => $item['allowed']['add'],
+                'modify'      => $item['allowed']['modify'],
+                'duplicate'   => $item['allowed']['duplicate'],
+                'move'        => $item['allowed']['move'],
+                'delete'      => $item['allowed']['delete']
+            );
+
+            $this->db->insert('templates_ranks', $data);
+            // }
         }
+    }
+    
+    /**
+     * Get the actions that are allowed for this template
+     * @param   $idTemplate The ID of the template
+     * @return  array       An associated array with the actions
+     */
+    function getAllowedActions($idTemplate, $idRank)
+    {
+        $this->db->select('*');
+        $this->db->from('templates_ranks');
+        $this->db->where('id_template', $idTemplate);
+        $this->db->where('id_rank', $idRank);
+        $query = $this->db->get();
+        $actions = $query->result_array();
+        return $actions[0];
     }
     
     /**

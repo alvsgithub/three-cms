@@ -209,7 +209,13 @@ class Admin extends Controller
 					// Save the allowed ranks:
 					$allowedRanks = $this->AdminModel->getAllowedRanks($id);					
 					for($i=0; $i<count($allowedRanks); $i++) {
-						$allowedRanks[$i]['allowed'] = isset($_POST['allow_rank_'.$allowedRanks[$i]['id']]);
+						// $allowedRanks[$i]['allowed'] = isset($_POST['allow_rank_'.$allowedRanks[$i]['id']]);
+						$allowedRanks[$i]['allowed']['visible']   = isset($_POST['visible_'.$childTemplates[$i]['id']]);
+						$allowedRanks[$i]['allowed']['add']       = isset($_POST['add_'.$childTemplates[$i]['id']]);
+						$allowedRanks[$i]['allowed']['modify']    = isset($_POST['modify_'.$childTemplates[$i]['id']]);
+						$allowedRanks[$i]['allowed']['duplicate'] = isset($_POST['duplicate_'.$childTemplates[$i]['id']]);
+						$allowedRanks[$i]['allowed']['move']      = isset($_POST['move_'.$childTemplates[$i]['id']]);
+						$allowedRanks[$i]['allowed']['delete']    = isset($_POST['delete_'.$childTemplates[$i]['id']]);
 					}
 					$this->AdminModel->saveAllowedRanks($id, $allowedRanks);
 					// Redirect away:
@@ -594,7 +600,8 @@ class Admin extends Controller
 						$data = array(
 							'content'=>$content,
 							'lang'=>$this->lang,
-							'childTemplates'=>$this->AdminModel->getChildTemplates($content['id_template'])
+							'childTemplates'=>$this->AdminModel->getChildTemplates($content['id_template']),
+							'allowedActions'=>$this->AdminModel->getAllowedActions($content['id_template'], $this->rank)
 						);
 						$this->load->view('admin/ajax/page_summary.php', $data);
 					}

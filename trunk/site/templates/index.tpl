@@ -10,6 +10,9 @@
 			</div>
 			{include file="navigation.tpl"}
 			<div id="content">
+				<div class="breadCrumbs">
+					{$breadCrumbs->generate($this->idContent)}
+				</div>
 				<h1>{$header}</h1>
 				<p>{$content}</p>
 			</div>
