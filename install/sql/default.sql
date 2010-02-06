@@ -8,7 +8,7 @@ INSERT INTO `[[PREFIX]]dataobjects` (`id`, `name`) VALUES (1, 'Default Page');
 INSERT INTO `[[PREFIX]]dataobjects_options` (`id`, `id_dataobject`, `id_option`, `order`) VALUES (1, 1, 4, 0), (2, 1, 1, 1), (3, 1, 2, 2), (4, 1, 3, 3);
 
 -- Options:
-INSERT INTO `[[PREFIX]]_options` (`id`, `name`, `description`, `tooltip`, `type`, `options`, `default_value`, `multilanguage`, `required`) VALUES (1, 'header', 'Header', 'The header of the page', 'small_text', '', '', 0, 1), (2, 'description', 'Description', '', 'large_text', '', '', 0, 0), (3, 'content', 'Content', '', 'rich_text', '', '', 0, 1), (4, 'show in menu', 'Show in menu', 'Should this page be displayed in the menu or not?', 'boolean', '', '', 0, 0);
+INSERT INTO `[[PREFIX]]options` (`id`, `name`, `description`, `tooltip`, `type`, `options`, `default_value`, `multilanguage`, `required`) VALUES (1, 'header', 'Header', 'The header of the page', 'small_text', '', '', 0, 1), (2, 'description', 'Description', '', 'large_text', '', '', 0, 0), (3, 'content', 'Content', '', 'rich_text', '', '', 0, 1), (4, 'show in menu', 'Show in menu', 'Should this page be displayed in the menu or not?', 'boolean', '', '', 0, 0);
 
 -- Templates:
 INSERT INTO `[[PREFIX]]templates` (`id`, `name`, `id_dataobject`, `templatefile`, `root`, `type`) VALUES (1, 'Default Page', 1, 'index.tpl', 1, 'page');
