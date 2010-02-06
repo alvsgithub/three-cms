@@ -100,13 +100,13 @@ A data object also has some functions to use:
 
 === children() ===
 
-*`function children($idContent = null, $options = null)`*
+*`function children($idContent = null, $options = null, $limit = null)`*
 
 Get the children of this dataModel.
 
-*$idContent:* The ID of the parent to get the children from. If ID is set to null (default), the current dataobjects' ID is used
-
-*$options:* An associated array with options to use as filter. Because Smarty doesn't natively accept arrays, arrays should be formatted as a string. See the below examples how this works.
+*$idContent:* The ID of the parent to get the children from. If ID is set to null (default), the current dataobjects' ID is used<br />
+*$options:* An associated array with options to use as filter. Because Smarty doesn't natively accept arrays, arrays should be formatted as a string. See the below examples how this works.<br />
+*$limit:* An array with one ore two values for the limit-options
 
 This function returns an array with dataModels.
 
@@ -131,6 +131,18 @@ Example 2, only show pages which are placed on the root (id=0), and have the `sh
 </ul>
 }}}
 
+=== child() ===
+
+*`function child($idContent=null, $options=null, $num=0)`*
+
+Get a specific child of this dataModel
+
+*$idContent:* The ID of the parent to get the children from. If ID is set to null (default), the current dataobjects' ID is used<br />
+*$options:* An array with options to use as filter
+*$num*: The number of the child to retrieve (default=the first)
+
+*Returns:* A single datamodel or false of no model is found
+
 === getTree() ===
 
 *`function getTree($startID=null, $templates=null, $optionConditions=null)`*
@@ -145,11 +157,22 @@ Create a tree of this dataModel and all it's children (recursive).
 
 === getUrl() ===
 
-*`function getUrl($idContent = null)`*
+*`function getUrl($idContent = null, $idLanguage = null)`*
 
 Create the url to this dataobject.
 
-*$idContent:* The ID of the content to create the URL of, if left empty, the URL of the current page is returned.
+*$idContent:* The ID of the content to create the URL of, if left empty, the URL of the current page is returned.<br />
+*$idLanguage:* The ID of the language to use for this URL. null for current language
+
+=== getAlias() ===
+
+*`getAlias($idContent)`*
+
+Get the alias of a given content ID
+
+*$idContent:* The ID of the content to get the alias from
+
+*Returns:* The alias
 
 === getLanguageCode() ===
 
