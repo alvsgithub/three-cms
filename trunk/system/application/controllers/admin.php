@@ -209,13 +209,12 @@ class Admin extends Controller
 					// Save the allowed ranks:
 					$allowedRanks = $this->AdminModel->getAllowedRanks($id);					
 					for($i=0; $i<count($allowedRanks); $i++) {
-						// $allowedRanks[$i]['allowed'] = isset($_POST['allow_rank_'.$allowedRanks[$i]['id']]);
-						$allowedRanks[$i]['allowed']['visible']   = isset($_POST['visible_'.$childTemplates[$i]['id']]);
-						$allowedRanks[$i]['allowed']['add']       = isset($_POST['add_'.$childTemplates[$i]['id']]);
-						$allowedRanks[$i]['allowed']['modify']    = isset($_POST['modify_'.$childTemplates[$i]['id']]);
-						$allowedRanks[$i]['allowed']['duplicate'] = isset($_POST['duplicate_'.$childTemplates[$i]['id']]);
-						$allowedRanks[$i]['allowed']['move']      = isset($_POST['move_'.$childTemplates[$i]['id']]);
-						$allowedRanks[$i]['allowed']['delete']    = isset($_POST['delete_'.$childTemplates[$i]['id']]);
+						$allowedRanks[$i]['allowed']['visible']   = isset($_POST['visible_'.$allowedRanks[$i]['id']]) ? 1 : 0;
+						$allowedRanks[$i]['allowed']['add']       = isset($_POST['add_'.$allowedRanks[$i]['id']]) ? 1 : 0;
+						$allowedRanks[$i]['allowed']['modify']    = isset($_POST['modify_'.$allowedRanks[$i]['id']]) ? 1 : 0;
+						$allowedRanks[$i]['allowed']['duplicate'] = isset($_POST['duplicate_'.$allowedRanks[$i]['id']]) ? 1 : 0;
+						$allowedRanks[$i]['allowed']['move']      = isset($_POST['move_'.$allowedRanks[$i]['id']]) ? 1 : 0;
+						$allowedRanks[$i]['allowed']['delete']    = isset($_POST['delete_'.$allowedRanks[$i]['id']]) ? 1 : 0;
 					}
 					$this->AdminModel->saveAllowedRanks($id, $allowedRanks);
 					// Redirect away:

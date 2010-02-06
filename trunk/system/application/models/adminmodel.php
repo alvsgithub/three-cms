@@ -889,20 +889,25 @@ class AdminModel extends Model
                 $this->db->where('id_template', $id);
                 $this->db->where('id_rank', $rank['id']);
                 $this->db->from('templates_ranks');
-                // $allowed = $this->db->count_all_results()==1;
                 $allowedQuery = $this->db->get();
                 $allowed      = $allowedQuery->result_array();
-                /*
-            } else {
-                $allowed = false;
-                */
+                if(count($allowed)==0) {                
+                    unset($allowed);
+                } else {
+                    $allowed = $allowed[0];
+                }
             }
-            // Administrators rank (id=1) is always allowed:
-            /*
-            if($rank['id'] == 1) {
-                $allowed = true;
+            if(!isset($allowed)) {
+                // No settings set:
+                $allowed = array(
+                    'visible'   => false,
+                    'add'       => false,
+                    'modify'    => false,
+                    'duplicate' => false,
+                    'move'      => false,
+                    'delete'    => false
+                );
             }
-            */
             $rank['allowed'] = $allowed;
             array_push($ranks, $rank);
         }
@@ -950,14 +955,7 @@ class AdminModel extends Model
         $this->db->delete('templates_ranks', array('id_template'=>$id));
         // Then add new ones:
         foreach($allowedRanks as $item) {
-            // Administrators rank (id=1) is always allowed:
-            /*
-            if($rank['id']==1) {
-                $rank['allowed'] = true;
-            }
-            */            
-            // if($rank['allowed']) {
-                $data = array(
+            $data = array(
                 'id_template' => $id,
                 'id_rank'     => $item['id'],
                 'visible'     => $item['allowed']['visible'],
@@ -967,9 +965,7 @@ class AdminModel extends Model
                 'move'        => $item['allowed']['move'],
                 'delete'      => $item['allowed']['delete']
             );
-
             $this->db->insert('templates_ranks', $data);
-            // }
         }
     }
     
@@ -980,13 +976,26 @@ class AdminModel extends Model
      */
     function getAllowedActions($idTemplate, $idRank)
     {
-        $this->db->select('*');
+        $this->db->select('visible,add,modify,duplicate,move,delete');
         $this->db->from('templates_ranks');
         $this->db->where('id_template', $idTemplate);
         $this->db->where('id_rank', $idRank);
         $query = $this->db->get();
         $actions = $query->result_array();
-        return $actions[0];
+        if(count($actions)==0) {
+            $allowed = array(
+                'visible'   => false,
+                'add'       => false,
+                'modify'    => false,
+                'duplicate' => false,
+                'move'      => false,
+                'delete'    => false
+            );
+            return $allowed;
+        } else {
+            $allowed = $actions[0];            
+        }
+        return $allowed;
     }
     
     /**
