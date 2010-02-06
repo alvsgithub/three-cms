@@ -75,7 +75,7 @@
 								$readonly = $rank['id']==1 ? ' disabled="disabled"' : '';
 								echo '<label class="allowed"><input type="checkbox" name="allow_rank_'.$rank['id'].'" '.$checked.$readonly.' /> '.$rank['name'].'</label>';
 								*/
-								$a = $rank['allowed'][0];
+								$a = $rank['allowed'];
 								echo '<strong>'.$rank['name'].':</strong><br />';
 								echo '<label><input type="checkbox" name="visible_'.$rank['id'].'" '.  chk($a['visible']).' /> '.  $lang->line('action_visible').' </label>';
 								echo '<label><input type="checkbox" name="add_'.$rank['id'].'" '.      chk($a['add']).' /> '.      $lang->line('action_add').' </label>';
@@ -83,6 +83,7 @@
 								echo '<label><input type="checkbox" name="duplicate_'.$rank['id'].'" '.chk($a['duplicate']).' /> '.$lang->line('action_duplicate').' </label>';
 								echo '<label><input type="checkbox" name="move_'.$rank['id'].'" '.     chk($a['move']).' /> '.     $lang->line('action_move').' </label>';
 								echo '<label><input type="checkbox" name="delete_'.$rank['id'].'" '.   chk($a['delete']).' /> '.   $lang->line('action_delete').' </label>';
+								echo '<br />';
 							}
 						?>
 					</td>
