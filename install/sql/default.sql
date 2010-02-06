@@ -20,4 +20,4 @@ INSERT INTO `[[PREFIX]]templates_allowed_children` (`id`, `id_template`, `id_chi
 INSERT INTO `[[PREFIX]]templates_ranks` (`id`, `id_template`, `id_rank`, `visible`, `add`, `modify`, `duplicate`, `move`, `delete`) VALUES (1, 1, 1, 1, 1, 1, 1, 1, 1);
 
 -- Values:
-INSERT INTO `[[PREFIX]]values` (`id`, `id_content`, `id_option`, `id_language`, `value`) VALUES (1, 1, 4, 1, '1'), (2, 1, 1, 1, 'My new website'), (3, 1, 2, 1, 'This is a simple page for this new website.'), (4, 1, 3, 1, '<p>\n	The templatefile of this page is located in site/templates. If you <a href="http://index.php/admin">login</a> in the CMS, you can start creating your new site.</p>\n');
+INSERT INTO `[[PREFIX]]values` (`id`, `id_content`, `id_option`, `id_language`, `value`) VALUES (1, 1, 4, 1, '1'), (2, 1, 1, 1, 'My new website'), (3, 1, 2, 1, 'This is a simple page for this new website.'), (4, 1, 3, 1, '<p>\n	The templatefile of this page is located in site/templates. If you <a href="index.php/admin">login</a> in the CMS, you can start creating your new site.</p>\n');
