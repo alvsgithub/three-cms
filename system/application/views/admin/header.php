@@ -23,7 +23,8 @@
     <body>
         <div id="body">
 			<?php
-				// Quick function to show the module-links:				
+				// Quick function to show the module-links:
+				/*
 				function moduleLink($current, $modules, $allowedModules) {
 					foreach($modules as $module) {
 						if(in_array(strtolower($module['name']), $allowedModules)) {
@@ -33,6 +34,7 @@
 						}
 					}
 				}
+				*/
 				// End Quick function
 			?>
             <div id="navigation">
@@ -45,7 +47,10 @@
                     <li><a class="configuration" href="#" class="noClick"><?php echo $lang->line('menu_configuration'); ?></a>
                         <ul>
                             <li><a href="<?php echo site_url(array('admin', 'settings')); ?>"><?php echo $lang->line('menu_site_settings'); ?></a></li>
-							<?php moduleLink('configuration', $modules, $allowedModules); ?>
+							<?php
+								$addons->executeHook('AppendSubNavigation', array('parent'=>'configuration'));
+								/* moduleLink('configuration', $modules, $allowedModules); */
+							?>
                         </ul>
                     </li>
                     <?php
@@ -69,7 +74,10 @@
                             <?php
                                 }
                             ?>
-							<?php moduleLink('users', $modules, $allowedModules); ?>
+							<?php
+								$addons->executeHook('AppendSubNavigation', array('parent'=>'users'));
+								/* moduleLink('users', $modules, $allowedModules); */
+							?>
                         </ul>
                     </li>
                     <?php
@@ -84,10 +92,16 @@
                             <li><a href="<?php echo site_url(array('admin', 'manage', 'options'));   ?>"><?php echo $lang->line('menu_options'); ?></a></li>
                             <li><a href="<?php echo site_url(array('admin', 'manage', 'languages')); ?>"><?php echo $lang->line('menu_languages'); ?></a></li>
                             <li><a href="<?php echo site_url(array('admin', 'manage', 'locales'));   ?>"><?php echo $lang->line('menu_locales'); ?></a></li>
-							<?php moduleLink('system', $modules, $allowedModules); ?>
+							<?php
+								$addons->executeHook('AppendSubNavigation', array('parent'=>'system'));
+								/* moduleLink('system', $modules, $allowedModules); */
+							?>
                         </ul>
                     </li>
-					<?php moduleLink('root', $modules, $allowedModules); ?>
+					<?php
+						/* moduleLink('root', $modules, $allowedModules); */
+						$addons->executeHook('AppendMainNavigation', array());
+					?>
                     <?php
                         }
                     ?>

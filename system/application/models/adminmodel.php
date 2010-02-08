@@ -23,7 +23,7 @@ class AdminModel extends Model
 {
     var $modules;           // Modules var for caching
     // TODO: Make Singleton of settings?
-    var $settings;          // Settings var for caching
+    var $settings;          // Settings var for caching    
     
     function AdminModel()
     {

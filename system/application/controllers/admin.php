@@ -46,6 +46,9 @@ class Admin extends Controller
         // Load the adminModel:
         $this->load->model('AdminModel', '', true);
 		
+		// Load the addonModel:
+		$this->load->model('AddonModel', '', true);
+		
 		// Load the settings:
 		$this->settings = $this->AdminModel->getSettings();
 		
@@ -891,8 +894,9 @@ class Admin extends Controller
         $data = array(
             'lang'=>$this->lang,
 			'rank'=>$this->AdminModel->getRank($this->rank),
-			'modules'=>$this->AdminModel->getModules(),
-			'allowedModules'=>$this->AdminModel->getRankModules($this->rank)
+			/* 'modules'=>$this->AdminModel->getModules(), */
+			'allowedModules'=>$this->AdminModel->getRankModules($this->rank),
+			'addons'=>$this->AddonModel
         );		
 		$this->load->view('admin/header.php', $data);
     }
