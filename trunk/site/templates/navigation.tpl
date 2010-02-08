@@ -1,7 +1,7 @@
 <div id="navigation">
 	{* See how simple it is to create a navigation: *}
 	<ul>
-	{foreach from=$dataObject->children(0) item=child}
+	{foreach from=$dataObject->children(0, 'published=>1') item=child}
 		<li>
 			<a {if $child->get('idContent') eq $idContent}class="active" {/if}href="{$child->getUrl()}">{$child->get('header')}</a>
 		</li>
