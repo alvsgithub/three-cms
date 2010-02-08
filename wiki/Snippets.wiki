@@ -33,3 +33,27 @@ A simple language picker which leads to the homepage of the selected language. T
   {/foreach}
 </ul>
 }}}
+
+== Published / Unpublished unfunctionality ==
+
+You can add published/unpublished-functionality by creating a published option of the type Boolean and filter them on the frontend. For this example we created a Boolean-option called 'published'.
+
+*navigation example:*
+{{{
+<ul>
+  {foreach from=$this->children(0, 'published=>1') item=child}
+    <li>
+      <a {if $child->get('idContent') eq $idContent}class="active" {/if}href="{$child->getUrl()}">{$child->get('header')}</a>
+    </li>
+  {/foreach}
+</ul>
+}}}
+
+*page example:*
+{{{
+{if $this->get('published') eq '1'}
+  ... show content ...
+{else}
+  <p>This page is not yet published!</p>
+{/if}
+}}}
