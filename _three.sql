@@ -2,10 +2,10 @@
 -- version 3.2.0.1
 -- http://www.phpmyadmin.net
 --
--- Host: localhost
--- Generation Time: Feb 06, 2010 at 03:32 PM
--- Server version: 5.1.36
--- PHP Version: 5.3.0
+-- Machine: localhost
+-- Genereertijd: 08 Feb 2010 om 10:27
+-- Serverversie: 5.1.36
+-- PHP-Versie: 5.3.0
 
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 
@@ -22,7 +22,7 @@ SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 -- --------------------------------------------------------
 
 --
--- Table structure for table `three_content`
+-- Tabelstructuur voor tabel `three_content`
 --
 
 CREATE TABLE IF NOT EXISTS `three_content` (
@@ -36,7 +36,7 @@ CREATE TABLE IF NOT EXISTS `three_content` (
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=63 ;
 
 --
--- Dumping data for table `three_content`
+-- Gegevens worden uitgevoerd voor tabel `three_content`
 --
 
 INSERT INTO `three_content` (`id`, `id_content`, `id_template`, `name`, `alias`, `order`) VALUES
@@ -57,7 +57,7 @@ INSERT INTO `three_content` (`id`, `id_content`, `id_template`, `name`, `alias`,
 -- --------------------------------------------------------
 
 --
--- Table structure for table `three_dataobjects`
+-- Tabelstructuur voor tabel `three_dataobjects`
 --
 
 CREATE TABLE IF NOT EXISTS `three_dataobjects` (
@@ -67,7 +67,7 @@ CREATE TABLE IF NOT EXISTS `three_dataobjects` (
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=8 ;
 
 --
--- Dumping data for table `three_dataobjects`
+-- Gegevens worden uitgevoerd voor tabel `three_dataobjects`
 --
 
 INSERT INTO `three_dataobjects` (`id`, `name`) VALUES
@@ -79,7 +79,7 @@ INSERT INTO `three_dataobjects` (`id`, `name`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `three_dataobjects_options`
+-- Tabelstructuur voor tabel `three_dataobjects_options`
 --
 
 CREATE TABLE IF NOT EXISTS `three_dataobjects_options` (
@@ -88,39 +88,41 @@ CREATE TABLE IF NOT EXISTS `three_dataobjects_options` (
   `id_option` int(11) NOT NULL,
   `order` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=135 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=150 ;
 
 --
--- Dumping data for table `three_dataobjects_options`
+-- Gegevens worden uitgevoerd voor tabel `three_dataobjects_options`
 --
 
 INSERT INTO `three_dataobjects_options` (`id`, `id_dataobject`, `id_option`, `order`) VALUES
-(133, 7, 3, 5),
-(121, 1, 6, 5),
-(120, 1, 3, 4),
-(119, 1, 2, 3),
-(118, 1, 7, 2),
+(148, 7, 6, 6),
+(140, 1, 6, 5),
+(139, 1, 3, 4),
+(138, 1, 2, 3),
+(137, 1, 7, 2),
 (93, 5, 3, 1),
 (92, 5, 2, 0),
-(117, 1, 8, 1),
+(136, 1, 8, 1),
 (107, 6, 8, 4),
 (106, 6, 12, 3),
 (105, 6, 14, 2),
 (104, 6, 13, 1),
 (103, 6, 2, 0),
 (108, 6, 3, 5),
-(116, 1, 1, 0),
-(132, 7, 2, 4),
-(131, 7, 7, 3),
-(130, 7, 8, 2),
-(129, 7, 12, 1),
-(128, 7, 1, 0),
-(134, 7, 6, 6);
+(135, 1, 1, 0),
+(147, 7, 3, 5),
+(146, 7, 2, 4),
+(145, 7, 7, 3),
+(144, 7, 8, 2),
+(143, 7, 12, 1),
+(142, 7, 1, 0),
+(141, 1, 15, 6),
+(149, 7, 15, 7);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `three_languages`
+-- Tabelstructuur voor tabel `three_languages`
 --
 
 CREATE TABLE IF NOT EXISTS `three_languages` (
@@ -132,7 +134,7 @@ CREATE TABLE IF NOT EXISTS `three_languages` (
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=11 ;
 
 --
--- Dumping data for table `three_languages`
+-- Gegevens worden uitgevoerd voor tabel `three_languages`
 --
 
 INSERT INTO `three_languages` (`id`, `name`, `code`, `active`) VALUES
@@ -142,7 +144,7 @@ INSERT INTO `three_languages` (`id`, `name`, `code`, `active`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `three_locales`
+-- Tabelstructuur voor tabel `three_locales`
 --
 
 CREATE TABLE IF NOT EXISTS `three_locales` (
@@ -152,7 +154,7 @@ CREATE TABLE IF NOT EXISTS `three_locales` (
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=16 ;
 
 --
--- Dumping data for table `three_locales`
+-- Gegevens worden uitgevoerd voor tabel `three_locales`
 --
 
 INSERT INTO `three_locales` (`id`, `name`) VALUES
@@ -165,7 +167,7 @@ INSERT INTO `three_locales` (`id`, `name`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `three_locales_values`
+-- Tabelstructuur voor tabel `three_locales_values`
 --
 
 CREATE TABLE IF NOT EXISTS `three_locales_values` (
@@ -177,7 +179,7 @@ CREATE TABLE IF NOT EXISTS `three_locales_values` (
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=64 ;
 
 --
--- Dumping data for table `three_locales_values`
+-- Gegevens worden uitgevoerd voor tabel `three_locales_values`
 --
 
 INSERT INTO `three_locales_values` (`id`, `id_locale`, `id_language`, `value`) VALUES
@@ -195,7 +197,7 @@ INSERT INTO `three_locales_values` (`id`, `id_locale`, `id_language`, `value`) V
 -- --------------------------------------------------------
 
 --
--- Table structure for table `three_options`
+-- Tabelstructuur voor tabel `three_options`
 --
 
 CREATE TABLE IF NOT EXISTS `three_options` (
@@ -209,10 +211,10 @@ CREATE TABLE IF NOT EXISTS `three_options` (
   `multilanguage` tinyint(1) NOT NULL,
   `required` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=15 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=16 ;
 
 --
--- Dumping data for table `three_options`
+-- Gegevens worden uitgevoerd voor tabel `three_options`
 --
 
 INSERT INTO `three_options` (`id`, `name`, `description`, `tooltip`, `type`, `options`, `default_value`, `multilanguage`, `required`) VALUES
@@ -224,12 +226,13 @@ INSERT INTO `three_options` (`id`, `name`, `description`, `tooltip`, `type`, `op
 (8, 'summary', 'Summary', '', 'large_text', '', '', 1, 0),
 (12, 'author', 'Author', '', 'small_text', '', '', 0, 0),
 (13, 'date', 'Date', '', 'date', '', '', 0, 0),
-(14, 'time', 'Time', 'The time of this item', 'time', '', '', 0, 0);
+(14, 'time', 'Time', 'The time of this item', 'time', '', '', 0, 0),
+(15, 'published', 'Published', '', 'boolean', '', '', 0, 0);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `three_ranks`
+-- Tabelstructuur voor tabel `three_ranks`
 --
 
 CREATE TABLE IF NOT EXISTS `three_ranks` (
@@ -243,7 +246,7 @@ CREATE TABLE IF NOT EXISTS `three_ranks` (
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
 
 --
--- Dumping data for table `three_ranks`
+-- Gegevens worden uitgevoerd voor tabel `three_ranks`
 --
 
 INSERT INTO `three_ranks` (`id`, `name`, `system`, `users`, `ranks`, `configuration`) VALUES
@@ -252,7 +255,7 @@ INSERT INTO `three_ranks` (`id`, `name`, `system`, `users`, `ranks`, `configurat
 -- --------------------------------------------------------
 
 --
--- Table structure for table `three_ranks_modules`
+-- Tabelstructuur voor tabel `three_ranks_modules`
 --
 
 CREATE TABLE IF NOT EXISTS `three_ranks_modules` (
@@ -263,7 +266,7 @@ CREATE TABLE IF NOT EXISTS `three_ranks_modules` (
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=7 ;
 
 --
--- Dumping data for table `three_ranks_modules`
+-- Gegevens worden uitgevoerd voor tabel `three_ranks_modules`
 --
 
 INSERT INTO `three_ranks_modules` (`id`, `id_rank`, `module`) VALUES
@@ -273,7 +276,7 @@ INSERT INTO `three_ranks_modules` (`id`, `id_rank`, `module`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `three_settings`
+-- Tabelstructuur voor tabel `three_settings`
 --
 
 CREATE TABLE IF NOT EXISTS `three_settings` (
@@ -284,7 +287,7 @@ CREATE TABLE IF NOT EXISTS `three_settings` (
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=6 ;
 
 --
--- Dumping data for table `three_settings`
+-- Gegevens worden uitgevoerd voor tabel `three_settings`
 --
 
 INSERT INTO `three_settings` (`id`, `name`, `value`) VALUES
@@ -297,7 +300,7 @@ INSERT INTO `three_settings` (`id`, `name`, `value`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `three_templates`
+-- Tabelstructuur voor tabel `three_templates`
 --
 
 CREATE TABLE IF NOT EXISTS `three_templates` (
@@ -311,7 +314,7 @@ CREATE TABLE IF NOT EXISTS `three_templates` (
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=9 ;
 
 --
--- Dumping data for table `three_templates`
+-- Gegevens worden uitgevoerd voor tabel `three_templates`
 --
 
 INSERT INTO `three_templates` (`id`, `name`, `id_dataobject`, `templatefile`, `root`, `type`) VALUES
@@ -324,7 +327,7 @@ INSERT INTO `three_templates` (`id`, `name`, `id_dataobject`, `templatefile`, `r
 -- --------------------------------------------------------
 
 --
--- Table structure for table `three_templates_allowed_children`
+-- Tabelstructuur voor tabel `three_templates_allowed_children`
 --
 
 CREATE TABLE IF NOT EXISTS `three_templates_allowed_children` (
@@ -335,7 +338,7 @@ CREATE TABLE IF NOT EXISTS `three_templates_allowed_children` (
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=59 ;
 
 --
--- Dumping data for table `three_templates_allowed_children`
+-- Gegevens worden uitgevoerd voor tabel `three_templates_allowed_children`
 --
 
 INSERT INTO `three_templates_allowed_children` (`id`, `id_template`, `id_child_template`) VALUES
@@ -351,7 +354,7 @@ INSERT INTO `three_templates_allowed_children` (`id`, `id_template`, `id_child_t
 -- --------------------------------------------------------
 
 --
--- Table structure for table `three_templates_ranks`
+-- Tabelstructuur voor tabel `three_templates_ranks`
 --
 
 CREATE TABLE IF NOT EXISTS `three_templates_ranks` (
@@ -368,7 +371,7 @@ CREATE TABLE IF NOT EXISTS `three_templates_ranks` (
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=27 ;
 
 --
--- Dumping data for table `three_templates_ranks`
+-- Gegevens worden uitgevoerd voor tabel `three_templates_ranks`
 --
 
 INSERT INTO `three_templates_ranks` (`id`, `id_template`, `id_rank`, `visible`, `add`, `modify`, `duplicate`, `move`, `delete`) VALUES
@@ -383,7 +386,7 @@ INSERT INTO `three_templates_ranks` (`id`, `id_template`, `id_rank`, `visible`, 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `three_users`
+-- Tabelstructuur voor tabel `three_users`
 --
 
 CREATE TABLE IF NOT EXISTS `three_users` (
@@ -397,7 +400,7 @@ CREATE TABLE IF NOT EXISTS `three_users` (
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
 
 --
--- Dumping data for table `three_users`
+-- Gegevens worden uitgevoerd voor tabel `three_users`
 --
 
 INSERT INTO `three_users` (`id`, `username`, `password`, `name`, `email`, `id_rank`) VALUES
@@ -406,7 +409,7 @@ INSERT INTO `three_users` (`id`, `username`, `password`, `name`, `email`, `id_ra
 -- --------------------------------------------------------
 
 --
--- Table structure for table `three_values`
+-- Tabelstructuur voor tabel `three_values`
 --
 
 CREATE TABLE IF NOT EXISTS `three_values` (
@@ -416,10 +419,10 @@ CREATE TABLE IF NOT EXISTS `three_values` (
   `id_language` int(11) NOT NULL,
   `value` text NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=402 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=410 ;
 
 --
--- Dumping data for table `three_values`
+-- Gegevens worden uitgevoerd voor tabel `three_values`
 --
 
 INSERT INTO `three_values` (`id`, `id_content`, `id_option`, `id_language`, `value`) VALUES
@@ -543,12 +546,20 @@ INSERT INTO `three_values` (`id`, `id_content`, `id_option`, `id_language`, `val
 (398, 62, 2, 2, ''),
 (399, 62, 3, 1, ''),
 (400, 62, 3, 2, ''),
-(401, 62, 6, 1, '');
+(401, 62, 6, 1, ''),
+(402, 51, 15, 1, '1'),
+(403, 50, 15, 1, '1'),
+(404, 52, 12, 1, ''),
+(405, 52, 15, 1, '1'),
+(406, 56, 15, 1, '1'),
+(407, 60, 15, 1, '1'),
+(408, 61, 15, 1, '1'),
+(409, 62, 15, 1, '1');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `three_webusers`
+-- Tabelstructuur voor tabel `three_webusers`
 --
 
 CREATE TABLE IF NOT EXISTS `three_webusers` (
@@ -568,7 +579,7 @@ CREATE TABLE IF NOT EXISTS `three_webusers` (
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
 
 --
--- Dumping data for table `three_webusers`
+-- Gegevens worden uitgevoerd voor tabel `three_webusers`
 --
 
 INSERT INTO `three_webusers` (`id`, `name`, `address`, `postalcode`, `city`, `country`, `telephone`, `mobile`, `email`, `username`, `password`, `blocked`) VALUES
@@ -578,7 +589,7 @@ INSERT INTO `three_webusers` (`id`, `name`, `address`, `postalcode`, `city`, `co
 -- --------------------------------------------------------
 
 --
--- Table structure for table `three_webusers_content_group`
+-- Tabelstructuur voor tabel `three_webusers_content_group`
 --
 
 CREATE TABLE IF NOT EXISTS `three_webusers_content_group` (
@@ -589,7 +600,7 @@ CREATE TABLE IF NOT EXISTS `three_webusers_content_group` (
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6 ;
 
 --
--- Dumping data for table `three_webusers_content_group`
+-- Gegevens worden uitgevoerd voor tabel `three_webusers_content_group`
 --
 
 INSERT INTO `three_webusers_content_group` (`id`, `id_content`, `id_group`) VALUES
@@ -599,7 +610,7 @@ INSERT INTO `three_webusers_content_group` (`id`, `id_content`, `id_group`) VALU
 -- --------------------------------------------------------
 
 --
--- Table structure for table `three_webusers_groups`
+-- Tabelstructuur voor tabel `three_webusers_groups`
 --
 
 CREATE TABLE IF NOT EXISTS `three_webusers_groups` (
@@ -609,7 +620,7 @@ CREATE TABLE IF NOT EXISTS `three_webusers_groups` (
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
 
 --
--- Dumping data for table `three_webusers_groups`
+-- Gegevens worden uitgevoerd voor tabel `three_webusers_groups`
 --
 
 INSERT INTO `three_webusers_groups` (`id`, `name`) VALUES
@@ -619,7 +630,7 @@ INSERT INTO `three_webusers_groups` (`id`, `name`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `three_webusers_user_group`
+-- Tabelstructuur voor tabel `three_webusers_user_group`
 --
 
 CREATE TABLE IF NOT EXISTS `three_webusers_user_group` (
@@ -630,7 +641,7 @@ CREATE TABLE IF NOT EXISTS `three_webusers_user_group` (
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
 
 --
--- Dumping data for table `three_webusers_user_group`
+-- Gegevens worden uitgevoerd voor tabel `three_webusers_user_group`
 --
 
 INSERT INTO `three_webusers_user_group` (`id`, `id_user`, `id_group`) VALUES

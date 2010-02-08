@@ -10,11 +10,15 @@
 			</div>
 			{include file="navigation.tpl"}
 			<div id="content">
-				<div class="breadCrumbs">
-					{$breadCrumbs->generate($this->idContent)}
-				</div>
-				<h1>{$header}</h1>
-				<p>{$content}</p>
+				{if $this->get('published') eq '1'}
+					<div class="breadCrumbs">
+						{$breadCrumbs->generate($this->idContent)}
+					</div>
+					<h1>{$header}</h1>
+					<p>{$content}</p>
+				{else}
+					<p>This page is not yet published!</p>
+				{/if}
 			</div>
 			<div id="footer">
 				<p>&copy; {$smarty.now|date_format:"%Y"} | Powered by Three CMS</p>
