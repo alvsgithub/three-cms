@@ -12,7 +12,7 @@ A simple navigation in an unordered list where the link of the current page gets
 
 {{{
 <ul>
-  {foreach from=$dataObject->children(0) item=child}
+  {foreach from=$this->children(0) item=child}
     <li>
       <a {if $child->get('idContent') eq $idContent}class="active" {/if}href="{$child->getUrl()}">{$child->get('header')}</a>
     </li>
@@ -26,7 +26,7 @@ A simple language picker which leads to the homepage of the selected language. T
 
 {{{
 <ul class="language">
-  {foreach from=$dataObject->getLanguages() item=language}
+  {foreach from=$this->getLanguages() item=language}
     <li>
       <a {if $language.id eq $idLanguage}class="active" {/if}href="{$language.url}">{$language.name}</a>
     </li>
@@ -43,7 +43,7 @@ You can add published/unpublished-functionality by creating a published option o
 <ul>
   {foreach from=$this->children(0, 'published=>1') item=child}
     <li>
-      <a {if $child->get('idContent') eq $idContent}class="active" {/if}href="{$child->getUrl()}">{$child->get('header')}</a>
+      <a href="{$child->getUrl()}">{$child->get('header')}</a>
     </li>
   {/foreach}
 </ul>
