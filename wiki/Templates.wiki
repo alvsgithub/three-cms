@@ -65,9 +65,9 @@ Content objects that are created according to your URL. For example: take an URL
 </html>
 }}}
 
-=== Data Object ===
+=== This ===
 
-The `{$dataObject}`-parameter is a reference to the current dataobject. Example:
+The `{$this}`-parameter is a reference to the current dataobject. Example:
 
 {{{
 <html>
@@ -77,13 +77,15 @@ The `{$dataObject}`-parameter is a reference to the current dataobject. Example:
   <body>
     {* Create a simple menu: *}
     <ul>
-      {foreach from=$dataObject->children() item=child}
+      {foreach from=$this->children() item=child}
         <li><a href="{$child->getUrl()}">{$child->get('header')}</a></li>
       {/foreach}
     </ul>
   </body>
 </html>
 }}}
+
+Note: Before beta 3 this parameter was referenced to as `{$dataObject}`.
 
 === Other parameters ===
 
@@ -115,7 +117,7 @@ Example 1:
 {{{
 {* Create a simple menu: *}
 <ul>
-  {foreach from=$dataObject->children() item=child}
+  {foreach from=$this->children() item=child}
     <li><a href="{$child->getUrl()}">{$child->get('header')}</a></li>
   {/foreach}
 </ul>
@@ -125,7 +127,7 @@ Example 2, only show pages which are placed on the root (id=0), and have the `sh
 {{{
 {* Create a simple menu: *}
 <ul>
-  {foreach from=$dataObject->children(0, 'show in menu=>1') item=child}
+  {foreach from=$this->children(0, 'show in menu=>1') item=child}
     <li><a href="{$child->getUrl()}">{$child->get('header')}</a></li>
   {/foreach}
 </ul>
@@ -231,7 +233,7 @@ Get a specific parameter
 Example:
 
 {{{
-{foreach from=$dataObject->children() item=child}
+{foreach from=$this->children() item=child}
   {* See how all attributes of each child are available: *}
   <div class="newsItem">
     <h2>{$child->get('header')}</h2>
@@ -254,7 +256,7 @@ Renders the current data object
 Example:
 
 {{{
-{foreach from=$dataObject->children() item=child}
+{foreach from=$this->children() item=child}
   {$child->render()}
 {/foreach}
 }}}
