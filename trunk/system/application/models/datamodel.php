@@ -43,6 +43,13 @@ class DataModel extends Model
 		// Load the session library:
 		$this->load->library('session');
 		
+		// Assign Addons:
+		// Load the addonBaseModel:
+		$this->load->model('AddonBaseModel', '', true);
+		
+		// Load the addonModel:
+		$this->load->model('AddonModel', '', true);
+		
 		// Default settings:
 		$this->parameters     = false;
 		$this->contentObjects = false;
@@ -511,6 +518,7 @@ class DataModel extends Model
 		
 		// Assign modules:
 		// Modules get auto-detected according to the folders found in the modules-directory
+		/*
         $folders = glob('assets/modules/*', GLOB_ONLYDIR);
 		if($folders != false) {
 			foreach($folders as $folder) {
@@ -540,6 +548,15 @@ class DataModel extends Model
 					$object = new $objectName;
 					$smarty->assign($folderName, $object);
 				}
+			}
+		}
+		*/
+		
+		
+		// Assign the addons:		
+		foreach($this->AddonModel->addons as $addon) {
+			if($addon[1]->frontEnd) {
+				$smarty->assign($addon[0], $addon[1]);
 			}
 		}
 		

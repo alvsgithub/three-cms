@@ -3,9 +3,10 @@
 
 /*
 
-	Hooks:
-		AppendMainNavigation
+	Hooks:							Context-items:
+		AppendMainNavigation			parent
 		AppendSubNavigation
+		ShowModuleScreen				alias,parameters[]
  
 */
 
@@ -31,6 +32,7 @@ class AddonModel extends Model
 				require_once($path);
 				$objectName = ucfirst($folderName);
 				$object     = new $objectName;
+				$object->init();
 				$hooks      = $object->getHooks();
 				array_push($this->addons, array($folderName, $object, $hooks));
 				// Setup the hooks:
