@@ -46,6 +46,9 @@ class Admin extends Controller
         // Load the adminModel:
         $this->load->model('AdminModel', '', true);
 		
+		// Load the addonBaseModel:
+		$this->load->model('AddonBaseModel', '', true);
+		
 		// Load the addonModel:
 		$this->load->model('AddonModel', '', true);
 		
@@ -1219,7 +1222,8 @@ class Admin extends Controller
 				}
 			}
 			// TODO: Optimize this?
-			$modules = $this->AdminModel->getModules();
+			// $modules = $this->AdminModel->getModules();
+			/*
 			foreach($modules as $module) {				
 				if($module['alias']==$alias) {
 					// Create dataobject:
@@ -1233,8 +1237,19 @@ class Admin extends Controller
 					$this->load->view('admin/modules/bottom.php');
 				}
 			}
+			*/
+			
+			// Execute the hooks:
+			// $this->load->view('admin/modules/top.php');
+			ob_start();
+			$this->AddonModel->executeHook('ModuleScreen', array('alias'=>$alias, 'parameters'=>$parameters));
+			$content = ob_get_clean();
+			// echo $content;
+			$this->load->view('admin/modules/content.php', array('content'=>$content));
+			// $this->load->view('admin/modules/bottom.php');
 		} else {
 			// TODO: Show 'module not found'-screen
+			
 		}
 		// Show the footer:
 		$this->showFooter();

@@ -3,7 +3,7 @@
     if(!isset($_POST['install'])) {
 ?>
 <p>It seems that this is the first time you are using the web users module.</p>
-<form method="post" action="<?php echo moduleCreateLink(array('webusers')); ?>" />
+<form method="post" action="<?php $this->createLink(array('webusers')); ?>" />
     <input type="submit" value="Click here to install" name="install" />
 </form>
 <?php
@@ -105,6 +105,6 @@
         $this->dbforge->create_table('webusers_content_group', true);        
         
         echo '<p>Module successfully installed...</p>';
-        echo '<p><a href="'.moduleCreateLink(array('webusers')).'">Click here to go to the module</a></p>';
+        echo '<p><a href="'.$this->createLink(array('webusers')).'">Click here to go to the module</a></p>';
     }
 ?>

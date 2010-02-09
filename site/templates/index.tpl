@@ -12,13 +12,15 @@
 			<div id="content">
 				{if $this->get('published') eq '1'}
 					<div class="breadCrumbs">
-						{$breadCrumbs->generate($this->idContent)}
+						{* {$breadCrumbs->generate($this->idContent)} *}
 					</div>
 					<h1>{$header}</h1>
 					<p>{$content}</p>
 				{else}
 					<p>This page is not yet published!</p>
 				{/if}
+				<h2>Tree:</h2>				
+				{include file="tree.tpl" id='0'}
 			</div>
 			<div id="footer">
 				<p>&copy; {$smarty.now|date_format:"%Y"} | Powered by Three CMS</p>
