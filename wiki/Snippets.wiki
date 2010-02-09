@@ -34,7 +34,7 @@ A simple language picker which leads to the homepage of the selected language. T
 </ul>
 }}}
 
-== Published / Unpublished unfunctionality ==
+== Published / Unpublished functionality ==
 
 You can add published/unpublished-functionality by creating a published option of the type Boolean and filter them on the frontend. For this example we created a Boolean-option called 'published'.
 
