@@ -57,3 +57,27 @@ You can add published/unpublished-functionality by creating a published option o
   <p>This page is not yet published!</p>
 {/if}
 }}}
+
+== Site tree ==
+
+Create easily a sitemap with Smarty:
+
+Create a file called tree.tpl with the following code:
+{{{
+{assign var='tree' value=$this->children($id)}
+{if $tree|@count gt 0}
+<ul>
+	{foreach from=$tree item=child}
+		<li>			
+			<a href="{$child->getUrl()}">{$child->get('contentName')}</a>
+			{include file="tree.tpl" id=$child->idContent}
+		</li>
+	{/foreach}
+</ul>
+{/if}
+}}}
+
+To show the tree in your site use:
+{{{
+{include file="tree.tpl" id='0'}
+}}}
