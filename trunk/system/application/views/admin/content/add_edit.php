@@ -79,7 +79,8 @@
 					</td>
 				</tr>
 				<?php
-					} // End count languages
+					} // End count languages					
+					$addons->executeHook('ContentAboveOptions', array('lang'=>$lang, 'contentData'=>$contentData, 'templates'=>$templates, 'title'=>$title, 'allowedTemplates'=>$allowedTemplates, 'settings'=>$settings));
 				?>
 				<tr class="delimiter optionsStart">
 					<td colspan="2">&nbsp;</td>
@@ -92,6 +93,7 @@
 				</tr>
 				<?php
 					// See if there are any modules to execute here:
+					/*
 					$moduleFound = false;
 					foreach($modules as $module) {
 						$moduleName = strtolower($module['name']);
@@ -108,6 +110,13 @@
 								<td colspan="2">&nbsp;</td>
 							</tr>
 						';
+					}
+					*/
+					
+					// Addons:
+					$ok = $addons->executeHook('ContentBelowOptions', array('lang'=>$lang, 'contentData'=>$contentData, 'templates'=>$templates, 'title'=>$title, 'allowedTemplates'=>$allowedTemplates, 'settings'=>$settings));
+					if($ok) {
+						echo '<tr class="delimiter"><td colspan="2">&nbsp;</td></tr>';
 					}
 				?>				
 				<tr>

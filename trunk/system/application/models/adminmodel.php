@@ -1052,6 +1052,7 @@ class AdminModel extends Model
      * Get a list of modules
      * @return  array       A 2-dimensional array with modules [[name, path]]
      */
+    /*
     function getModules()
     {
         if(!isset($this->modules)) {
@@ -1078,19 +1079,20 @@ class AdminModel extends Model
         }
         return $this->modules;
     }
-    
+                                           */
+            
     /**
      * Save the link between ranks and modules
      * @param   $idRank     int     The ID of the rank
-     * @param   $modules    array   An array with the names of the modules
+     * @param   $addons    array   An array with the names of the modules
      */
-    function saveRankModules($idRank, $modules)
+    function saveRankAddons($idRank, $addons)
     {
         // First delete all existing links:
-        $this->db->delete('ranks_modules', array('id_rank'=>$idRank));
+        $this->db->delete('ranks_addons', array('id_rank'=>$idRank));
         // Then insert new links:
-        foreach($modules as $module) {
-            $this->db->insert('ranks_modules', array('id_rank'=>$idRank, 'module'=>$module));
+        foreach($addons as $addon) {
+            $this->db->insert('ranks_addons', array('id_rank'=>$idRank, 'addon'=>$addon));
         }
     }
     
@@ -1099,16 +1101,17 @@ class AdminModel extends Model
      * @param   $idRank     int     The ID of the rank
      * @return              array   An array with the names of the modules
      */
-    function getRankModules($idRank)
+    function getRankAddons($idRank)
     {
-        $modules = array();
-        $this->db->select('module');
+        $addons = array();
+        return $addons;
+        $this->db->select('addon');
         $this->db->where('id_rank', $idRank);
-        $query = $this->db->get('ranks_modules');
+        $query = $this->db->get('ranks_addons');
         foreach($query->result() as $result) {
-            array_push($modules, $result->module);
+            array_push($addons, $result->addon);
         }
-        return $modules;
+        return $addons;
     }
 }
 ?>

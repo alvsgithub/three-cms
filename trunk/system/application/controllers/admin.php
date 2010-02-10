@@ -739,8 +739,11 @@ class Admin extends Controller
 						}
 					}
 					// All the values are retreived, now save the data:
+					$this->AddonModel->executeHook('PreSaveContent', array('idContent'=>$idContent, 'contentData'=>$contentData));
 					$idContent = $this->AdminModel->saveContentData($idContent, $contentData);
+					
 					// Execute external module-commands:
+					/*
 					$modules   = $this->AdminModel->getModules();
 					foreach($modules as $module) {
 						$moduleName = strtolower($module['name']);
@@ -749,6 +752,9 @@ class Admin extends Controller
 							include_once($path);			
 						}
 					}
+					*/
+					$this->AddonModel->executeHook('PostSaveContent', array('idContent'=>$idContent, 'contentData'=>$contentData));
+					
 					// See if this action was send using ajax:
 					if(isset($_POST['ajax'])) {
 						echo '1;'.$this->lang->line('content_stored');
@@ -774,7 +780,8 @@ class Admin extends Controller
 							'title'=>$this->lang->line('title_add_content'),
 							'allowedTemplates'=>$this->AdminModel->getAllowedTemplates($this->rank),
 							'settings'=>$this->settings,
-							'modules'=>$this->AdminModel->getModules()
+							/* 'modules'=>$this->AdminModel->getModules() */
+							'addons'=>$this->AddonModel
 						);
 						$this->load->view('admin/content/add_edit.php', $data);
 					}
@@ -793,7 +800,8 @@ class Admin extends Controller
 							'title'=>$this->lang->line('title_modify_content'),
 							'allowedTemplates'=>$this->AdminModel->getAllowedTemplates($this->rank),
 							'settings'=>$this->settings,
-							'modules'=>$this->AdminModel->getModules()
+							/* 'modules'=>$this->AdminModel->getModules() */
+							'addons'=>$this->AddonModel
 						);
 						$this->load->view('admin/content/add_edit.php', $data);
 					}
@@ -894,11 +902,12 @@ class Admin extends Controller
 	 */
 	function showHeader()
     {
+		// TODO: Filter addons according to the addons which this rank is allowed to see:
         $data = array(
             'lang'=>$this->lang,
 			'rank'=>$this->AdminModel->getRank($this->rank),
 			/* 'modules'=>$this->AdminModel->getModules(), */
-			'allowedModules'=>$this->AdminModel->getRankModules($this->rank),
+			/* 'allowedAddons'=>$this->AdminModel->getRankAddons($this->rank), */
 			'addons'=>$this->AddonModel
         );		
 		$this->load->view('admin/header.php', $data);
@@ -1113,7 +1122,7 @@ class Admin extends Controller
 								array_push($modules, $a[1]);
 							}
 						}
-						$this->AdminModel->saveRankModules($id, $modules);
+						$this->AdminModel->saveRankAddons($id, $modules);
 						// Redirect:
 						redirect(site_url(array('admin', 'ranks')));
 						break;
@@ -1121,7 +1130,8 @@ class Admin extends Controller
 				case 'add' :
 					{
 						$data['rank']    = $this->AdminModel->getData('ranks', 0);
-						$data['modules'] = $this->AdminModel->getModules();
+						/* $data['modules'] = $this->AdminModel->getModules(); */
+						$data['addons']  = $this->AddonModel;
 						$this->load->view('admin/ranks/add_edit.php', $data);
 						break;
 					}
@@ -1130,7 +1140,8 @@ class Admin extends Controller
 						$id = $this->uri->segment(4);
 						if($id!=false) {
 							$data['rank']    = $this->AdminModel->getData('ranks', $id);
-							$data['modules'] = $this->AdminModel->getModules();
+							// $data['modules'] = $this->AdminModel->getModules();
+							$data['addons']  = $this->AddonModel;
 							$this->load->view('admin/ranks/add_edit.php', $data);
 						}
 						break;

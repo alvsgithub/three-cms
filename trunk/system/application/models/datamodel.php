@@ -556,6 +556,7 @@ class DataModel extends Model
 		// Assign the addons:		
 		foreach($this->AddonModel->addons as $addon) {
 			if($addon[1]->frontEnd) {
+				$addon[1]->dataObject = $this;
 				$smarty->assign($addon[0], $addon[1]);
 			}
 		}

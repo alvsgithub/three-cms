@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Machine: localhost
--- Genereertijd: 08 Feb 2010 om 10:27
+-- Genereertijd: 10 Feb 2010 om 15:47
 -- Serverversie: 5.1.36
 -- PHP-Versie: 5.3.0
 
@@ -255,23 +255,22 @@ INSERT INTO `three_ranks` (`id`, `name`, `system`, `users`, `ranks`, `configurat
 -- --------------------------------------------------------
 
 --
--- Tabelstructuur voor tabel `three_ranks_modules`
+-- Tabelstructuur voor tabel `three_ranks_addons`
 --
 
-CREATE TABLE IF NOT EXISTS `three_ranks_modules` (
+CREATE TABLE IF NOT EXISTS `three_ranks_addons` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `id_rank` int(11) NOT NULL,
-  `module` tinytext NOT NULL,
+  `addon` tinytext NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=7 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=9 ;
 
 --
--- Gegevens worden uitgevoerd voor tabel `three_ranks_modules`
+-- Gegevens worden uitgevoerd voor tabel `three_ranks_addons`
 --
 
-INSERT INTO `three_ranks_modules` (`id`, `id_rank`, `module`) VALUES
-(6, 1, 'webusers'),
-(5, 1, 'export');
+INSERT INTO `three_ranks_addons` (`id`, `id_rank`, `addon`) VALUES
+(8, 1, 'webusers');
 
 -- --------------------------------------------------------
 
@@ -576,7 +575,7 @@ CREATE TABLE IF NOT EXISTS `three_webusers` (
   `password` tinytext,
   `blocked` tinyint(1) DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
 
 --
 -- Gegevens worden uitgevoerd voor tabel `three_webusers`
@@ -584,7 +583,8 @@ CREATE TABLE IF NOT EXISTS `three_webusers` (
 
 INSERT INTO `three_webusers` (`id`, `name`, `address`, `postalcode`, `city`, `country`, `telephone`, `mobile`, `email`, `username`, `password`, `blocked`) VALUES
 (1, 'Testuser', '', '', '', '', '', '', '', 'test', '81dc9bdb52d04dc20036dbd8313ed055', 0),
-(2, '', '', '', '', '', '', '', '', 'test2', '81dc9bdb52d04dc20036dbd8313ed055', 0);
+(2, '', '', '', '', '', '', '', '', 'test2', '81dc9bdb52d04dc20036dbd8313ed055', 0),
+(3, 'name', 'address', 'postalcode', 'city', 'country', 'telephone', 'mobile', 'example@example.com', 'username', '81dc9bdb52d04dc20036dbd8313ed055', 0);
 
 -- --------------------------------------------------------
 
@@ -597,7 +597,7 @@ CREATE TABLE IF NOT EXISTS `three_webusers_content_group` (
   `id_content` int(11) DEFAULT NULL,
   `id_group` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=9 ;
 
 --
 -- Gegevens worden uitgevoerd voor tabel `three_webusers_content_group`
@@ -638,7 +638,7 @@ CREATE TABLE IF NOT EXISTS `three_webusers_user_group` (
   `id_user` int(11) DEFAULT NULL,
   `id_group` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=7 ;
 
 --
 -- Gegevens worden uitgevoerd voor tabel `three_webusers_user_group`
@@ -647,4 +647,6 @@ CREATE TABLE IF NOT EXISTS `three_webusers_user_group` (
 INSERT INTO `three_webusers_user_group` (`id`, `id_user`, `id_group`) VALUES
 (3, 1, 1),
 (2, 2, 2),
-(4, 1, 2);
+(4, 1, 2),
+(5, 3, 1),
+(6, 3, 2);

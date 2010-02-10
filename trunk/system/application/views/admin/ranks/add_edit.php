@@ -30,18 +30,18 @@
 					<td colspan="2">&nbsp;</td>
 				</tr>
 				<tr>
-					<th><?php echo $lang->line('ranks_modules'); ?>:</th>
+					<th><?php echo $lang->line('ranks_addons'); ?>:</th>
 					<td>
-						<?php
-							if(count($modules)==0) {
-								echo '<em>'.$lang->line('ranks_no_modules').'</em>';
-							} else {
-								foreach($modules as $module) {
-									$query = $this->db->get_where('ranks_modules', array('id_rank'=>$rank['id'], 'module'=>strtolower($module['name'])));
+						<?php							
+							if(count($addons->addons)==0) {
+								echo '<em>'.$lang->line('ranks_no_addons').'</em>';
+							} else {								
+								foreach($addons->addons as $addon) {									
+									$query = $this->db->get_where('ranks_addons', array('id_rank'=>$rank['id'], 'addon'=>strtolower($addon[0])));
 									$checked = $query->num_rows >= 1 ? ' checked="checked" ' : '';
 									echo '
-										<input type="checkbox" name="module_'.strtolower($module['name']).'" '.$checked.' /> '.$module['name'].'<br />
-									';
+										<input type="checkbox" name="module_'.strtolower($addon[0]).'" '.$checked.' /> '.$addon[0].'<br />
+									';									
 								}
 							}
 						?>
