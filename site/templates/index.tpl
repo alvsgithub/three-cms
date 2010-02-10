@@ -12,7 +12,7 @@
 			<div id="content">
 				{if $this->get('published') eq '1'}
 					<div class="breadCrumbs">
-						{* {$breadCrumbs->generate($this->idContent)} *}
+						{$breadcrumbs->generate($this->idContent)}
 					</div>
 					<h1>{$header}</h1>
 					<p>{$content}</p>

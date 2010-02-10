@@ -1,7 +1,8 @@
 <?php
 class AddonBaseModel extends Model
 {
-	var $frontEnd = false;	// $frontEnd determines if this addon is available on the frontend
+	var $frontEnd   = false;	// $frontEnd determines if this addon is available on the frontend
+	var $dataObject = null;		// $dateObject is a reference to the current data object (for frontend use)
 	
 	function AddonBaseModel()
 	{

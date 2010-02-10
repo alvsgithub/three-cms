@@ -23,6 +23,14 @@ class Webusers extends AddonBaseModel
 			array(
 				'hook'=>'ModuleScreen',
 				'callback'=>'showModuleScreen'
+			),
+			array(
+				'hook'=>'ContentBelowOptions',
+				'callback'=>'showUserGroupSelector'
+			),
+			array(
+				'hook'=>'PostSaveContent',
+				'callback'=>'save'
 			)
 		);
 		return $hooks;
@@ -107,6 +115,99 @@ class Webusers extends AddonBaseModel
 					}
 				}
 			}
+		}
+	}
+	
+	function showUserGroupSelector($context)
+	{
+		if($this->db->table_exists('webusers')) {	
+			$allowedGroups = array();
+			if($context['contentData']['id']==0) {
+				// This is new content:
+				$allChecked = ' checked="checked" ';
+			} else {
+				// This is existing content:
+				// See which user groups are allowed to see this content, 0 means all
+				$query = $this->db->select('id_group');
+				$query = $this->db->where('id_content', $context['contentData']['id']);
+				$query = $this->db->get('webusers_content_group');
+				if($query->num_rows==0) {
+					$allChecked = ' checked="checked" ';
+				} else {
+					// There are restrictions:
+					$allChecked = '';
+					foreach($query->result() as $result) {
+						array_push($allowedGroups, $result->id_group);
+					}
+				}
+			}
+			echo '
+				<tr>
+					<th>Visible for webuser groups:</th>
+					<td><input type="checkbox" name="webusers_all" '.$allChecked.' /> <strong>All users can view this page</strong><br />
+				';
+			// Get all groups:
+			$this->db->select('id,name');
+			$this->db->order_by('name', 'asc');
+			$query = $this->db->get('webusers_groups');
+			foreach($query->result() as $result) {
+				$checked = in_array($result->id, $allowedGroups) ? ' checked="checked" ' : '';
+				echo '
+					<input type="checkbox" name="webusers_'.$result->id.'" '.$checked.' /> '.$result->name.'<br />
+				';
+			}
+			echo '
+				<script type="text/javascript">
+				// jQuery script:
+				$(function(){				
+					$("input[name=webusers_all]").change(function(){
+						if(!$(this).attr("checked")) {
+							$("input[name^=webusers_]").removeAttr("disabled");						
+						} else {
+							$("input[name^=webusers_]").not($(this)).attr("disabled", "disabled");
+						}
+					});				
+					$("input[name!=webusers_all]").change(function(){
+						if($(this).attr("checked")) {
+							$("input[name=webusers_all]").removeAttr("checked");
+						} else {
+							// See if there are other checkboxes that are checked
+							var otherChecked = false;
+							$("input[name!=webusers_all]").each(function(){
+								if($(this).attr("checked")) {
+									otherChecked = true;
+								}
+							});
+							if(!otherChecked) {
+								$("input[name=webusers_all]").attr("checked", "checked");
+							}
+						}					
+					});
+				});
+				</script>
+			</td>
+		</tr>
+			';
+		}
+	}
+	
+	function save($context)
+	{
+		if($this->db->table_exists('webusers')) {		
+			// First, delete all existing links:
+			$this->db->delete('webusers_content_group', array('id_content'=>$context['idContent']));
+			if(!isset($_POST['webusers_all'])) {
+				// Store all links:
+				foreach($_POST as $key=>$value) {
+					if(substr($key, 0, 9)=='webusers_') {
+						$a = explode('_', $key);
+						if(count($a)==2) {
+							$id_group = $a[1];
+							$this->db->insert('webusers_content_group', array('id_content'=>$context['idContent'], 'id_group'=>$id_group));
+						}
+					}
+				}
+			}	
 		}
 	}
 	
