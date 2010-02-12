@@ -6,5 +6,5 @@
     * [Templates Template Design and Development]
     * [FriendlyURLS How to setup friendly URLS]
     * [PluginDevelopment Plugin Development]
-    * [ModuleDevelopment Module Development]
+    * [AddonDevelopment Addon Development]
     * [Snippets Snippets to use in your templates]
