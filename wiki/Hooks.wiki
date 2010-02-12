@@ -1,0 +1,18 @@
+#summary An overview of all the hooks.
+
+= Introduction =
+
+Hooks are used by addons. There will be many hooks, but for now it is limited. If you have requests for hooks place them in the forum, or post them here.
+
+= Hooks =
+
+||*Name*||*When gets it executed?*||*Context-parameters*||
+||AppendMainNavigation||_backend_; allows you to add HTML after the main navigation||parent||
+||AppendSubNavigation||_backend_; allows you to add HTML after the subnavigation||_none_||
+||ShowModuleScreen||_backend_; gets used for a dedicated module page||alias,parameters[]||
+||ContentAboveOptions||_backend_; allows you to put HTML between the options and the top-options (language-picker etc.)||lang,contentData,templates,title,allowedTemplates,settings||
+||ContentBelowOptions||_backend_; allows you to put HTML between the options and the save-button||lang,contentData,templates,title,allowedTemplates,settings||
+||PreSaveContent||_backend_; before content is stored in the database.||idContent,contentData[]||
+||PostSaveContent||_backend_; after content gets stored in the database.||idContent,contentData[]||
+||PreRenderPage||_frontend_; before Smarty renders the page.||idPage,dataObject,parameters[],dataObjects[]||
+||PostRenderPage||_frontend_; after Smarty has rendered the page.||idPage,dataObject,parameters[],dataObjects[]||
