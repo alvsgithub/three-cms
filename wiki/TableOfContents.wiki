@@ -7,4 +7,5 @@
     * [FriendlyURLS How to setup friendly URLS]
     * [PluginDevelopment Plugin Development]
     * [AddonDevelopment Addon Development]
+      * [Hooks Hooks List]
     * [Snippets Snippets to use in your templates]
