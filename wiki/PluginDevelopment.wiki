@@ -2,6 +2,8 @@
 #labels Phase-Implementation,Phase-Deploy
 #sidebar TableOfContents
 
+*Important: In the current SVN and the upcoming releases Modules and Plugins will make place for one single option: Addons.*
+
 = Introduction =
 
 A plugin is a class which can be used to perform one or more specific actions. Plugin development in Three CMS is fairly simple.
