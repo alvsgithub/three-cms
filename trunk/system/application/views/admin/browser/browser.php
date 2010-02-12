@@ -34,7 +34,7 @@
 									$a = explode('/', $file);
 									$name = $a[count($a)-1];
 									// Make sure it is not the modules or plugins-folder:
-									if($file != 'assets/modules' && $file != 'assets/plugins') {
+									if($file != 'assets/addons') {
 										echo '<li class="folder"><span rel="'.str_replace('/', '-', $file).'">'.$name.'</span>';
 										buildTree($file);
 										echo '</li>';
