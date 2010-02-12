@@ -18,6 +18,13 @@ class Page extends Controller
 		// Load the page model:		
 		$this->load->model('PageModel', '', true);
 		
+		// Assign Addons:
+		// Load the addonBaseModel:
+		$this->load->model('AddonBaseModel', '', true);
+		
+		// Load the addonModel:
+		$this->load->model('AddonModel', '', true);
+		
 		// Load DataModel Class:
 		$this->load->model('DataModel', '', true);
 		
@@ -130,7 +137,9 @@ class Page extends Controller
 			$dataObject->parameters     = $contentParams;
 			$dataObject->contentObjects = $contentObjects;
 			// Render it:
+			$this->AddonModel->executeHook('PreRenderPage', array('idPage'=>$idPage, 'dataObject'=>$dataObject, 'parameters'=>$contentParams, 'dateObjects'=>$contentObjects));
 			$dataObject->render();
+			$this->AddonModel->executeHook('PostRenderPage', array('idPage'=>$idPage, 'dataObject'=>$dataObject, 'parameters'=>$contentParams, 'dateObjects'=>$contentObjects));
 		} else {
 			echo 'Error: Page does not exist! (id: '.$idPage.')';
 		}

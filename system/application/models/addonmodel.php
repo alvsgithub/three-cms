@@ -11,7 +11,8 @@
 		ContentBelowOptions				lang,contentData,templates,title,allowedTemplates,settings
 		PreSaveContent					idContent,contentData[]
 		PostSaveContent					idContent,contentData[]
-		
+		PreRenderPage					idPage,dataObject,parameters[],dataObjects[]
+		PostRenderPage					idPage,dataObject,parameters[],dataObjects[]
  
 */
 

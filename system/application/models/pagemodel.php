@@ -18,7 +18,7 @@ class PageModel extends Model
 {
 	function PageModel()
 	{
-		parent::Model();		
+		parent::Model();
 	}
 	
 	/**

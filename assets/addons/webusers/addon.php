@@ -1,6 +1,67 @@
 <?php
+/*
+ 
+	Webusers v0.1
+	---------------------------------------------------------------------------
+	Author:		Giel Berkers
+	Website:	www.gielberkers.com
+	---------------------------------------------------------------------------
+	Usage:
+	
+	Frontend functions:
+		loggedIn()			Check to see whether the current user is logged in
+		userInfo($str)		Get certain information about the current user
+		allowed($id)		Check whether the user is allowed to see the content
+							with the given ID
+		getErrors()			Check if there are errors
+		
+	Example #1: login / logout form:
+	
+		{if $webusers->loggedIn()}
+			<h2>Logout</h2>
+			<form method="post" action="">
+				<input type="submit" name="webusers[logout]" />
+			</form>
+		{else}
+			<h2>Login</h2>
+			<form method="post" action="">
+				Username:	<input type="text" name="webusers[username]" />
+				Password:	<input type="password" name="webusers[password]" />
+				<input type="submit" name="webusers[login]" />
+			</form>
+		{/if}
+	
+	Example #2: Register form:
+	
+		<h2>Register</h2>
+		<form method="post" action="">
+			Username:			<input type="text" name="webusers[username]" />
+			Password:			<input type="password" name="webusers[password]" />
+			Password (repeat):	<input type="password" name="webusers[passwordrepeat]" />
+			E-mail address:		<input type="text" name="webusers[email]" />
+			<input type="submit" name="webusers[register]" />
+		</form>
+	
+	Example #3: Show allowed content:
+	
+		<body>
+			{if $webusers->allowed($idContent)}
+			
+				...(show content)...
+				
+			{else}
+				<p>You are not authorized to view this page!</p>
+			{/if}
+		</body>
+		
+	---------------------------------------------------------------------------
+ 
+*/
+
 class Webusers extends AddonBaseModel
 {
+	var $errors;
+	
 	/**
 	 * Initialize
 	 */
@@ -8,6 +69,7 @@ class Webusers extends AddonBaseModel
 	{
 		@session_start();
 		$this->frontEnd = true;
+		$this->errors   = array();
 	}
 	
 	/**
@@ -31,6 +93,10 @@ class Webusers extends AddonBaseModel
 			array(
 				'hook'=>'PostSaveContent',
 				'callback'=>'save'
+			),
+			array(
+				'hook'=>'PreRenderPage',
+				'callback'=>'preRender'
 			)
 		);
 		return $hooks;
@@ -211,6 +277,90 @@ class Webusers extends AddonBaseModel
 		}
 	}
 	
+	function preRender($context)
+	{
+		// Check if there is a post done to register this user:
+		if(isset($_POST['webusers'])) {
+			if($this->db->table_exists('webusers')) {
+				$vars = $this->input->post('webusers'); 
+				// Check what the action is:
+				if(isset($vars['login'])) {
+					// Login
+					if(isset($vars['username']) && isset($vars['password'])) {				
+						$username = $vars['username'];
+						$password = md5($vars['password']);					
+						$this->db->where(array(
+							'username' => $username,
+							'password' => $password
+						));
+						$query = $this->db->get('webusers');
+						if($query->num_rows==1) {						
+							$details = $query->result_array();
+							// Add the groups where this user belongs to:
+							$this->db->select('id_group');						
+							$this->db->where('id_user', $details[0]['id']);
+							$query = $this->db->get('webusers_user_group');
+							$groups = array();
+							foreach($query->result() as $result) {
+								array_push($groups, $result->id_group);
+							}
+							$details[0]['groups'] = $groups;
+							$_SESSION['webuser_info'] = $details[0];
+							$_SESSION['webuser_loggedin'] = true;
+						} else {
+							array_push($this->errors, array('code'=>101, 'message'=>'Login: Failed login attempt'));
+						}
+					}
+				} elseif(isset($vars['logout'])) {
+					// Logout
+					unset($_SESSION['webuser_loggedin']);
+					unset($_SESSION['webuser_info']);
+					header('Location: '.$context['dataObject']->getUrl());
+				} elseif(isset($vars['register'])) {
+					// Register
+					// Check if there required fields are not empty:
+					if(!empty($vars['username']) && !empty($vars['password']) && !empty($vars['passwordrepeat']) && !empty($vars['email'])) {
+						// Save the user:
+						$details = array(
+							'email' => $vars['email'],
+							'username' => $vars['username']
+						);
+						$details['name'] = isset($vars['name']) ? $vars['name'] : '';
+						$details['postalcode'] = isset($vars['postalcode']) ? $vars['postalcode'] : '';
+						$details['city'] = isset($vars['city']) ? $vars['city'] : '';
+						$details['country'] = isset($vars['country']) ? $vars['country'] : '';
+						$details['address'] = isset($vars['address']) ? $vars['address'] : '';
+						$details['telephone'] = isset($vars['telephone']) ? $vars['telephone'] : '';
+						$details['mobile'] = isset($vars['mobile']) ? $vars['mobile'] : '';
+						$details['blocked'] = isset($_POST['blocked']) ? 1 : 0;
+						if(!empty($vars['password'])) {
+							$password  = md5($vars['password']);
+							$password2 = md5($vars['passwordrepeat']);
+							if($password == $password2) {
+								$details['password'] = $password;
+								// Check if there is not already a user with the same e-mail address:
+								$this->db->select('id');
+								$this->db->where('email', $details['email']);
+								$query = $this->db->get('webusers');
+								if($query->num_rows >= 1) {
+									array_push($this->errors, array('code'=>203, 'message'=>'Register: E-mail address is already in use'));
+								} else {
+									// New webuser:
+									$this->db->insert('webusers', $details);					
+									header('Location: '.$context['dataObject']->getUrl());
+								}
+							} else {
+								array_push($this->errors, array('code'=>202, 'message'=>'Register: Passwords do not match'));
+							}
+						}
+					} else {
+						array_push($this->errors, array('code'=>201, 'message'=>'Register: Not all required fields are filled in'));						
+					}
+				}
+			}
+		}
+	}
+	
 	/// Front-end functions:
 	
 	/**
@@ -225,6 +375,7 @@ class Webusers extends AddonBaseModel
 	/**
 	 * Check if the user makes a login- or logout-action:
 	 */
+	/*
 	function checkLogin()
 	{
 		if(isset($_POST['login'])) {
@@ -256,7 +407,7 @@ class Webusers extends AddonBaseModel
 			unset($_SESSION['webuser_info']);
 		}
 	}
-	
+	*/
 	/**
 	 * Get info from the user
 	 * @param	$str	string	The name of the information you want to get
@@ -300,118 +451,18 @@ class Webusers extends AddonBaseModel
 		}
 	}
 	
-	/*
-	// Show the install:
-	function showInstall()
+	/**
+	 * Returns errors generated
+	 * @return	mixed	array with errors on failure, false on success
+	 */
+	function getErrors()
 	{
-		echo '<hr />';
-		if(!isset($_POST['install'])) {
-			echo '
-				<p>It seems that this is the first time you are using the web users module.</p>
-				<form method="post" action="'.$this->createLink(array('webusers')).'" />
-					<input type="submit" value="Click here to install" name="install" />
-				</form>';
+		if(count($this->errors)==0) {
+			return false;
 		} else {
-			// Install:
-			
-			// Webusers table:
-			$fields = array(
-				'id' => array(
-					'type' => 'INT',
-					'auto_increment' => true
-				),
-				'name' => array(
-					'type' => 'TINYTEXT'
-				),
-				'address' => array(
-					'type' => 'TINYTEXT'
-				),
-				'postalcode' => array(
-					'type' => 'TINYTEXT'
-				),
-				'city' => array(
-					'type' => 'TINYTEXT'
-				),
-				'country' => array(
-					'type' => 'TINYTEXT'
-				),
-				'telephone' => array(
-					'type' => 'TINYTEXT'
-				),
-				'mobile' => array(
-					'type' => 'TINYTEXT'
-				),
-				'email' => array(
-					'type' => 'TINYTEXT'
-				),
-				'username' => array(
-					'type' => 'TINYTEXT'
-				),
-				'password' => array(
-					'type' => 'TINYTEXT'
-				),
-				'blocked' => array(
-					'type' => 'BOOL',
-					'default' => 0
-				)
-			);
-			// $this->load->dbforge(); // TODO: this function now loads in the admin controller, but it should be able to load at runtime.
-			$this->dbforge->add_field($fields);
-			$this->dbforge->add_key('id', true);
-			$this->dbforge->create_table('webusers', true);
-			
-			// Webuser groups:
-			$fields = array(
-				'id' => array(
-					'type' => 'INT',
-					'auto_increment' => true
-				),
-				'name' => array(
-					'type' => 'TINYTEXT'
-				)
-			);
-			$this->dbforge->add_field($fields);
-			$this->dbforge->add_key('id', true);
-			$this->dbforge->create_table('webusers_groups', true);
-			
-			// Linkage between webusers and webuser-groups:
-			$fields = array(
-				'id' => array(
-					'type' => 'INT',
-					'auto_increment' => true
-				),
-				'id_user' => array(
-					'type' => 'INT'
-				),
-				'id_group' => array(
-					'type' => 'INT'
-				)
-			);
-			$this->dbforge->add_field($fields);
-			$this->dbforge->add_key('id', true);
-			$this->dbforge->create_table('webusers_user_group', true);        
-			
-			// Linkage between groups and content:
-			$fields = array(
-				'id' => array(
-					'type' => 'INT',
-					'auto_increment' => true
-				),
-				'id_content' => array(
-					'type' => 'INT'
-				),
-				'id_group' => array(
-					'type' => 'INT'
-				)
-			);
-			$this->dbforge->add_field($fields);
-			$this->dbforge->add_key('id', true);
-			$this->dbforge->create_table('webusers_content_group', true);        
-			
-			echo '<p>Module successfully installed...</p>';
-			echo '<p><a href="'.$this->createLink(array('webusers')).'">Click here to go to the module</a></p>';
+			return $this->errors;
 		}
 	}
-	*/
+	
 }
 ?>

@@ -41,10 +41,11 @@ class Admin extends Controller
         }
 		
 		// Get the rank of this user:
-		$this->rank     = $this->session->userdata('rank');
+		$this->rank     = $this->session->userdata('rank');		
 		
         // Load the adminModel:
         $this->load->model('AdminModel', '', true);
+		$this->AdminModel->idRank = $this->rank;
 		
 		// Load the addonBaseModel:
 		$this->load->model('AddonBaseModel', '', true);
@@ -789,8 +790,8 @@ class Admin extends Controller
 				}
 			case 'edit' :
 				{
-					$this->showTree();
 					if($id!=false) {
+						$this->showTree($id);
 						$contentData = $this->AdminModel->getContentData($id);
 						$data = array(
 							'lang'=>$this->lang,
@@ -841,7 +842,7 @@ class Admin extends Controller
 					$this->showTree();
 					$data = array(
 						'lang'=>$this->lang,
-						'templates'=>$this->AdminModel->getRootTemplates(),
+						'templates'=>$this->AdminModel->getRootTemplates($this->rank),
 						'allowedTemplates'=>$this->AdminModel->getAllowedTemplates($this->rank)
 					);
 					$this->load->view('admin/content/new_content.php', $data);
@@ -887,12 +888,13 @@ class Admin extends Controller
 	/**
 	 * Show the initial tree
 	 */
-    function showTree()
+    function showTree($currentId = 0)
 	{
 		$data = array(
 			'lang'=>$this->lang,
 			'tree'=>$this->AdminModel->getTree(),
-			'sitename'=>$this->settings['site_name']
+			'sitename'=>$this->settings['site_name'],
+			'currentId'=>$currentId
 		);
 		$this->load->view('admin/tree.php', $data);
 	}

@@ -23,7 +23,9 @@ class AdminModel extends Model
 {
     var $modules;           // Modules var for caching
     // TODO: Make Singleton of settings?
-    var $settings;          // Settings var for caching    
+    var $settings;          // Settings var for caching
+    // TODO: Check functions which have a rank-id as parameter if it can be replace with this internal var:
+    var $idRank;            // The ID of the current rank
     
     function AdminModel()
     {
@@ -397,11 +399,15 @@ class AdminModel extends Model
      * Get the templates that can be added to the root
      * @return  array   A 2-dimensional array of the templates: [[id=int, name=string], ...]
      */
-    function getRootTemplates()
+    function getRootTemplates($idRank)
     {
         $templates = array();
-        $this->db->select('id,name');
+        // Make sure that only templates gets shown which are allowed to be added by this rank:
+        $this->db->select('templates.id,name,templates_ranks.add');
         $this->db->where('root', 1);
+        $this->db->where('add', 1);
+        $this->db->where('id_rank', $idRank);
+        $this->db->join('templates_ranks', 'templates.id = id_template');
         $query = $this->db->get('templates');
         foreach($query->result() as $result) {
             array_push($templates, array('id'=>$result->id, 'name'=>$result->name, 'allowed'=>true));
@@ -430,12 +436,12 @@ class AdminModel extends Model
                     $templates = $this->getChildTemplates($content['id_template']);
                 } else {
                     // The parent is the root:
-                    $templates = $this->getRootTemplates();
+                    $templates = $this->getRootTemplates($this->idRank);
                 }
             }
         } else {
             // New content is added to the root:
-            $templates = $this->getRootTemplates();
+            $templates = $this->getRootTemplates($this->idRank);
         }
         return $templates;
     }    
