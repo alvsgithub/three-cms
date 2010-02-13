@@ -1,22 +1,33 @@
 <?php
 	// TODO: Some serious optimization here. There are now 3 foreach-loops stacked in each other!
+
+	// Set to 1 if there is one or more multilingual item. This is used by Three CMS to show or hide the language buttons:
+	$multilingual = 0;	
+	$totalItems   = count($contentData['content']);
+	$currentItem  = 1;
 	
 	// Show the content fields:
-	foreach($contentData['content'] as $item) {						
+	foreach($contentData['content'] as $item) {		
 		echo '<tr class="option"><th>';
 		echo ucfirst($item['description']).':';
 		// The tooltip:
 		if(!empty($item['tooltip'])) {
-			echo '<span class="tooltip">?</span><span class="tooltipContent">'.$item['tooltip'].'</span></th>';
+			echo '<span class="tooltip">?</span><span class="tooltipContent">'.$item['tooltip'].'</span>';
 		}
-		echo '<td>';
 		$optionID = $item['id_option'];
 		// See if this item is multilingual:
 		if($item['multilanguage']==1) {
+			$multilingual = true;
 			$iterations = count($contentData['languages']);
 		} else {
 			$iterations = 1;
 		}
+		// Set a hidden variable to tell the javascript that if there is one ore more multilingual items:
+		if($currentItem==$totalItems) {
+			echo '<var style="display: none;" class="multilingual">'.$multilingual.'</var>';
+		}
+		$currentItem++;
+		echo '</th><td>';
 		for($i=0; $i<$iterations; $i++) {						
 			$languageID = $item['multilanguage']==1 ? $contentData['languages'][$i]['id'] : 0;	// 0 stands for non-multilanguage
 			$name       = 'input_'.$optionID.'_'.$languageID;
@@ -112,10 +123,10 @@
 						// Add a timepicker
 						echo '<input type="text" name="'.$name.'" value="'.$value.'" class="'.$class.' timePicker" />';
 						break;
-					}
-				// TODO: Custom options:
+					}				
 			}
+			$addons->executeHook('ContentAddOption', array('type'=>$item['type'], 'inputName'=>$name, 'value'=>$value, 'class'=>$class, 'item'=>$item));
 		}
-		echo '</td>';
+		echo '</td>';		
 	}
 ?>

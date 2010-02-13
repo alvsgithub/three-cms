@@ -49,13 +49,16 @@
 					<td><input class="small" type="text" name="order" value="<?php echo $contentData['order']; ?>" /> <a href="#" class="orderSmaller">&laquo;</a> <a href="#" class="orderBigger">&raquo;</a></td>
 				</tr>				
 				<?php
-					// Only show the language picker if there is more than one language:
-					if(count($contentData['languages']) > 1) {
+					// Only show the language picker if:
+					// - there is more than one language AND
+					// - there are any options AND
+					// - any of the options are multilingual:
+					if(count($contentData['languages']) > 1 && count($contentData['content']) > 0) {
 				?>
-				<tr class="delimiter">
+				<tr class="delimiter hideIfNotMultilingual">
 					<td colspan="2">&nbsp;</td>
 				</tr>
-				<tr>
+				<tr class="hideIfNotMultilingual">
 					<th><?php echo $lang->line('content_language'); ?>:</th>
 					<td>
 						<?php							

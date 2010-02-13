@@ -18,7 +18,7 @@ CREATE TABLE IF NOT EXISTS `[[PREFIX]]locales` (`id` int(11) NOT NULL AUTO_INCRE
 CREATE TABLE IF NOT EXISTS `[[PREFIX]]locales_values` (`id` int(11) NOT NULL AUTO_INCREMENT, `id_locale` int(11) NOT NULL, `id_language` int(11) NOT NULL, `value` text NOT NULL, PRIMARY KEY (`id`));
 
 -- Options:
-CREATE TABLE IF NOT EXISTS `[[PREFIX]]options` (`id` int(11) NOT NULL AUTO_INCREMENT, `name` tinytext NOT NULL, `description` tinytext NOT NULL, `tooltip` tinytext NOT NULL, `type` enum('small_text','large_text','rich_text','url','image','file','boolean','dropdown','selectbox','date','time') NOT NULL, `options` text NOT NULL, `default_value` text NOT NULL, `multilanguage` tinyint(1) NOT NULL, `required` tinyint(1) NOT NULL, PRIMARY KEY (`id`));
+CREATE TABLE IF NOT EXISTS `[[PREFIX]]options` (`id` int(11) NOT NULL AUTO_INCREMENT, `name` tinytext NOT NULL, `description` tinytext NOT NULL, `tooltip` tinytext NOT NULL, `tinytext` NOT NULL, `options` text NOT NULL, `default_value` text NOT NULL, `multilanguage` tinyint(1) NOT NULL, `required` tinyint(1) NOT NULL, PRIMARY KEY (`id`));
 
 -- Ranks (+ default administrator rank):
 CREATE TABLE IF NOT EXISTS `[[PREFIX]]ranks` (`id` int(11) NOT NULL AUTO_INCREMENT, `name` tinytext NOT NULL, `system` tinyint(1) NOT NULL, `users` tinyint(1) NOT NULL, `ranks` tinyint(1) NOT NULL, `configuration` tinyint(1) NOT NULL, PRIMARY KEY (`id`));
