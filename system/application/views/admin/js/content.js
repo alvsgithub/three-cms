@@ -122,7 +122,7 @@ $(function(){
 			$("tr.option").remove();
 			$.post(baseURL + 'index.php/admin/ajax/loadoptions', {template: idTemplate, parent: idParent, id: idContent}, function(data){
 				$("#loading").hide();
-				$("tr.optionsStart").after(data);
+				$("tr.optionsStart").after(data);				
 				setupContent();
 			});
 		} else {
@@ -143,10 +143,20 @@ $(function(){
 // Add all functionality:
 function setupContent()
 {
+	// Check if the current content is multilingual:
+	if($("var.multilingual").text()=='1') {
+		// Show the languagepicker:
+		$(".hideIfNotMultilingual").show();
+	} else {
+		// Hide the language picker:
+		$(".hideIfNotMultilingual").hide();
+	}
+	
 	// First hide all the languages:
 	for(i=0; i<language_ids.length; i++) {
 		$(".language_" + language_ids[i]).hide();
 	}
+	
 	// Show the default languages:
 	$(".language_" + currentLanguage).show();
 	$(".l_" + currentLanguage).addClass("active");

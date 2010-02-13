@@ -13,6 +13,9 @@
 		PostSaveContent					idContent,contentData[]
 		PreRenderPage					idPage,dataObject,parameters[],dataObjects[]
 		PostRenderPage					idPage,dataObject,parameters[],dataObjects[]
+		AddOption						lang,values[]
+		ContentAddOption				type,inputName,value,class,item[]
+		
  
 */
 
@@ -45,9 +48,9 @@ class AddonModel extends Model
 				foreach($hooks as $hook) {
 					// Set a referece to the object:
 					if(!isset($this->hooks[$hook['hook']])) {
-						$this->hooks[$hook['hook']] = array(array(&$object, $hook['callback']));
+						$this->hooks[$hook['hook']] = array(array($object, $hook['callback']));
 					} else {						
-						array_push($this->hooks[$hook['hook']], array(&$object, $hook['callback']));
+						array_push($this->hooks[$hook['hook']], array($object, $hook['callback']));
 					}
 				}
 			}
@@ -66,7 +69,9 @@ class AddonModel extends Model
 		// Check if this hook is set:
 		if(isset($this->hooks[$name])) {
 			// Execute all callbacks for this hook:
-			foreach($this->hooks[$name] as $callback) {				
+			foreach($this->hooks[$name] as $callback) {
+				// $callback[0] is a reference to the object
+				// $callback[1] is the name of the function
 				$callback[0]->$callback[1]($context);
 			}
 			$ok = true;

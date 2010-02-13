@@ -38,10 +38,8 @@
 								drawOption('date', $lang, $values['type']);
 								drawOption('time', $lang, $values['type']);
 								
-								// TODO: Custom options:
-								
-								// drawOption('content', $lang, $values['type']);
-								// drawOption('content_of_type', $lang, $values['type']);								
+								// Custom options:
+								$addons->executeHook('AddOption', array('lang'=>$lang, 'values'=>$values));
 							?>
 						</select>
 					</td>

@@ -394,7 +394,8 @@ class Admin extends Controller
 					$data = array(
 						'lang'=>$this->lang,
 						'title'=>$title,
-						'values'=>$this->AdminModel->getData('options', $id)
+						'values'=>$this->AdminModel->getData('options', $id),
+						'addons'=>$this->AddonModel
 					);					
 					$this->showHeader();
 					$this->showTree();
@@ -730,7 +731,12 @@ class Admin extends Controller
 										}										
 										default:
 										{
-											$value = isset($_POST[$name]) ? $this->makeSafe($this->input->post($name)) : '';
+											$value = isset($_POST[$name]) ? $this->input->post($name) : '';
+											// Check if $value is an array, because some addons might try to save content like an array:
+											if(is_array($value)) {
+												$value = implode('||', $value);
+											}
+											$value = $this->makeSafe($value);
 											break;
 										}
 									}
