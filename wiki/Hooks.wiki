@@ -8,7 +8,7 @@ Hooks are used by addons. There will be many hooks, but for now it is limited. I
 
 ||*Name*||*When gets it executed?*||*Context-parameters*||
 || AppendMainNavigation ||_backend_; allows you to add HTML after the main navigation||_none_||
-||AppendSubNavigation||_backend_; allows you to add HTML after the subnavigation||paren||
+||AppendSubNavigation||_backend_; allows you to add HTML after the subnavigation||parent||
 ||ShowModuleScreen||_backend_; gets used for a dedicated module page||alias,parameters[]||
 ||ContentAboveOptions||_backend_; allows you to put HTML between the options and the top-options (language-picker etc.)||lang,contentData,templates,title,allowedTemplates,settings||
 ||ContentBelowOptions||_backend_; allows you to put HTML between the options and the save-button||lang,contentData,templates,title,allowedTemplates,settings||
