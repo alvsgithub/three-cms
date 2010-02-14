@@ -137,9 +137,9 @@ class Page extends Controller
 			$dataObject->parameters     = $contentParams;
 			$dataObject->contentObjects = $contentObjects;
 			// Render it:
-			$this->AddonModel->executeHook('PreRenderPage', array('idPage'=>$idPage, 'dataObject'=>$dataObject, 'parameters'=>$contentParams, 'dateObjects'=>$contentObjects));
+			$this->AddonModel->executeHook('PreRenderPage', array('idPage'=>$idPage, 'idLanguage'=>$idLanguage, 'dataObject'=>$dataObject, 'parameters'=>$contentParams, 'dateObjects'=>$contentObjects));
 			$dataObject->render();
-			$this->AddonModel->executeHook('PostRenderPage', array('idPage'=>$idPage, 'dataObject'=>$dataObject, 'parameters'=>$contentParams, 'dateObjects'=>$contentObjects));
+			$this->AddonModel->executeHook('PostRenderPage', array('idPage'=>$idPage, 'idLanguage'=>$idLanguage, 'dataObject'=>$dataObject, 'parameters'=>$contentParams, 'dateObjects'=>$contentObjects));
 		} else {
 			echo 'Error: Page does not exist! (id: '.$idPage.')';
 		}

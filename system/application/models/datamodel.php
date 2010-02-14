@@ -102,6 +102,9 @@ class DataModel extends Model
 		
 		// Fill the dataObject with the values:
 		foreach($query->result() as $result) {
+			// Execute Hook to allow to modify the data:
+			// Note that here the result-parameter is a pointer to the $result-object. This is because the executeHook()-function cannot return values, only true or false.
+			$this->AddonModel->executeHook('ModifyOptionValue', array('result'=>&$result, 'dataObject'=>$this));
 			// If type is rich_text, replace id:-links with the correct URL:
 			if($result->type=='rich_text') {
 				$value = $result->value;
@@ -452,6 +455,19 @@ class DataModel extends Model
 			$locales[$locale->name] = $locale->value;
 		}
 		return $locales;
+	}
+	
+	/**
+	 * Create a new data object with the given parameters
+	 * @param	$idContent	int		The ID of the content
+	 * @param	$idLanguage	int		The ID of the language
+	 * @return	DataModel			The data object
+	 */
+	function newObject($idContent, $idLanguage)
+	{
+		$object = new DataModel();
+		$object->load($idContent, $idLanguage);
+		return $object;
 	}
 	
 	/**
