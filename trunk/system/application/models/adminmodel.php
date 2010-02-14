@@ -1119,5 +1119,103 @@ class AdminModel extends Model
         }
         return $addons;
     }
+    
+    /**
+     * Get the dashboard
+     * @return  array   A multideminsional array with the different dashboard items
+     */
+    function getDashBoard()
+    {
+        $left  = array();
+        $right = array();
+        $settings = $this->getSettings();
+        $query = $this->db->get('dashboard');
+        foreach($query->result_array() as $item) {
+            // Read the name:
+            $headers = explode(',', $item['headers']);
+            $newHeaders = array();
+            foreach($headers as $id) {
+                if(is_int($id)) {
+                    // This is easy, the ID is supplied:
+                    $this->db->select('id,name,description');
+                    $this->db->where('id', $id);
+                } else {
+                    // TODO: Get the information about this option according to the name of the option and the template of the source
+                    $this->db->select('id,name,description');
+                    $this->db->where('name', $id);
+                }                
+                $query  = $this->db->get('options');
+                $result = $query->result();                
+                $header = array(
+                    'id'=>$result[0]->id,
+                    'name'=>$result[0]->name,
+                    'description'=>$result[0]->description
+                );
+                array_push($newHeaders, $header);
+            }
+            $item['headers'] = $newHeaders;
+            // Read the content:
+            $content = array();
+            $this->db->select('id,name');
+            switch($item['type']) {
+                case 'from_parent' :
+                    {
+                        $this->db->where('id_content', $item['source']);
+                        break;
+                    }
+                case 'from_template' :
+                    {
+                        $this->db->where('id_template', $item['source']);
+                        break;
+                    }
+            }
+            $query = $this->db->get('content');
+            foreach($query->result() as $result) {
+                $currentContent = array(
+                    'id'=>$result->id,
+                    'name'=>$result->name,
+                    'headers'=>array()
+                );
+                // Get the specific option values for this content item:
+                foreach($newHeaders as $header) {
+                    $this->db->select('value');
+                    $this->db->where('id_content', $result->id);
+                    $this->db->where('id_language', $settings['default_language']);
+                    $this->db->where('id_option', $header['id']);
+                    $currentContentQuery = $this->db->get('values');
+                    $currentContentResult = $currentContentQuery->result();                    
+                    $currentContent['headers'][$header['name']] = $currentContentResult[0]->value;
+                }
+                array_push($content, $currentContent);
+            }
+            $item['content'] = $content;
+            // Set it in the correct array:
+            if($item['column']=='left') {
+                array_push($left, $item);
+            } else {
+                array_push($right, $item);
+            }            
+        }
+        $dashboard = array(
+            'left'=>$left,
+            'right'=>$right
+        );        
+        return $dashboard;
+    }
+    
+    /**
+     * Duplicate a dashboard item
+     * @param   $id int The ID of the dashboard item to duplicate
+     */
+    function duplicateDashboard($id)
+    {
+        $query  = $this->db->get_where('dashboard', array('id'=>$id));
+        $values = $query->result_array();
+        $values = $values[0];
+        $values['name'] = $this->lang->line('action_duplicate_prefix').$values['name'];
+        unset($values['id']);
+        $this->db->insert('dashboard', $values);
+    }
+    
 }
 ?>

@@ -164,6 +164,15 @@ class Admin extends Controller
                     $tableHeaders   = array('id', 'name');
                     break;
                 }
+			case 'dashboard' :
+				{
+                    $title          = $this->lang->line('title_dashboard');
+                    $name           = $this->lang->line('name_dashboard');
+                    $description    = $this->lang->line('desc_dashboard');
+                    $tableData      = $this->AdminModel->getTableData('dashboard', 'id,name');
+                    $tableHeaders   = array('id', 'name');
+					break;
+				}
             default :
                 {
                     // Non existing action
@@ -541,6 +550,72 @@ class Admin extends Controller
 					$this->showHeader();
 					$this->showTree();
 					$this->load->view('admin/locales/add_edit.php', $data);
+			        $this->showFooter();
+					break;
+				}
+		}
+	}
+	
+	/**
+	 * Dashboard function:
+	 */
+	function dashboard()
+	{
+		$action = $this->uri->segment(3);
+		$id     = $this->uri->segment(4);
+		// Check for the action:
+		switch($action) {
+			case 'save' :
+				{
+					// Save the data (POST-action)
+					$data = array(						
+						'name'=>$this->makeSafe($this->input->post('name')),
+						'type'=>$this->makeSafe($this->input->post('type')),
+						'source'=>$this->makeSafe($this->input->post('source')),
+						'headers'=>$this->makeSafe($this->input->post('headers')),
+						'count'=>$this->makeSafe($this->input->post('count')),
+						'column'=>$this->makeSafe($this->input->post('column'))
+					);
+					$this->AdminModel->saveData('dashboard', $data, $this->input->post('id'));
+					redirect(site_url(array('admin', 'manage', 'dashboard')));
+					break;
+				}
+			case 'delete' :
+				{
+					// Delete
+					if($id!=false) {
+						$this->AdminModel->deleteData(array('dashboard'=>'id'), $id);
+						redirect(site_url(array('admin', 'manage', 'dashboard')));
+					}
+					break;
+				}
+			case 'duplicate' :
+				{
+					// Duplicate
+					if($id!=false) {
+						$this->AdminModel->duplicateDashboard($id);
+						redirect(site_url(array('admin', 'manage', 'dashboard')));
+					}
+					break;
+				}
+			case 'add' :
+			case 'edit' :
+				{
+					// Add or edit
+					$name  = $this->lang->line('name_dashboard');
+					if($action=='add') {
+						$title = str_replace('%s', $name, $this->lang->line('title_add_new_item'));
+					} else {
+						$title = str_replace('%s', $name, $this->lang->line('title_modify_item'));
+					}
+					$data = array(
+						'lang'=>$this->lang,
+						'title'=>$title,
+						'values'=>$this->AdminModel->getData('dashboard', $id)
+					);
+					$this->showHeader();
+					$this->showTree();
+					$this->load->view('admin/dashboard/add_edit.php', $data);
 			        $this->showFooter();
 					break;
 				}
@@ -927,9 +1002,10 @@ class Admin extends Controller
 	function showDashBoard()
 	{
         $data = array(
-            'lang'=>$this->lang
+            'lang'=>$this->lang,
+			'dashboard'=>$this->AdminModel->getDashBoard()
         );
-        $this->load->view('admin/dashboard.php', $data);
+        $this->load->view('admin/dashboard/dashboard.php', $data);
 	}
 	
 	/**
