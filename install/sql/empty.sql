@@ -1,6 +1,9 @@
 -- Content Table:
 CREATE TABLE IF NOT EXISTS `[[PREFIX]]content` (`id` int(11) NOT NULL AUTO_INCREMENT, `id_content` int(11) NOT NULL, `id_template` int(11) NOT NULL, `name` tinytext NOT NULL, `alias` tinytext NOT NULL, `order` int(11) NOT NULL, PRIMARY KEY (`id`));
 
+-- Dashboard:
+CREATE TABLE IF NOT EXISTS `[[PREFIX]]dashboard` (`id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY, `name` TINYTEXT NOT NULL, `type` TINYTEXT NOT NULL , `source` TINYTEXT NOT NULL, `headers` TINYTEXT NOT NULL, `count` INT NOT NULL, `column` enum('left','right') NOT NULL);
+
 -- Data objects:
 CREATE TABLE IF NOT EXISTS `[[PREFIX]]dataobjects` (`id` int(11) NOT NULL AUTO_INCREMENT, `name` tinytext NOT NULL, PRIMARY KEY (`id`));
 

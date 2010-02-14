@@ -18,20 +18,19 @@
 	{/foreach}
 	</ul>
 	
-	{* The power of external modules: *}
-	{$webusers->checkLogin()}
+	{* The power of external modules: *}	
 	{if $webusers->loggedIn()}
 		<p>Hallo {$webusers->userInfo('name')}!</p>
 		<form method="post">
-			<input type="submit" name="logout" value="logout" />
+			<input type="submit" name="webusers[logout]" value="logout" />
 		</form>
 	{else}
 		<form method="post">
 			<label for="username">Username:</label>
-			<input type="text" name="username" id="username" />
+			<input type="text" name="webusers[username]" id="username" />
 			<label for="password">Password:</label>
-			<input type="password" name="password" id="password" />
-			<input type="submit" value="login" name="login" />
+			<input type="password" name="webusers[password]" id="password" />
+			<input type="submit" value="login" name="webusers[login]" />
 		</form>
 	{/if}
 </div>

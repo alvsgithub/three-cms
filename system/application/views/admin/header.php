@@ -92,6 +92,7 @@
                             <li><a href="<?php echo site_url(array('admin', 'manage', 'options'));   ?>"><?php echo $lang->line('menu_options'); ?></a></li>
                             <li><a href="<?php echo site_url(array('admin', 'manage', 'languages')); ?>"><?php echo $lang->line('menu_languages'); ?></a></li>
                             <li><a href="<?php echo site_url(array('admin', 'manage', 'locales'));   ?>"><?php echo $lang->line('menu_locales'); ?></a></li>
+                            <li><a href="<?php echo site_url(array('admin', 'manage', 'dashboard'));   ?>"><?php echo $lang->line('menu_dashboard'); ?></a></li>
 							<?php
 								$addons->executeHook('AppendSubNavigation', array('parent'=>'system'));
 								/* moduleLink('system', $modules, $allowedModules); */

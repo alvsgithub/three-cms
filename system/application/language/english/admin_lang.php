@@ -29,6 +29,7 @@
 	$lang['title_add_content']			= 'Add new content';
 	$lang['title_modify_content']		= 'Edit content';
     $lang['title_settings']				= 'Settings';
+    $lang['title_dashboard']			= 'Dashboard';
 	
     // Names:
     $lang['name_template']          	= 'template';
@@ -36,6 +37,7 @@
     $lang['name_option']            	= 'option';
     $lang['name_language']          	= 'language';
     $lang['name_locale']            	= 'locale';
+    $lang['name_dashboard']            	= 'dashboard item';
     
     // Descriptions:
     $lang['desc_templates']        		= 'A template is used to render the data object to the screen in a presentational form. This can be a webpage, but it can also be a small part of a webpage, or something completely different, like a XML-file for instance.';
@@ -43,6 +45,7 @@
     $lang['desc_options']          		= 'A option is a single piece of data of a specific kind.';
     $lang['desc_languages']        		= 'Here you can specify which languages your site uses. You can also de-activate a language for a while.';
     $lang['desc_locales']          		= 'For multi-lingual sites you have some non-content-terms which should be translated for each country. For instance, the text on a button or the name of a shopping cart. This can easily be done with locales.';
+    $lang['desc_dashboard']        		= 'Dashboard items are used as quick-steps to managing certain content objects. They can be helpfull as shortcuts to most common used functionality for your website.';
     $lang['desc_notfound']         		= 'The page you are looking for cannot be found!';
     
     // Actions:
@@ -86,6 +89,19 @@
 	$lang['option_time']				= 'Time';
 	$lang['option_content']				= 'Content';
 	$lang['option_content_of_type']		= 'Content of a specific type';
+	
+	// Dashboard:
+	$lang['system_dashboard_name']			= 'Name';
+	$lang['system_dashboard_type']			= 'Type';
+	$lang['system_dashboard_from_parent']	= 'From parent';
+	$lang['system_dashboard_from_template']	= 'From template';
+	$lang['system_dashboard_from_addon']	= 'From addon';
+	$lang['system_dashboard_source']		= 'Source';
+	$lang['system_dashboard_headers']		= 'Headers';
+	$lang['system_dashboard_count']			= 'Count';
+	$lang['system_dashboard_column']		= 'Column';
+	$lang['system_dashboard_left']			= 'Left';
+	$lang['system_dashboard_right']			= 'Right';
 	
 	// System settings:
 	$lang['system_language_name']		= 'Name';

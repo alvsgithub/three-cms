@@ -37,6 +37,25 @@
 				- Use distinct values when ordering? (for statistics case, only show a single date once)
 				- When distinct, which options should be cummulicative (for statistics case, only show a single date once, but get the total of the hits)
 			*/
+			
+			$left  = $dashboard['left'];
+			$right = $dashboard['right'];
 		?>
+		<div id="dashboard">
+			<div class="left">
+				<?php
+					foreach($left as $item) {
+						include('item.php');
+					}
+				?>
+			</div>
+			<div class="right">
+				<?php
+					foreach($right as $item) {
+						include('item.php');
+					}
+				?>
+			</div>
+		</div>
 	</div>
 </div>
