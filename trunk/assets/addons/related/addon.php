@@ -34,6 +34,10 @@ class Related extends AddonBaseModel
 			array(
 				'hook'=>'ContentAddOption',
 				'callback'=>'contentAddOption'
+			),
+			array(
+				'hook'=>'ModifyOptionValue',
+				'callback'=>'makeArray'
 			)
 			/*,
 			array(
@@ -94,6 +98,22 @@ class Related extends AddonBaseModel
 			}
 			echo '</select><br />';
 			echo '<em>You can select more than one content items by holding the Ctrl-button on your keyboard.</em>';
+		}
+	}
+	
+	function makeArray($context)
+	{
+		if($context['result']->type=='related_content') {
+			$ids     = explode('||', $context['result']->value);
+			/*
+			$objects = array();
+			foreach($ids as $id) {				
+				$object = new DataModel();
+				// $object->load($id, $context['dataObject']->get('idLanguage'));
+				array_push($objects, $object);				
+			}
+			*/
+			$context['result']->value = $ids;
 		}
 	}
 }
