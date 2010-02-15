@@ -5,7 +5,8 @@
 			// Quick inline function:
 			function isSelected($a, $b)
 			{
-				return $a==$b ? ' selected="selected" ' : '';
+				$str = $a==$b ? ' selected="selected" ' : '';
+				return $str;
 			}
 		?>
 		<form method="post" action="<?php echo site_url(array('admin', 'dashboard', 'save')); ?>">
@@ -20,7 +21,12 @@
 						<select name="type">
 							<option value="from_parent" <?php echo isSelected($values['type'], 'from_parent').'>'.$lang->line('system_dashboard_from_parent'); ?></option>
 							<option value="from_template" <?php echo isSelected($values['type'], 'from_template').'>'.$lang->line('system_dashboard_from_template'); ?></option>
+							<?php
+								// TODO: Addon callback
+							/*
 							<option value="from_addon" <?php echo isSelected($values['type'], 'from_addon').'>'.$lang->line('system_dashboard_addon'); ?></option>
+							*/
+							?>
 						</select>
 					</td>
 				</tr>
@@ -40,8 +46,8 @@
 					<th><?php echo $lang->line('system_dashboard_column'); ?></th>
 					<td>
 						<select name="column">
-							<option value="left" <?php echo isSelected($values['type'], 'left').'>'.$lang->line('system_dashboard_left'); ?></option>
-							<option value="right" <?php echo isSelected($values['type'], 'right').'>'.$lang->line('system_dashboard_right'); ?></option>
+							<option value="left" <?php echo isSelected($values['column'], 'left').'>'.$lang->line('system_dashboard_left'); ?></option>
+							<option value="right" <?php echo isSelected($values['column'], 'right').'>'.$lang->line('system_dashboard_right'); ?></option>
 						</select>
 					</td>
 				</tr>
