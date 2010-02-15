@@ -1124,7 +1124,7 @@ class AdminModel extends Model
      * Get the dashboard
      * @return  array   A multideminsional array with the different dashboard items
      */
-    function getDashBoard()
+    function getDashBoard($page=0)
     {
         $left  = array();
         $right = array();
@@ -1135,7 +1135,7 @@ class AdminModel extends Model
             $headers = explode(',', $item['headers']);
             $newHeaders = array();
             foreach($headers as $id) {
-                if(is_int($id)) {
+                if(is_numeric($id)) {
                     // This is easy, the ID is supplied:
                     $this->db->select('id,name,description');
                     $this->db->where('id', $id);
@@ -1145,15 +1145,16 @@ class AdminModel extends Model
                     $this->db->where('name', $id);
                 }                
                 $query  = $this->db->get('options');
-                $result = $query->result();                
-                $header = array(
-                    'id'=>$result[0]->id,
-                    'name'=>$result[0]->name,
-                    'description'=>$result[0]->description
-                );
-                array_push($newHeaders, $header);
+                $result = $query->result();
+                if(count($result) > 0) {
+                    $header = array(
+                        'id'=>$result[0]->id,
+                        'name'=>$result[0]->name,
+                        'description'=>$result[0]->description
+                    );
+                    array_push($newHeaders, $header);                    
+                }
             }
-            $item['headers'] = $newHeaders;
             // Read the content:
             $content = array();
             $this->db->select('id,name');
@@ -1169,8 +1170,13 @@ class AdminModel extends Model
                         break;
                     }
             }
-            $query = $this->db->get('content');
+            // Limit:            
+            $this->db->limit($item['count'], $page * $item['count']);
+            $this->db->from('content');            
+            $query = $this->db->get();
             foreach($query->result() as $result) {
+                // Add ID and name to the newHeaders:
+                // array_push($newHeaders, array('name'=>$result->name, 'description'=>ucfirst($result->name)));
                 $currentContent = array(
                     'id'=>$result->id,
                     'name'=>$result->name,
@@ -1178,23 +1184,35 @@ class AdminModel extends Model
                 );
                 // Get the specific option values for this content item:
                 foreach($newHeaders as $header) {
-                    $this->db->select('value');
-                    $this->db->where('id_content', $result->id);
-                    $this->db->where('id_language', $settings['default_language']);
-                    $this->db->where('id_option', $header['id']);
-                    $currentContentQuery = $this->db->get('values');
-                    $currentContentResult = $currentContentQuery->result();                    
-                    $currentContent['headers'][$header['name']] = $currentContentResult[0]->value;
+                    // if(isset($header['id'])) {
+                        $this->db->select('value');
+                        $this->db->where('id_content', $result->id);
+                        $this->db->where('id_language', $settings['default_language']);
+                        $this->db->where('id_option', $header['id']);
+                        $currentContentQuery = $this->db->get('values');
+                        $currentContentResult = $currentContentQuery->result();                    
+                        $currentContent['headers'][$header['name']] = $currentContentResult[0]->value;
+                    // }
                 }
                 array_push($content, $currentContent);
             }
+            
+            // Info for the add-new-button:            
+            $add = array();
+            // At the moment, it is only possible to add content if the type is from_parent
+            if($item['type']=='from_parent') {
+                // $add['templates'] = $this->getChildTemplates($item['source']);
+                $add['templates'] = $this->getAvailableTemplates($item['source'], true);                
+            }
+            $item['headers'] = $newHeaders;
             $item['content'] = $content;
+            $item['add'] = $add;
             // Set it in the correct array:
             if($item['column']=='left') {
                 array_push($left, $item);
             } else {
                 array_push($right, $item);
-            }            
+            }
         }
         $dashboard = array(
             'left'=>$left,

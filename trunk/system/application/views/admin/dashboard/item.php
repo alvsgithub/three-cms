@@ -28,7 +28,21 @@
 		}
 		// Show add-action:
 		// TODO: Add according to allowed templates
+		/*
 		echo '<tr><td class="add" colspan="'.$colspan.'"><a href="#">add new</a></td></tr>';
+		*/
+		$count = 0;
+		if(isset($item['add']['templates'])) {
+			foreach($item['add']['templates'] as $template) {				
+				if(in_array($template['id'], $allowedTemplates) && $template['allowed']) {
+					if($count==0) { echo '<tr><td colspan="'.$colspan.'">'; }
+					$count++;
+					$buttonText = str_replace('%s', $template['name'], $lang->line('action_add_type'));
+					echo '<a href="'.site_url(array('admin', 'content', 'add', $item['source'], $template['id'])).'" class="addContent" title="'.$buttonText.'">'.$buttonText.'</a>';
+				}
+			}
+			if($count > 0) { echo '</td></tr>'; }
+		}
 		echo '</table>';
 		// print_r($item);
 	?>

@@ -575,7 +575,7 @@ class Admin extends Controller
 						'headers'=>$this->makeSafe($this->input->post('headers')),
 						'count'=>$this->makeSafe($this->input->post('count')),
 						'column'=>$this->makeSafe($this->input->post('column'))
-					);
+					);					
 					$this->AdminModel->saveData('dashboard', $data, $this->input->post('id'));
 					redirect(site_url(array('admin', 'manage', 'dashboard')));
 					break;
@@ -1003,7 +1003,8 @@ class Admin extends Controller
 	{
         $data = array(
             'lang'=>$this->lang,
-			'dashboard'=>$this->AdminModel->getDashBoard()
+			'dashboard'=>$this->AdminModel->getDashBoard(),
+			'allowedTemplates'=>$this->AdminModel->getAllowedTemplates($this->rank)
         );
         $this->load->view('admin/dashboard/dashboard.php', $data);
 	}

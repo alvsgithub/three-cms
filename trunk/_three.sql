@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Feb 14, 2010 at 11:01 AM
+-- Generation Time: Feb 15, 2010 at 07:01 PM
 -- Server version: 5.1.36
 -- PHP Version: 5.3.0
 
@@ -69,14 +69,15 @@ CREATE TABLE IF NOT EXISTS `three_dashboard` (
   `count` int(11) NOT NULL,
   `column` enum('left','right') NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
 
 --
 -- Dumping data for table `three_dashboard`
 --
 
 INSERT INTO `three_dashboard` (`id`, `name`, `type`, `source`, `headers`, `count`, `column`) VALUES
-(1, 'News items', 'from_parent', '56', 'header,date', 10, 'left');
+(1, 'News items', 'from_parent', '56', 'header,date,bestaat_niet,12', 2, 'right'),
+(4, 'Core Values', 'from_template', '5', 'parent.name,name', 2, 'left');
 
 -- --------------------------------------------------------
 
