@@ -61,6 +61,7 @@
 class Webusers extends AddonBaseModel
 {
 	var $errors;
+	var $dbforge;
 	
 	/**
 	 * Initialize
@@ -97,9 +98,23 @@ class Webusers extends AddonBaseModel
 			array(
 				'hook'=>'PreRenderPage',
 				'callback'=>'preRender'
+			),
+			array(
+				'hook'=>'LoadAdmin',
+				'callback'=>'loadUtilities'
 			)
 		);
 		return $hooks;
+	}
+	
+	// Load the utilities
+	function loadUtilities($context)
+	{
+		// Load the CI-dbforge library:
+		$context['admin']->load->dbforge();
+		// Make a reference to the dbforge-object, since it will not be automaticly
+		// coupled this this Addon-Object:
+		$this->dbforge = $context['admin']->dbforge;
 	}
 	
 	// Add the menu option to the menu:

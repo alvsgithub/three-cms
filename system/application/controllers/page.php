@@ -31,6 +31,10 @@ class Page extends Controller
 		// Load the settings:
 		$this->settings   = $this->PageModel->getSettings();
 		$this->idLanguage = $this->settings['default_language'];
+		
+		// Execute hook that the page is loaded:
+		// This must be a reference since the executeHook()-function only returns true or false
+		$this->AddonModel->executeHook('LoadPage', array('page'=>&$this));		
 	}
 	
 	function index()
