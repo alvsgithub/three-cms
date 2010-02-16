@@ -1110,14 +1110,58 @@ class AdminModel extends Model
     function getRankAddons($idRank)
     {
         $addons = array();
-        return $addons;
         $this->db->select('addon');
         $this->db->where('id_rank', $idRank);
         $query = $this->db->get('ranks_addons');
         foreach($query->result() as $result) {
             array_push($addons, $result->addon);
-        }
+        }        
         return $addons;
+    }
+    
+    /**
+     * Get an array with all the templates and the rights that the given rank has for it.
+     * @param   $idRank     int     The ID of the rank
+     * @return              array   A multidimensional array
+     */
+    function getTemplateRights($idRank)
+    {
+        $templates = array();
+        $query = $this->getTableData('templates', 'id,name');
+        foreach($query->result_array() as $template) {            
+            $this->db->where('id_template', $template['id']);
+            $this->db->where('id_rank', $idRank);
+            $rightsQuery = $this->db->get('templates_ranks');
+            if($rightsQuery->num_rows == 0) {
+                $rights = $this->getData('templates_ranks', 0);
+            } else {
+                $values = $rightsQuery->result_array();
+                $rights = $values[0];
+            }
+            unset($rights['id']);
+            unset($rights['id_template']);
+            unset($rights['id_rank']);
+            $template['rights'] = $rights;
+            array_push($templates, $template);            
+        }
+        return $templates;
+    }
+    
+    /**
+     * Save the templates rights for this rank
+     * @param   $idRank     int     The ID of the rank
+     * @param   $templates  array   A multidimensional array with the rights-information
+     */
+    function saveTemplateRights($idRank, $templates)
+    {
+        // First delete all existing links:
+        $this->db->delete('templates_ranks', array('id_rank'=>$idRank));
+        foreach($templates as $template) {
+            $data = $template['rights'];
+            $data['id_template'] = $template['id'];
+            $data['id_rank'] = $idRank;
+            $this->db->insert('templates_ranks', $data);
+        }
     }
     
     /**

@@ -994,7 +994,7 @@ class Admin extends Controller
             'lang'=>$this->lang,
 			'rank'=>$this->AdminModel->getRank($this->rank),
 			/* 'modules'=>$this->AdminModel->getModules(), */
-			/* 'allowedAddons'=>$this->AdminModel->getRankAddons($this->rank), */
+			'allowedAddons'=>$this->AdminModel->getRankAddons($this->rank),
 			'addons'=>$this->AddonModel
         );		
 		$this->load->view('admin/header.php', $data);
@@ -1142,6 +1142,7 @@ class Admin extends Controller
 					{
 						$data['user'] = $this->AdminModel->getData('users', 0);
 						$data['ranks'] = $this->AdminModel->getRanks();
+						$data['title']   = $this->lang->line('users_add');
 						$this->load->view('admin/users/add_edit.php', $data);
 						break;
 					}
@@ -1151,6 +1152,7 @@ class Admin extends Controller
 						if($id!=false) {
 							$data['user'] = $this->AdminModel->getData('users', $id);
 							$data['ranks'] = $this->AdminModel->getRanks();
+							$data['title']   = $this->lang->line('users_edit');
 							$data['user']['password'] = '';		// When editing, leave the password empty.
 							$this->load->view('admin/users/add_edit.php', $data);
 						}
@@ -1209,9 +1211,20 @@ class Admin extends Controller
 							if(substr($key, 0, 7)=='module_') {
 								$a = explode('_', $key);
 								array_push($modules, $a[1]);
-							}
+							} 
 						}
 						$this->AdminModel->saveRankAddons($id, $modules);
+						// Save the templates rights:
+						$templates = $this->AdminModel->getTemplateRights($id);
+						for($i=0; $i< count($templates); $i++) {
+							$templates[$i]['rights']['visible']   = isset($_POST['template_visible_'.$templates[$i]['id']])   ? 1 : 0;
+							$templates[$i]['rights']['add']       = isset($_POST['template_add_'.$templates[$i]['id']])       ? 1 : 0;
+							$templates[$i]['rights']['modify']    = isset($_POST['template_modify_'.$templates[$i]['id']])    ? 1 : 0;
+							$templates[$i]['rights']['move']      = isset($_POST['template_move_'.$templates[$i]['id']])      ? 1 : 0;
+							$templates[$i]['rights']['duplicate'] = isset($_POST['template_duplicate_'.$templates[$i]['id']]) ? 1 : 0;
+							$templates[$i]['rights']['delete']    = isset($_POST['template_delete_'.$templates[$i]['id']])    ? 1 : 0;
+						}
+						$this->AdminModel->saveTemplateRights($id, $templates);						
 						// Redirect:
 						redirect(site_url(array('admin', 'ranks')));
 						break;
@@ -1221,6 +1234,8 @@ class Admin extends Controller
 						$data['rank']    = $this->AdminModel->getData('ranks', 0);
 						/* $data['modules'] = $this->AdminModel->getModules(); */
 						$data['addons']  = $this->AddonModel;
+						$data['title']   = $this->lang->line('ranks_add');
+						$data['templates'] = $this->AdminModel->getTemplateRights(0);
 						$this->load->view('admin/ranks/add_edit.php', $data);
 						break;
 					}
@@ -1231,6 +1246,8 @@ class Admin extends Controller
 							$data['rank']    = $this->AdminModel->getData('ranks', $id);
 							// $data['modules'] = $this->AdminModel->getModules();
 							$data['addons']  = $this->AddonModel;
+							$data['title']   = $this->lang->line('ranks_edit');
+							$data['templates'] = $this->AdminModel->getTemplateRights($id);
 							$this->load->view('admin/ranks/add_edit.php', $data);
 						}
 						break;

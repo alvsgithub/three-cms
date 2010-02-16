@@ -4,8 +4,8 @@
 /*
 
 	Hooks:							Context-items:
-		AppendMainNavigation			parent
-		AppendSubNavigation
+		AppendMainNavigation			allowedAddons
+		AppendSubNavigation				parent,allowedAddons
 		ShowModuleScreen				alias,parameters[]
 		ContentAboveOptions				lang,contentData,templates,title,allowedTemplates,settings
 		ContentBelowOptions				lang,contentData,templates,title,allowedTemplates,settings

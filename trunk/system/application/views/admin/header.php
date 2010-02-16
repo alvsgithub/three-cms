@@ -48,7 +48,7 @@
                         <ul>
                             <li><a href="<?php echo site_url(array('admin', 'settings')); ?>"><?php echo $lang->line('menu_site_settings'); ?></a></li>
 							<?php
-								$addons->executeHook('AppendSubNavigation', array('parent'=>'configuration'));
+								$addons->executeHook('AppendSubNavigation', array('parent'=>'configuration', 'allowedAddons'=>$allowedAddons));
 								/* moduleLink('configuration', $modules, $allowedModules); */
 							?>
                         </ul>
@@ -75,7 +75,7 @@
                                 }
                             ?>
 							<?php
-								$addons->executeHook('AppendSubNavigation', array('parent'=>'users'));
+								$addons->executeHook('AppendSubNavigation', array('parent'=>'users', 'allowedAddons'=>$allowedAddons));
 								/* moduleLink('users', $modules, $allowedModules); */
 							?>
                         </ul>
@@ -93,15 +93,15 @@
                             <li><a href="<?php echo site_url(array('admin', 'manage', 'languages')); ?>"><?php echo $lang->line('menu_languages'); ?></a></li>
                             <li><a href="<?php echo site_url(array('admin', 'manage', 'locales'));   ?>"><?php echo $lang->line('menu_locales'); ?></a></li>
                             <li><a href="<?php echo site_url(array('admin', 'manage', 'dashboard'));   ?>"><?php echo $lang->line('menu_dashboard'); ?></a></li>
-							<?php
-								$addons->executeHook('AppendSubNavigation', array('parent'=>'system'));
+							<?php								
+								$addons->executeHook('AppendSubNavigation', array('parent'=>'system', 'allowedAddons'=>$allowedAddons));
 								/* moduleLink('system', $modules, $allowedModules); */
 							?>
                         </ul>
                     </li>
 					<?php
 						/* moduleLink('root', $modules, $allowedModules); */
-						$addons->executeHook('AppendMainNavigation', array());
+						$addons->executeHook('AppendMainNavigation', array('allowedAddons'=>$allowedAddons));
 					?>
                     <?php
                         }

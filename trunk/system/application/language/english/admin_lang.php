@@ -164,6 +164,7 @@
 	// Users:
 	$lang['users_title']				= 'Users';
 	$lang['users_add']					= 'Add a new user';
+	$lang['users_edit']					= 'Edit user';
 	$lang['users_username']				= 'Username';
 	$lang['users_password']				= 'Password';
 	$lang['users_password_again']		= 'Password (again)';
@@ -174,12 +175,14 @@
 	// Ranks:
 	$lang['ranks_title']				= 'Ranks';
 	$lang['ranks_add']					= 'Add a new rank';
+	$lang['ranks_edit']					= 'Edit rank';
 	$lang['ranks_name']					= 'Name';
 	$lang['ranks_system']				= 'User can manage system functionality';
 	$lang['ranks_users']				= 'User can manage user accounts';
 	$lang['ranks_ranks']				= 'User can manage ranks';
 	$lang['ranks_configuration']		= 'User can edit the sites configuration';
 	$lang['ranks_addons']				= 'Allowed addons';
+	$lang['ranks_templates']			= 'Template rights';
 	$lang['ranks_no_addons']			= 'No addons found!';
 	
 	// Login:

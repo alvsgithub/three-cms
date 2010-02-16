@@ -1,6 +1,6 @@
 <div id="content">
 	<div id="innerContent">
-        <h1><?php echo $lang->line('users_add'); ?></h1>
+        <h1><?php echo $title; ?></h1>
 		<form method="post" action="<?php echo site_url(array('admin', 'users', 'save')); ?>">
 			<table>
 				<tr>
