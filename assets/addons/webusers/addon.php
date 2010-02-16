@@ -120,8 +120,10 @@ class Webusers extends AddonBaseModel
 	// Add the menu option to the menu:
 	function addMenuOption($context)
 	{
-		if($context['parent']=='users') {
-			echo '<li><a href="'.$this->createLink(array('webusers')).'">Webusers</a></li>';			
+		if(in_array('webusers', $context['allowedAddons'])) {
+			if($context['parent']=='users') {
+				echo '<li><a href="'.$this->createLink(array('webusers')).'">Webusers</a></li>';			
+			}
 		}
 	}
 	

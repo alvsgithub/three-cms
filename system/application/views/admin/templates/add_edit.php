@@ -83,7 +83,7 @@
 								echo '<label><input type="checkbox" name="duplicate_'.$rank['id'].'" '.chk($a['duplicate']).' /> '.$lang->line('action_duplicate').' </label>';
 								echo '<label><input type="checkbox" name="move_'.$rank['id'].'" '.     chk($a['move']).' /> '.     $lang->line('action_move').' </label>';
 								echo '<label><input type="checkbox" name="delete_'.$rank['id'].'" '.   chk($a['delete']).' /> '.   $lang->line('action_delete').' </label>';
-								echo '<br />';
+								echo '<br /><br />';
 							}
 						?>
 					</td>
