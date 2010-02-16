@@ -8,6 +8,32 @@
 	This option adds a related-content option to choose from
 	
 	Usage:
+	
+	Create an option of the type 'Related content'.
+	
+	You can set filters in the options-fields to filter the related content.
+	For example: a filter like "template==7" only shows content items which
+	template is from ID 7. A filter like "id_content=32" only shows content
+	items which parent is 32. You could also filter on name, id or alias but
+	these items are always unique, so they will always result in only one
+	related content item to choose from. So	that would be rather silly.
+	
+	Frontend usage:
+	
+	This addon returns an array with the ID's of the related content items.
+	You could use these like this for example:
+	
+	{* Assuming that the name of your option is 'relatedContent': *}
+	{foreach from=$relatedContent item=id}
+		{assign var='content' value=$this->newObject($id, $idLanguage)}
+		<div class="content">
+			<a href="{$content->getUrl()}">
+				<h2>{$content->get('headerOrSomething')}</h2>
+				<p><a href="{$content->getUrl()}">Go to content</a></p>
+			</a>
+		</div>
+	{/foreach}
+	
 */
 
 class Related extends AddonBaseModel
@@ -39,24 +65,6 @@ class Related extends AddonBaseModel
 				'hook'=>'ModifyOptionValue',
 				'callback'=>'makeArray'
 			)
-			/*,
-			array(
-				'hook'=>'ModuleScreen',
-				'callback'=>'showModuleScreen'
-			),
-			array(
-				'hook'=>'ContentBelowOptions',
-				'callback'=>'showUserGroupSelector'
-			),
-			array(
-				'hook'=>'PostSaveContent',
-				'callback'=>'save'
-			),
-			array(
-				'hook'=>'PreRenderPage',
-				'callback'=>'preRender'
-			)
-			*/
 		);
 		return $hooks;
 	}
@@ -105,14 +113,6 @@ class Related extends AddonBaseModel
 	{
 		if($context['result']->type=='related_content') {
 			$ids     = explode('||', $context['result']->value);
-			/*
-			$objects = array();
-			foreach($ids as $id) {				
-				$object = new DataModel();
-				// $object->load($id, $context['dataObject']->get('idLanguage'));
-				array_push($objects, $object);				
-			}
-			*/
 			$context['result']->value = $ids;
 		}
 	}

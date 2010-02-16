@@ -16,6 +16,8 @@
 		AddOption						lang,values[]
 		ContentAddOption				type,inputName,value,class,item[]
 		ModifyOptionValue				&result,dataObject
+		LoadPage						&page
+		LoadAdmin						&page
  
 */
 

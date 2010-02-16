@@ -27,7 +27,7 @@ class Admin extends Controller
 		$this->load->helper('module');
 		
 		// Load dbforge (in case some modules need it)
-		$this->load->dbforge();
+		// $this->load->dbforge();
 		
         // Load the Language Class:
         $this->lang->load('admin');
@@ -58,7 +58,11 @@ class Admin extends Controller
 		
 		// Set the messages:
 		$this->messages = $this->session->userdata('messages');		
-		$this->session->set_userdata('messages', array());		
+		$this->session->set_userdata('messages', array());
+		
+		// Execute hook that the admin is loaded:
+		// This must be a reference since the executeHook()-function only returns true or false
+		$this->AddonModel->executeHook('LoadAdmin', array('admin'=>&$this));		
     }
     
 	/**
