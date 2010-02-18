@@ -59,7 +59,9 @@
 					}
 				case 'rich_text' :
 					{
-						echo '<div class="'.$class.'"><textarea name="'.$name.'" class="richtext">'.$value.'</textarea></div>';
+						// Extra class to set on the textarea:
+						$class2 = $item['required']==1 ? ' required' : '';
+						echo '<div class="'.$class.'"><textarea name="'.$name.'" class="richtext'.$class2.'">'.$value.'</textarea></div>';
 						break;
 					}
 				case 'url' :

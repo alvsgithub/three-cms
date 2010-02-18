@@ -28,6 +28,9 @@
 		}
 		// Show add-action:
 		// TODO: Add according to allowed templates
+		// What kind of add-buttons can be shown by 'from_template'?
+		// Add new item to... ? or none? In case of a blog, maybe 100 add-buttons will be shown :-S
+		//
 		/*
 		echo '<tr><td class="add" colspan="'.$colspan.'"><a href="#">add new</a></td></tr>';
 		*/
@@ -44,6 +47,6 @@
 			if($count > 0) { echo '</td></tr>'; }
 		}
 		echo '</table>';
-		// print_r($item);
+		
 	?>
 </div>

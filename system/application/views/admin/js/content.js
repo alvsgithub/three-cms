@@ -42,7 +42,15 @@ $(function(){
 	$("form").submit(function(){
 		// Check if all required fields are filled in:
 		ok = true;
-		$(".required", this).each(function(){			
+		$("textarea.required", this).each(function(){
+			// See if it is a CKEditor, in that case, the content of CKEditor should be see if it is empty:
+			instance = CKEDITOR.instances[$(this).attr("name")];
+			if(instance != undefined) {
+				// ckEditor instance:
+				$(this).val(instance.getData());
+			}
+		});
+		$("input.required, textarea.required", this).each(function(){			
 			$(this).removeClass("error");
 			if($(this).val()=='') {
 				$(this).addClass("error");

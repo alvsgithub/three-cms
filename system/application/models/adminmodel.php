@@ -1179,24 +1179,41 @@ class AdminModel extends Model
             $headers = explode(',', $item['headers']);
             $newHeaders = array();
             foreach($headers as $id) {
-                if(is_numeric($id)) {
-                    // This is easy, the ID is supplied:
-                    $this->db->select('id,name,description');
-                    $this->db->where('id', $id);
-                } else {
-                    // TODO: Get the information about this option according to the name of the option and the template of the source
-                    $this->db->select('id,name,description');
-                    $this->db->where('name', $id);
-                }                
-                $query  = $this->db->get('options');
-                $result = $query->result();
-                if(count($result) > 0) {
+                // First check special cases, these are id,name and anything starting with 'parent.':
+                if($id=='id' || $id=='name' || substr($id, 0, 7)=='parent.') {
+                    // Header is the id or the name of the item
+                    if(substr($id, 0, 7)=='parent.') {
+                        $desc = ucfirst(str_replace('.', ' ', $id));
+                    } else {
+                        $desc = ucfirst($id);
+                    }
                     $header = array(
-                        'id'=>$result[0]->id,
-                        'name'=>$result[0]->name,
-                        'description'=>$result[0]->description
+                        'id'=>0,
+                        'name'=>$id,
+                        'description'=>$desc
                     );
-                    array_push($newHeaders, $header);                    
+                    array_push($newHeaders, $header);
+                } else {                    
+                    if(is_numeric($id)) {
+                        // This is easy, the ID is supplied:
+                        $this->db->select('id,name,description');
+                        $this->db->where('id', $id);
+                    } else {
+                        // TODO: Get the information about this option according to the name of the option and the template of the source
+                        $this->db->select('id,name,description');
+                        $this->db->where('name', $id);
+                    }                
+                    $query  = $this->db->get('options');
+                    $result = $query->result();
+                    
+                    if(count($result) > 0) {
+                        $header = array(
+                            'id'=>$result[0]->id,
+                            'name'=>$result[0]->name,
+                            'description'=>$result[0]->description
+                        );                        
+                        array_push($newHeaders, $header);                    
+                    }
                 }
             }
             // Read the content:
@@ -1228,6 +1245,60 @@ class AdminModel extends Model
                 );
                 // Get the specific option values for this content item:
                 foreach($newHeaders as $header) {
+                    // Special cases for id,name and parent.:
+                    if($header['name']=='id') {
+                        // The ID:
+                        $currentContent['headers']['id'] = $result->id;                        
+                    } elseif($header['name']=='name') {
+                        // The Name:
+                        $currentContent['headers']['name'] = $result->name;                        
+                    } elseif(substr($header['name'], 0, 7)=='parent.') {
+                        // A value from the parent:
+                        $a = explode('.', $header['name']);
+                        // Get the ID of the parent:
+                        $this->db->select('id_content');
+                        $this->db->where('id', $result->id);
+                        $parentQuery  = $this->db->get('content');
+                        $parentResult = $parentQuery->result();
+                        $parentID     = $parentResult[0]->id_content;
+                        
+                        // Special case if this is ID or Name
+                        if($a[1]=='id' || $a[1]=='name') {
+                            $this->db->select('id,name');
+                            $this->db->where('id', $parentID);
+                            $parentQuery  = $this->db->get('content');
+                            $parentResult = $parentQuery->result();
+                            if($a[1]=='id') {
+                                $currentContent['headers'][$header['name']] = $parentResult[0]->id;
+                            } else {
+                                $currentContent['headers'][$header['name']] = $parentResult[0]->name;
+                            }
+                        } else {
+                            if(is_numeric($a[1])) {
+                                // ID
+                                $idOption = $a[1];
+                            } else {
+                                // Name
+                                // Get the ID of the option
+                                $this->db->select('id');
+                                $this->db->where('name', $a[1]);
+                                $optionQuery  = $this->db->get('options');
+                                $optionResult = $optionQuery->result();
+                                $idOption = $optionResult[0]->id;
+                            }
+                            // Get the value:
+                            $this->db->select('value');
+                            $this->db->where('id_content', $parentID);
+                            $this->db->where('id_language', $settings['default_language']);
+                            $this->db->where('id_option', $idOption);
+                            $currentContentQuery = $this->db->get('values');
+                            $currentContentResult = $currentContentQuery->result();                    
+                            $currentContent['headers'][$header['name']] = $currentContentResult[0]->value;
+                            
+                        }                        
+                        
+                    } else {
+                    
                     // if(isset($header['id'])) {
                         $this->db->select('value');
                         $this->db->where('id_content', $result->id);
@@ -1237,6 +1308,7 @@ class AdminModel extends Model
                         $currentContentResult = $currentContentQuery->result();                    
                         $currentContent['headers'][$header['name']] = $currentContentResult[0]->value;
                     // }
+                    }
                 }
                 array_push($content, $currentContent);
             }
