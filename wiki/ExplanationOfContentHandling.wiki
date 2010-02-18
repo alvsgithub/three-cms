@@ -13,6 +13,11 @@ Three CMS handles content as induvidual pieces of information. For example: For 
 
 In most CMS-es you can make a news page and add some other pages as subpages of the newspage to act as newsitems. Not in Three CMS: Three CMS will see the news item as it's own induvidual piece of content, which would only need it's own induvidual fields.
 
+The scheme below visualizes this concept:
+
+
+http://threecms.com/forum/download/file.php?id=49&.png
+
 = A more practical example =
 
 == Scenario ==
