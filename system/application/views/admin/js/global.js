@@ -1,7 +1,8 @@
 var ajaxLoader = '<img src="'+baseURL+'system/application/views/admin/images/ajax-loader.gif" width="128" height="15" />';
 var inputField;
-var parentSelection = false;
-var moveAction = false;
+var currentID = 0;
+// var parentSelection = false;
+// var moveAction = false;
 
 $(function(){
 	// Simple dropdown:
@@ -12,7 +13,7 @@ $(function(){
 	});
 	
 	// Tree:
-	initializeTree();
+	// initializeTree();
 	
 	// Delete link:
 	$("a.delete").click(function(){
@@ -20,12 +21,13 @@ $(function(){
 	});
 	
 	// Parent selection:
+	/*
 	$("a.selectParent").click(function(){
 		$("span", this).text(select_parent);
 		setParentSelection();
 		return false;		
 	});
-	
+	*/
 	// Set interval to keep the session alive (runs each 5 minutes):
 	setInterval('keepAlive()', 300000);	// 300000 ms = 5 minutes
 	
@@ -50,14 +52,98 @@ $(function(){
 		return false;
 	});
 	$(".module ul.tabMenu li:first a").click();
+	
+	// jsTree:
+	// When a node is moved, it may only be placed in another node which allows it's template				
+	$("#treeContainer").tree({
+		data : {
+			async : true,
+			opts : {
+				'method' : 'POST',
+				'url' : baseURL + 'index.php/admin/ajax/tree/' + currentID
+			}
+		},
+		callback : {
+			/*
+			beforedata: function(node, tree_obj) {
+				
+			},*/
+			beforedata: function(node, tree_obj) {
+				// return node;
+				currentID = $("var.id:first", node).text();
+				tree_obj.settings.data.opts.url = baseURL + 'index.php/admin/ajax/tree/' + currentID;				
+				return true;
+			},
+			beforemove: function(node) {
+				if($("var.move:first", node.node).text()=='1') {
+					allowed = $("var.allowed:first", node.parent).text().split(',');
+					current = $("var.template:first", node.node).text();
+					if(in_array(current, allowed)) {
+						return true;
+					} else {
+						alert('You cannot place this item here!');
+						return false;
+					}
+				} else {
+					alert('This item is not movable!');
+					return false;
+				}
+			},
+			onmove: function(node) {							
+				// Reset the positions:							
+				var pos=0;							
+				$(">ul>li>a var.position", node.parent).each(function(){
+					$(this).text(pos);
+					pos++;
+				});
+			},
+			onselect: function(node) {
+				// Select:
+				id = $("var.id:first", node).text();
+				$("#content").load(baseURL + 'index.php/admin/ajax/page_summary/' + id, function(){
+					$("td.content_actions a.delete").click(function(){
+						return confirm(dialog_delete_tree);
+					});
+					/*
+					$("td.content_actions a.move").click(function(){
+						$(this).addClass("inactive");
+						setParentSelection();
+						moveAction = true;
+						return false;
+					});
+					*/
+					$("#loading").hide();
+				});
+			},
+			ondblclk: function(node) {
+				// Modify:
+				if($("var.modify:first", node).text()=='1') {
+					id = $("var.id:first", node).text();
+					window.location = baseURL + 'index.php/admin/content/edit/' + id;
+				}
+			}
+		}
+	});
 });
 
+function in_array (needle, haystack) {
+	for (key in haystack) {
+		if (haystack[key] == needle) {
+			return true;
+		}
+	}
+	return false;
+}
+
+/*
 function setParentSelection()
 {
 	$("#tree").css({backgroundColor: "#CCDDFF"}).animate({backgroundColor: "#FFFFFF"}, 1000);
 	parentSelection = true;
 }
+*/
 
+/*
 function initializeTree()
 {
 	var iconClicked = false;
@@ -184,6 +270,7 @@ function initializeTree()
 		}
 	});
 }
+*/
 
 function keepAlive()
 {

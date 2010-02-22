@@ -5,12 +5,14 @@
         <link rel="stylesheet" type="text/css" media="screen,tv,projection" href="<?php echo base_url(); ?>system/application/views/admin/css/screen.css" />
 		<link rel="stylesheet" type="text/css" media="screen,tv,projection" href="<?php echo base_url(); ?>system/application/views/admin/css/calendar-blue.css" />
 		<link rel="stylesheet" type="text/css" media="screen,tv,projection" href="<?php echo base_url(); ?>system/application/views/admin/css/jquery.timeentry.css" />
+		<link rel="stylesheet" type="text/css" media="screen,tv,projection" href="<?php echo base_url(); ?>system/application/views/admin/css/jquery.tree.css" />
         <script type="text/javascript" src="<?php echo base_url(); ?>system/application/views/admin/js/jquery-1.4.1.min.js"></script>
 		<script type="text/javascript" src="<?php echo base_url(); ?>system/application/views/admin/js/jquery.mousewheel.min.js"></script>
 		<script type="text/javascript" src="<?php echo base_url(); ?>system/application/views/admin/js/jquery.dynDateTime.min.js"></script>
 		<script type="text/javascript" src="<?php echo base_url(); ?>system/application/views/admin/js/calendar-en.js"></script>
 		<script type="text/javascript" src="<?php echo base_url(); ?>system/application/views/admin/js/jquery.timeentry.min.js"></script>
 		<script type="text/javascript" src="<?php echo base_url(); ?>system/application/views/admin/js/jquery.color.js"></script>
+		<script type="text/javascript" src="<?php echo base_url(); ?>system/application/views/admin/js/jquery.tree.js"></script>
         <script type="text/javascript" src="<?php echo base_url(); ?>system/application/views/admin/ckeditor/ckeditor.js"></script>
         <script type="text/javascript">
             var baseURL              = '<?php echo base_url(); ?>';
