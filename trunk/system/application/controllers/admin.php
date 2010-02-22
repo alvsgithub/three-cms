@@ -637,10 +637,11 @@ class Admin extends Controller
 			case 'tree' :
 				{
 					// Show the tree:					
-					$id   = $this->uri->segment(4);					
+					$id   = $this->uri->segment(4);
+					if($id==false) { $id=0; }
 					$data = array(
 						'lang'=>$this->lang,
-						'tree'=>$this->AdminModel->getTree($id)
+						'tree'=>$this->AdminModel->getTree($this->rank, $id)
 					);
 					$this->load->view('admin/ajax/tree.php', $data);
 					break;
@@ -962,7 +963,7 @@ class Admin extends Controller
 		$this->showTree();
 		$data = array(
 			'lang'=>$this->lang,
-			'tree'=>$this->AdminModel->getTree(),
+			// 'tree'=>$this->AdminModel->getTree(),
 			'settings'=>$this->AdminModel->getSettings(),
 			'languages'=>$this->AdminModel->getLanguages()
 		);
@@ -977,7 +978,7 @@ class Admin extends Controller
 	{
 		$data = array(
 			'lang'=>$this->lang,
-			'tree'=>$this->AdminModel->getTree(),
+			'tree'=>$this->AdminModel->getTree($this->rank),
 			'sitename'=>$this->settings['site_name'],
 			'currentId'=>$currentId
 		);

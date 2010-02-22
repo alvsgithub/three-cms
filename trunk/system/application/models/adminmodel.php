@@ -34,10 +34,11 @@ class AdminModel extends Model
     
     /**
      * Get the tree information, given from a certain start-ID
+     * @param   $idRank int The ID of the userrank
      * @param $startID  int The ID of the root of the tree
      * @return  array   An array holding the information of the tree
      */
-    function getTree($startID=0)
+    function getTree($idRank, $startID=0)
     {
         // Add this id to the session of trees that are expanded:
         $expandedTrees = $this->session->userdata('treeArray');
@@ -46,23 +47,46 @@ class AdminModel extends Model
         // Create the tree:
         $tree  = array();
         $this->db->where('id_content', $startID);
-        $this->db->select('id,name');
+        $this->db->select('id,name,id_template');
         $this->db->order_by('order', 'asc');
         $query = $this->db->get('content');
+        // Each result is a node in the tree
         foreach($query->result() as $result) {
-            $this->db->where('id_content', $result->id);
             $this->db->from('content');
+            $this->db->where('id_content', $result->id);
             $numChildren = $this->db->count_all_results();
             $item = array(
                 'id'=>$result->id,
                 'name'=>$result->name,
+                'template'=>$result->id_template,
                 'numChildren'=>$numChildren,
                 'tree'=>null
             );
+            // Check for each node what the rights for this rank are for this user:
+            $this->db->select('move,modify,visible');
+            $this->db->from('templates_ranks');
+            $this->db->where('id_rank', $idRank);
+            $rankQuery  = $this->db->get();
+            $rankResult = $rankQuery->result();
+            $item['move']    = $rankResult[0]->move;
+            $item['modify']  = $rankResult[0]->modify;
+            $item['visible'] = $rankResult[0]->visible;
+            // Check which allowed templates this node has:
+            $allowed   = $this->getChildTemplates($item['template']);
+            $tempArray = array();
+            foreach($allowed as $a) {
+                if($a['allowed']) {
+                    array_push($tempArray, $a['id']);
+                }
+            }
+            $item['allowed'] = implode(',', $tempArray);
+            
+            // Check if this node is expanded:
             if(in_array($result->id, $expandedTrees)) {
-                $childTree = $this->getTree($result->id);
+                $childTree = $this->getTree($idRank, $result->id);
                 $item['tree'] = $childTree;
             }
+            // Add the node to the tree:
             array_push($tree, $item);
         }
         return $tree;
