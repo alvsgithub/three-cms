@@ -116,6 +116,7 @@ $(function(){
 			},
 			onselect: function(node) {
 				// Select:
+				$("#loading").show();
 				id = $("var.id:first", node).text();
 				$("#content").load(baseURL + 'index.php/admin/ajax/page_summary/' + id, function(){
 					$("td.content_actions a.delete").click(function(){
@@ -134,6 +135,7 @@ $(function(){
 			},
 			ondblclk: function(node) {
 				// Modify:
+				$("#loading").show();
 				if($("var.modify:first", node).text()=='1') {
 					id = $("var.id:first", node).text();
 					window.location = baseURL + 'index.php/admin/content/edit/' + id;

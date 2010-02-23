@@ -95,9 +95,11 @@ $(function(){
 				response = responseStr.split(';');
 				if(response.length==2) {
 					// Reload the tree:
+					/*
 					$("#tree").load(baseURL + 'index.php/admin/ajax/fulltree #tree>*', function(){
 						initializeTree();
 					});
+					*/
 					$("#message").html('<p class="ok">' + response[1] + '</p>').slideDown("slow");				
 				} else {
 					alert(content_server_error);
