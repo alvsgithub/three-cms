@@ -762,19 +762,22 @@ class Admin extends Controller
 					$this->showTree();
 					// Default values:
 					$idContent  = $this->input->post('id');
-					$idParent   = $this->input->post('parent');
+					$idParent   = $this->input->post('parent');	
 					$idTemplate = $this->input->post('template');
 					$contentData = $this->AdminModel->getContentData($idContent, $idParent, $idTemplate);
 					// Adjust the contentData according to the parameters:
 					$contentData['id_template'] = $idTemplate;
 					$contentData['name']        = $this->makeSafe($this->input->post('name'));
 					$contentData['alias']       = $this->input->post('alias');
-					$contentData['order']		= $this->input->post('order');
+					// $contentData['order']		= $this->input->post('order');
 					if(empty($contentData['name'])) { $contentData['name'] = 'Untitled'; }
-					// Check if the parent is not a descendant of this content and if the parent is not itself:					
+					// Is not needed anymore since this is done in the tree:
+					// Check if the parent is not a descendant of this content and if the parent is not itself:
+					/*
 					if(!$this->AdminModel->checkDescendant($idContent, $idParent) && $idContent != $idParent) {
 						$contentData['id_content']  = $idParent;		// id_content is the parent of this content
 					}
+					*/
 					// Get the values:
 					for($item=0; $item<count($contentData['content']); $item++) {
 						if($contentData['content'][$item]['multilanguage']==1) {

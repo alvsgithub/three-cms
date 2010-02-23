@@ -40,6 +40,9 @@
 						?>
 					</td>
 				</tr>
+				<?php
+				// Parent and order are not needed anymore since this is done in the tree:
+				/*
 				<tr>
 					<th><?php echo $lang->line('content_parent'); ?>:</th>
 					<td><input readonly="readonly" class="small" type="text" name="parent" value="<?php echo $contentData['id_content']; ?>" /> <a href="#" class="selectParent">Select parent <span></span></a></td>
@@ -47,7 +50,9 @@
 				<tr>
 					<th><?php echo $lang->line('content_order'); ?>:</th>
 					<td><input class="small" type="text" name="order" value="<?php echo $contentData['order']; ?>" /> <a href="#" class="orderSmaller">&laquo;</a> <a href="#" class="orderBigger">&raquo;</a></td>
-				</tr>				
+				</tr>
+				*/
+				?>
 				<?php
 					// Only show the language picker if:
 					// - there is more than one language AND
@@ -126,6 +131,7 @@
 					<th>&nbsp;</th>
 					<td>
 						<input type="hidden" name="id" value="<?php echo $contentData['id']; ?>" />
+						<input type="hidden" name="parent" value="<?php echo $contentData['id_content']; ?>" />
 						<input type="submit" value="<?php echo $lang->line('button_save'); ?>" /> <img src="<?php echo base_url(); ?>system/application/views/admin/images/ajax-loader.gif" width="128" height="15" class="loading" />		<div id="message"></div>
 					</td>
 				</tr>
