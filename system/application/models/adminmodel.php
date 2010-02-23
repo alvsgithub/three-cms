@@ -1374,6 +1374,31 @@ class AdminModel extends Model
         unset($values['id']);
         $this->db->insert('dashboard', $values);
     }
+
+    /**
+     * Set the parent of a specific content item
+     * @param   $idContent  int The ID of the content item
+     * @param   $idParent   int The ID of the parent
+     */
+    function setParent($idContent, $idParent)
+    {
+        $this->db->where('id', $idContent);
+        $this->db->update('content', array('id_content'=>$idParent));
+    }
+    
+    /**
+     * Set the order of children
+     * @param   $order      array   An array with ID's in the correct order
+     */
+    function setOrder($order)
+    {
+        $current = 0;
+        foreach($order as $id) {
+            $this->db->where('id', $id);
+            $this->db->update('content', array('order'=>$current));
+            $current++;
+        }
+    }
     
 }
 ?>

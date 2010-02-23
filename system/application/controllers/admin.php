@@ -729,6 +729,19 @@ class Admin extends Controller
 					}
 					break;
 				}
+			case 'tree_move' :
+				{
+					$id_item   = $this->input->post('id_item');
+					$id_parent = $this->input->post('id_parent');
+					$positions = $this->input->post('positions');
+					if($id_parent !== false && $positions !== false && $id_item !== false) {
+						// Adjust the parent:
+						$positions = explode(',', $positions);
+						$this->AdminModel->setParent($id_item, $id_parent);
+						$this->AdminModel->setOrder($positions);
+					}
+					break;
+				}
 		}
 	}
 	
