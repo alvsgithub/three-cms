@@ -22,9 +22,9 @@
 .tree-default li span ins { background-position:-16px 0; }
 #jstree-dragged.tree-default ins { background:url("icons.png") -16px -32px no-repeat !important; }
 #jstree-dragged.tree-default ins.forbidden { background:url("icons.png") -16px -16px no-repeat !important; }
-
 /* CONTEXT MENU */
 .tree-default-context a ins { background-image:url("icons.png"); background-repeat:no-repeat; background-position:-64px -64px; }
 .tree-default-context a ins.create { background-position:0 -16px; }
 .tree-default-context a ins.rename { background-position:-16px 0px; }
 .tree-default-context a ins.remove { background-position:0 -32px; }
+.tree-default var { display: none; }

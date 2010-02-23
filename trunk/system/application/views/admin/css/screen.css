@@ -21,7 +21,7 @@ html { font-family: arial, helvetica, sans-serif; font-size: 62.5%; cursor: defa
 
 #tree { float: left; width: 25%; font-size: 1.6em; outline: 1px solid #cfcfcf; background: url(tree.png) left bottom repeat-x; }
 #innerTree { padding: 10px; }
-#innerTree var { display: none; }
+/* #innerTree var { display: none; } */
 
 /*
 #tree ul { list-style-type: none; }

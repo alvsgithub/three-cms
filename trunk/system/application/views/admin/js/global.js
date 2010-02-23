@@ -64,10 +64,6 @@ $(function(){
 			}
 		},
 		callback : {
-			/*
-			beforedata: function(node, tree_obj) {
-				
-			},*/
 			beforedata: function(node, tree_obj) {
 				// return node;
 				currentID = $("var.id:first", node).text();
@@ -75,8 +71,14 @@ $(function(){
 				return true;
 			},
 			beforemove: function(node) {
+				// See if this node is allowed to move:
 				if($("var.move:first", node.node).text()=='1') {
-					allowed = $("var.allowed:first", node.parent).text().split(',');
+					// See if this node is allowed in it's new parent:
+					if(node.parent == -1) {
+						// When node.parent = -1, this item is located on the root.
+						return true;
+					}
+					allowed = $("var.allowed:first", node.parent).text().split(',');					
 					current = $("var.template:first", node.node).text();
 					if(in_array(current, allowed)) {
 						return true;
@@ -91,11 +93,26 @@ $(function(){
 			},
 			onmove: function(node) {							
 				// Reset the positions:							
-				var pos=0;							
-				$(">ul>li>a var.position", node.parent).each(function(){
-					$(this).text(pos);
-					pos++;
-				});
+				positions = [];
+				// AJAX-call the new positions and the parent:
+				if(node.parent == -1) {
+					id_parent = 0;
+					$("#treeContainer>ul>li>a").each(function(){
+						positions.push($("var.id", this).text());
+					});
+				} else {
+					id_parent = $("var.id:first", node.parent).text();
+					$(">ul>li>a", node.parent).each(function(){
+						positions.push($("var.id", this).text());
+					});
+				}
+				id_item = $("var.id:first", node.node).text();
+				data = {
+					id_item: id_item,
+					id_parent: id_parent,
+					positions: positions.join(',')					
+				};
+				$.post(baseURL + 'index.php/admin/ajax/tree_move', data);
 			},
 			onselect: function(node) {
 				// Select:

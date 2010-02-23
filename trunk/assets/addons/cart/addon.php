@@ -49,6 +49,7 @@
 class Cart extends AddonBaseModel
 {
 	var $cart;
+	var $email;
 	
 	/**
 	 * Initialize
@@ -86,6 +87,10 @@ class Cart extends AddonBaseModel
 		// Make a reference to the cart-object, since it will not be automaticly
 		// coupled this this Addon-Object:
 		$this->cart = $context['page']->cart;
+		
+		// Do the same for the e-mail class:
+		$context['page']->load->library('email');
+		$this->email = $context['page']->email;
 	}
 	
 	// Check for POST-data
@@ -124,6 +129,8 @@ class Cart extends AddonBaseModel
 			} elseif(isset($data['destroy'])) {
 				// Destroy (empty) the cart:
 				$this->destroy();
+			} elseif(isset($data['order_complete'])) {				
+				$this->complete($data);
 			}
 			
 		}
@@ -170,6 +177,50 @@ class Cart extends AddonBaseModel
 	function destroy()
 	{
 		$this->cart->destroy();
+	}
+	
+	/**
+	 * Complete the order:
+	 */
+	function complete($data)
+	{
+		if(isset($data['order_type'])) {
+			switch($data['order_type']) {
+				case 'email' :
+					{						
+						// Send an e-mail to a user:
+						if(isset($data['order_recipient'])) {
+							$this->db->select('email');
+							$this->db->where('username', $data['order_recipient']);
+							$query = $this->db->get('users');
+							if($query->num_rows==1) {
+								$result = $query->result();								
+								$email_address = $result[0]->email;
+								$cart  = $this->getCart();
+								$clientDetails = $data['client'];
+								// Create message:
+								ob_start();
+								include('email.tpl');
+								$content = ob_get_clean();
+								
+								// Load Configuration:
+								// $cartConfig = array();
+								include('cart_config.php');
+								$this->email->initialize($cartConfig);
+								
+								// Send HTML mail:
+								$this->email->from($cartConfig['from']);
+								$this->email->to($email_address);
+								$this->email->subject($cartConfig['subject']);
+								$this->email->message($content);								
+								$ok = $this->email->send();
+							}
+							die();
+						}
+						break;					
+					}
+			}
+		}
 	}
 }
 ?>
