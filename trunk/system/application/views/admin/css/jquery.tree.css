@@ -28,3 +28,5 @@
 .tree-default-context a ins.rename { background-position:-16px 0px; }
 .tree-default-context a ins.remove { background-position:0 -32px; }
 .tree-default var { display: none; }
+
+.tree-default span.id { background: none; border: none; color: #999; font-size: 0.75em; font-style: italic; }
