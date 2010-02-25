@@ -52,7 +52,7 @@
 			<div class="right">
 				<?php
 					foreach($right as $item) {
-						include('item.php');
+						include('item.php');						
 					}
 				?>
 			</div>
