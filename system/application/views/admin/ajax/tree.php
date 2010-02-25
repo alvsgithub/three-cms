@@ -4,10 +4,11 @@
 		foreach($tree as $item) {
 			if($item['visible']) {
 				$class = $item['numChildren'] > 0 ? ' class="closed"' : '';
+				$class = $item['tree'] == null ? $class : ' class="open"';
 				echo '
 					<li'.$class.'>
 						<a href="#">
-							'.$item['name'].'
+							'.$item['name'].' <span class="id">('.$item['id'].')</span>
 							<var class="id">'.$item['id'].'</var>
 							<var class="template">'.$item['template'].'</var>
 							<var class="allowed">'.$item['allowed'].'</var>								

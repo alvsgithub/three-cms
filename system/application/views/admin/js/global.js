@@ -140,6 +140,11 @@ $(function(){
 					id = $("var.id:first", node).text();
 					window.location = baseURL + 'index.php/admin/content/edit/' + id;
 				}
+			},
+			onclose: function(node) {
+				// Send ajax-call that the tree is closed:
+				id = $("var.id:first", node).text();
+				$.post(baseURL + 'index.php/admin/ajax/treeclose/' + id);
 			}
 		}
 	});
