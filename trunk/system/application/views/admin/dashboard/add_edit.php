@@ -21,12 +21,7 @@
 						<select name="type">
 							<option value="from_parent" <?php echo isSelected($values['type'], 'from_parent').'>'.$lang->line('system_dashboard_from_parent'); ?></option>
 							<option value="from_template" <?php echo isSelected($values['type'], 'from_template').'>'.$lang->line('system_dashboard_from_template'); ?></option>
-							<?php
-								// TODO: Addon callback
-							/*
-							<option value="from_addon" <?php echo isSelected($values['type'], 'from_addon').'>'.$lang->line('system_dashboard_addon'); ?></option>
-							*/
-							?>
+							<option value="from_addon" <?php echo isSelected($values['type'], 'from_addon').'>'.$lang->line('system_dashboard_from_addon'); ?></option>
 						</select>
 					</td>
 				</tr>
