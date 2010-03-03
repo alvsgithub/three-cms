@@ -81,3 +81,46 @@ To show the tree in your site use:
 {{{
 {include file="tree.tpl" id='0'}
 }}}
+
+== Pagination ==
+
+Create simple pagination with Smarty:
+
+This example uses the `$parameters`-variable to check which page to show.
+
+{{{
+{*
+  Setup the pagination; set the amount of items to show for each page,
+  set the current page, and set the limit for the current page:
+*}
+{assign var="itemsPerPage" value=3}
+{if $parameters|@count eq 1}
+  {assign var="currentPage" value=$parameters[0]}
+  {math assign="limit" equation="$currentPage * $itemsPerPage"}
+{else}
+  {assign var="currentPage" value=0}
+  {assign var="limit" value=0}
+{/if}
+{*
+  Show the items:
+*}                    
+{foreach from=$this->children($idContent, "", "$itemsPerPage,$limit") item=child}
+  ...do your stuff here...  
+{/foreach}
+{*
+  Show the paginator:
+*}
+{assign var="tree" value=$this->getTree()}
+{assign var="totalItems" value=$tree|@count}
+{math assign="lastPage" equation="floor(x/$itemsPerPage)" x=$totalItems}
+{if $totalItems gt $itemsPerPage}
+  <div class="paginator">
+    {if $currentPage gt 0}
+      <a href="{$this->getUrl()}/{math equation="x-1" x=$currentPage}">previous</a>
+    {/if}
+    {if $currentPage lt $lastPage}
+      <a href="{$this->getUrl()}/{math equation="x+1" x=$currentPage}">next</a>
+    {/if}
+  </div>
+{/if}
+}}}
