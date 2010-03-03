@@ -117,6 +117,9 @@
 				case 'date' :
 					{
 						// Add a datapicker
+						if(is_numeric($value)) {
+							$value = strftime($settings['date_format'], $value);
+						}
 						echo '<input type="text" name="'.$name.'" value="'.$value.'" class="'.$class.' datePicker" />';
 						break;
 					}

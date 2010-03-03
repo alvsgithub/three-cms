@@ -1318,7 +1318,7 @@ class AdminModel extends Model
                             $currentContentQuery = $this->db->get('values');
                             $currentContentResult = $currentContentQuery->result();                    
                             $currentContent['headers'][$header['name']] = $currentContentResult[0]->value;
-                            
+                            // TODO: If the option is of the type 'date', convert the timestamp to the date
                         }                        
                         
                     } else {

@@ -23,7 +23,8 @@ class Admin extends Controller
 		
 		// Load the Helpers:
 		$this->load->helper('url');		
-		$this->load->helper('stringencrypter');		
+		$this->load->helper('stringencrypter');
+		$this->load->helper('strptime'); // For strptime() on Windows servers
 		$this->load->helper('module');
 		
 		// Load dbforge (in case some modules need it)
@@ -723,7 +724,8 @@ class Admin extends Controller
 						$data = array(
 							'lang'=>$this->lang,
 							'contentData'=>$contentData,
-							'settings'=>$this->settings
+							'settings'=>$this->settings,
+							'addons'=>$this->AddonModel
 						);
 						$this->load->view('admin/content/options_field.php', $data);
 					}
@@ -821,8 +823,22 @@ class Admin extends Controller
 										}
 										case 'date' :
 										{
-											// TODO: Should date be formatted to timestamp?
+											// Format date to timestamp:											
 											$value = isset($_POST[$name]) ? $this->makeSafe($this->input->post($name)) : '';
+											$time  = strptime($value, $this->settings['date_format']);
+											/*
+												[tm_sec] => 0
+												[tm_min] => 0
+												[tm_hour] => 0
+												[tm_mday] => 3
+												[tm_mon] => 2
+												[tm_year] => 99
+												[tm_wday] => 3
+												[tm_yday] => 61
+												[unparsed] => 
+											*/
+											$value = mktime(0, 0, 0, $time['tm_mon'], $time['tm_mday'], 1900 + $time['tm_year']);
+											// $value = implode('-', $time);
 											break;
 										}										
 										default:
@@ -1388,5 +1404,6 @@ class Admin extends Controller
 		// Show the footer:
 		$this->showFooter();
 	}
+	
 }
 ?>
