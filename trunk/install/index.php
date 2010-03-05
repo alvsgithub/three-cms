@@ -114,14 +114,20 @@
 					<h1>Select setup</h1>
 					<p>There are different types of predefined installations available, please select the one which you would want to install:</p>
 					<label><input type="radio" name="setup" value="1" /> Empty installation</label>
-					<label><input type="radio" name="setup" value="2" checked="checked" /> Default website</label>
-					<label><input type="radio" name="setup" value="3" disabled="disabled" /> Example site</label>
-					<label><input type="radio" name="setup" value="4" disabled="disabled" /> Example blog</label>
+					<label><input type="radio" name="setup" value="2" /> Default website</label>
+					<label><input type="radio" name="setup" value="3" checked="checked" /> Demo website</label>
+					<label class="disabled"><input type="radio" name="setup" value="4" disabled="disabled" /> Demo multilingual site</label>
+					<label class="disabled"><input type="radio" name="setup" value="5" disabled="disabled" /> Demo weblog</label>
+					<label class="disabled"><input type="radio" name="setup" value="6" disabled="disabled" /> Demo site with webusers</label>
+					<label class="disabled"><input type="radio" name="setup" value="7" disabled="disabled" /> Demo webshop</label>
 					<div class="descriptions">
 						<p class="description1">This is an empty site with no predefined content types, templates or pages.<br /><br />Use this setup if you want to create a site completely form scratch.</p>
 						<p class="description2">This is an empty site with one page and one basic template. The template provides general options for default pages, such as a header, a summary and a content area.<br /><br />Use this setup if you want a quick setup for a simple site.</p>
-						<p class="description3">This is an example of a multilingual site with some default pages and a news page. It shows the default functionality of Three CMS and the Smarty Template Engine.<br /><br />Use this setup if you're new to Three CMS or want to learn the way Three CMS works (or if you want to create a multilingual site with a news-page offcourse!).</p>
-						<p class="description4">This is an example of a blog created with Three CMS.<br /><br />Use this setup if you're new to Three CMS or want to learn the way Three CMS works (or if you want to create a blog offcourse!).</p>
+						<p class="description3">This is an example of a website with some 2 default pages and a news page. It shows the default functionality of Three CMS and the Smarty Template Engine.<br /><br />Use this setup if you're new to Three or want to learn the way Three works (or if you want to create a website with a news-page offcourse!).</p>						
+						<p class="description4">This is an example of a multilingual site with some default pages. It shows the multilingual features of Three CMS such as multilingual options and locales.<br /><br />Use this setup if you're new to Three and want to learn how to create multilingual sites. (or if you want to create a multilingual site offcourse!).</p>
+						<p class="description5">This is an example of a blog created with Three. It demonstrates the use of addons to extends Three's functionality.<br /><br />Use this setup if you're new to Three's addon structure or want to learn the way Three works with addons (or if you want to create a blog offcourse!).</p>
+						<p class="description6">This is an example of a website with some protected pages created with Three. It demonstrates the use of the webusers-addon to extends Three's functionality.<br />It allows your visitors to register on your site and to show certain pages only visible for users that are logged in.<br /><br />Use this setup if you're new to Three's webusers-addon or want to learn the way Three's webusers-addon works (or if you want to create a website which utilizes webusers offcourse!).</p>
+						<p class="description7">This is an example of a webshop created with Three. It demonstrates the use of the webusers-addon, the cart-addon and the related content-addon to extends Three's functionality.<br />It allows your visitors to have the ultimate shopping experience on your webshop.<br /><br />Use this setup if you're new to Three's cart-addon or want to learn the way Three's cart-addon works (or if you want to create a webshop which utilizes webusers offcourse!).</p>
 					</div>
 					<div class="footer">
 						<input type="button" class="prev step4" value="Previous" />

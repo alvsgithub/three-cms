@@ -21,7 +21,8 @@ input.next { float: right; padding: 0 20px; }
 #step2, #step3, #step4, #step5, #step6, #step7 { display: none; }
 
 label { display: block; float: left; width: 120px; font-size: 1.2em; }
-#step5 label { display: block; clear: both; margin-bottom: 5px; }
+#step5 label { display: block; clear: both; margin-bottom: 5px; width: 170px; }
+#step5 label.disabled { color: #ccc; }
 
 .licenseLabel { display: inline; float: none; width: auto; }
 

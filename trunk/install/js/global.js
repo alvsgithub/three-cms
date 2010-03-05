@@ -52,7 +52,7 @@ $(function(){
 
 	// Setup selector:
 	$(".descriptions p").hide();
-	$("p.description2").show();
+	$("p.description" + $("input[name=setup]:checked").val()).show();  
 	$("input[name=setup]").click(function(){
 		$(".descriptions p").hide();
 		$("p.description" + $(this).val()).show();
@@ -73,10 +73,19 @@ $(function(){
 				$("dd.setup").text('Default website');
 				break;
 			case '3':
-				$("dd.setup").text('Example site');
+				$("dd.setup").text('Demo website');
 				break;
 			case '4':
-				$("dd.setup").text('Example blog');
+				$("dd.setup").text('Demo multilingual site');
+				break;
+			case '5':
+				$("dd.setup").text('Demo weblog');
+				break;
+			case '6':
+				$("dd.setup").text('Demo site with webusers');
+				break;
+			case '7':
+				$("dd.setup").text('Demo webshop');
 				break;
 		}
 	});

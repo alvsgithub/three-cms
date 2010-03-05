@@ -137,44 +137,122 @@ class DataModel extends Model
 	 * @param	$limit		array	An array with one ore two values for the limit-options
 	 * @return	array		An array with dataModels
 	 */
-	function children($idContent = null, $options = null, $limit = null)
+	function children($idContent = null, $options = null, $limit = null, $orderby = null)
 	{
 		$idContent = $idContent !== null ? $idContent : $this->idContent;
 		//if(isset($this->childrenArray[$idContent])) {
 		//	$children = $this->childrenArray[$idContent];
 		// } else {
 			// Retrieve the children of this data object:
-			$children = array();		
-			$this->db->select('a.id');
-			$this->db->where('a.`id_content`', $idContent, false);
-			$this->db->from('content a');
+			$children = array();
+			$pf = $this->db->dbprefix;				
+			$sql = 'SELECT DISTINCT `a`.`id` FROM (`'.$pf.'content` a ';
+			$firstWhere = true;
+			$where      = '';
+			// $this->db->distinct();
+			// $this->db->select('a.id');
+			// $this->db->where('a.`id_content`', $idContent, false);
+			// $this->db->from('content a');
 			if($options != null) {
 				// Create an associated array:
 				if(is_string($options)) {
 					$options = $this->stringToAssocArray($options);
 				}
 				// Adjust the query:
-				$this->db->from('options b');
-				$this->db->from('values c');
+				$sql .= ', `'.$pf.'options` b, `'.$pf.'values` c) ';
+				// $this->db->from('options b');
+				// $this->db->from('values c');
 				foreach($options as $key=>$value) {
-					$this->db->where('b.`name`', '\''.$key.'\'', false);
-					$this->db->where('c.`id_option`', 'b.`id`', false);
-					$this->db->where('c.`value`', '\''.$value.'\'', false);
-					$this->db->where('c.`id_content`', 'a.`id`', false);
+					if($firstWhere) {
+						$firstWhere = false;
+						$where .= 'WHERE b.`name` = \''.$key.'\' ';						
+					} else {
+						$where .= 'AND b.`name` = \''.$key.'\' ';						
+					}
+					$where .= 'AND c.`id_option` = b.`id` ';
+					$where .= 'AND c.`value` = \''.$value.'\' ';
+					$where .= 'AND c.`id_content` = a.`id` ';
+					
+					// $this->db->where('b.`name`', '\''.$key.'\'', false);
+					// $this->db->where('c.`id_option`', 'b.`id`', false);
+					// $this->db->where('c.`value`', '\''.$value.'\'', false);
+					// $this->db->where('c.`id_content`', 'a.`id`', false);
 				}
+			} else {
+				$sql .= ') ';
 			}
-			$this->db->order_by('a.order', 'asc');
+			if($orderby != null) {
+				// Order by given options:
+				$orderby   = explode(' ', $orderby);
+				$item      = $orderby[0];
+				$direction = isset($orderby[1]) ? strtolower($orderby[1]) : 'asc';				
+				if($direction != 'asc' && $direction != 'desc') {
+					$direction = 'asc';
+				}
+				$sql .= 'JOIN (`'.$pf.'values`, `'.$pf.'options`) ON (`'.$pf.'values`.`id_content` = `a`.`id` AND `'.$pf.'values`.`id_option` = `'.$pf.'options`.`id` AND `'.$pf.'options`.`name` = \''.$item.'\') ';
+				$orderby = ' ORDER BY `'.$pf.'values`.`value` '.strtoupper($direction).' ';
+				
+				/*
+				$this->db->from('options d');
+				$this->db->from('values e');
+				$this->db->where('d.`name`', '\''.$item.'\'', false);
+				$this->db->where('e.`id_option`', 'd.`id`', false);
+				$this->db->order_by('e.`value`', $direction);
+				*/
+				
+				/*
+					SELECT DISTINCT `a`.`id` FROM
+						(`demo_content` a, `demo_options` b, `demo_values` c)
+					JOIN (`demo_values`, `demo_options`) ON
+						(`demo_values`.`id_content` = `a`.`id` AND
+						`demo_values`.`id_option` = `demo_options`.`id` AND
+						`demo_options`.`name` = 'date')
+					WHERE a.`id_content` =3 AND b.`name` ='published'
+					AND c.`id_option` =b.`id` AND c.`value` ='1'
+					AND c.`id_content` =a.`id` ORDER BY `demo_values`.`value` desc
+				*/
+				
+				// $pf = $this->db->dbprefix;				
+				// $this->db->join('(`'.$pf.'values`, `'.$pf.'options`)', '(`'.$pf.'values`.`id_content` = `a`.`id` AND `'.$pf.'values`.`id_option` = `'.$pf.'options`.`id` AND `'.$pf.'options`.`name` = \''.$item.'\')');
+				// $this->db->where('JOIN (`'.$pf.'values`, `'.$pf.'options`) ON (`'.$pf.'values`.`id_content` = `a`.`id` AND `'.$pf.'values`.`id_option` = `'.$pf.'options`.`id` AND `'.$pf.'options`.`name` = \''.$item.'\')');
+				
+				// $this->db->join('options', 'values.id_option = options.id');
+				
+				// $this->db->where('values.id_option', 'options.id');
+				// $this->db->where('options.name', $item);
+				// $this->db->join('options', 'options.name = '.$item.'');
+				// $this->db->order_by('values.value', 'desc');
+			} else {
+				// Order by internal order-parameter:
+				// $this->db->order_by('a.order', 'asc');
+				$orderby = ' ORDER BY a.`order` ASC ';
+			}
+			
+			if($firstWhere) {
+				$where .= 'WHERE a.`id_content` = '.$idContent.' ';
+				$firstWhere = false;
+			} else {
+				$where .= 'AND a.`id_content` = '.$idContent.' ';
+			}
+			
+			$sql .= $where.$orderby;
+			
 			if($limit!=null) {
 				if(is_string($limit)) {					
 					$limit = $this->stringToAssocArray($limit);
 				}
 				if(count($limit)==1) {
-					$this->db->limit($limit[0]);
+					// $this->db->limit($limit[0]);
+					$sql .= 'LIMIT '.$limit[0];
 				} else {
-					$this->db->limit($limit[0], $limit[1]);
+					// $this->db->limit($limit[0], $limit[1]);
+					$sql .= 'LIMIT '.$limit[1].', '.$limit[0];
 				}
 			}
-			$query = $this->db->get();
+			
+			$sql .= ';';
+			
+			$query = $this->db->query($sql);			
 			// echo $this->db->last_query();
 			foreach($query->result() as $result) {
 				$dataObject = new DataModel();
@@ -182,8 +260,29 @@ class DataModel extends Model
 				array_push($children, $dataObject);
 			}
 			// Store for optimization:
-			$this->childrenArray[$idContent] = $children;
+			// $this->childrenArray[$idContent] = $children;
 		// }
+		
+		// TODO: Order by:
+		/*
+		if($orderby != null) {
+			$orderby   = explode(' ', $orderby);
+			$item      = $orderby[0];
+			$direction = isset($orderby[1]) ? strtolower($orderby[1]) : 'asc';
+			if($direction != 'asc' || $direction != 'desc') {
+				$direction = 'asc';
+			}
+			// Multisort:
+			function _inline_usort_callback($a, $b) {
+				if ($a->options['date'] == $b->optons['date']) {
+					return 0;
+				}
+			    return ($a->options['date'] < $b->options['date']) ? -1 : 1;
+			}			
+			usort($children, "_inline_usort_callback");
+		}
+		*/
+		
 		return $children;
 	}
 	

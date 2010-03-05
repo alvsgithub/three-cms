@@ -95,9 +95,12 @@
 			break;
 		case 3:
 			parseSqlFile('sql/empty.sql');
-			// TODO: Insert example news site:
-			// TODO: Copy files:
-			echo '<p class="ok">Three CMS installed with example multilingual newssite.</p>';
+			// Insert example news site:
+			parseSqlFile('sql/demosite.sql');
+			// Copy files:
+			copyDir('sites/demo', '../site');
+			echo '<p class="ok">Three CMS installed with example newssite.</p>';
+			break;
 			break;
 		case 4:
 			parseSqlFile('sql/empty.sql');
