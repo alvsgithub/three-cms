@@ -837,7 +837,7 @@ class Admin extends Controller
 												[tm_yday] => 61
 												[unparsed] => 
 											*/
-											$value = mktime(0, 0, 0, $time['tm_mon'], $time['tm_mday'], 1900 + $time['tm_year']);
+											$value = mktime(12, 0, 0, $time['tm_mon']+1, $time['tm_mday'], 1900 + $time['tm_year']);
 											// $value = implode('-', $time);
 											break;
 										}										
