@@ -116,6 +116,8 @@ $(function(){
 			},
 			onselect: function(node) {
 				// Select:
+				$("#innerTree a").not($("a", node)).removeClass("clicked");
+				
 				$("#loading").show();
 				id = $("var.id:first", node).text();
 				$("#content").load(baseURL + 'index.php/admin/ajax/page_summary/' + id, function(){

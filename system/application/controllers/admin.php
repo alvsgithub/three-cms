@@ -642,7 +642,8 @@ class Admin extends Controller
 					if($id==false) { $id=0; }
 					$data = array(
 						'lang'=>$this->lang,
-						'tree'=>$this->AdminModel->getTree($this->rank, $id)
+						'tree'=>$this->AdminModel->getTree($this->rank, $id),
+						'currentID'=>$this->session->userdata('currentId')
 					);
 					$this->load->view('admin/ajax/tree.php', $data);
 					break;
@@ -1008,6 +1009,7 @@ class Admin extends Controller
 	 */
     function showTree($currentId = 0)
 	{
+		$this->session->set_userdata('currentId', $currentId);
 		$data = array(
 			'lang'=>$this->lang,
 			'tree'=>$this->AdminModel->getTree($this->rank),
