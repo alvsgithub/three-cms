@@ -20,6 +20,20 @@ A simple navigation in an unordered list where the link of the current page gets
 </ul>
 }}}
 
+== Navigation with 'first' and 'last'-class:
+
+The same navigation only the first list item has the class 'first' and the last list item has the class 'last':
+
+{{{
+<ul>
+  {foreach from=$this->children(0, 'show in menu=>1') item=child name=navigation}
+    <li>
+      <a class="{if $child->get('idContent') eq $idContent}active{/if} {if $smarty.foreach.navigation.first}first{/if} {if $smarty.foreach.navigation.last}last{/if}" href="{$child->getUrl()}">{$child->get('contentName')}</a>
+    </li>			
+  {/foreach}
+</ul>
+}}}
+
 == Language picker ==
 
 A simple language picker which leads to the homepage of the selected language. The current language gets a class called 'active':
