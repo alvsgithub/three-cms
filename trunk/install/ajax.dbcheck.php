@@ -16,6 +16,10 @@
 			$sql = 'CREATE DATABASE `'.$dbName.'`;';
 			mysql_query($sql) or die('<var>0</var><p class="error">Could not create database: '.mysql_error().'</p>');
 			
+			// Set database to UTF-8:
+			$sql = 'ALTER DATABASE `test` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci';
+			mysql_query($sql) or die('<var>0</var><p class="error">Could not set database collation to UTF-8: '.mysql_error().'</p>');
+			
 			echo '<var>1</var><p class="ok">Settings are correct, new database created.</p>';			
 		} else {
 			echo '<var>1</var><p class="ok">Settings are correct, database selected.</p>';

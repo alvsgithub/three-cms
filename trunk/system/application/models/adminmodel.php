@@ -759,9 +759,30 @@ class AdminModel extends Model
      */
     function makeAlias($string)
     {
+        // First translate the cyrillic characters:
+        // Single characters:
+        $string = strtr($string, "абвгдеёзийклмнопрстуфхъыэ_",
+                                 "abvgdeeziyklmnoprstufh'iei");
+        $string = strtr($string, "АБВГДЕЁЗИЙКЛМНОПРСТУФХЪЫЭ_",
+                                 "ABVGDEEZIYKLMNOPRSTUFH'IEI");
+        $arrr = array(
+            "ж"=>"zh", "ц"=>"ts", "ч"=>"ch", "ш"=>"sh",
+            "щ"=>"shch","ь"=>"", "ю"=>"yu", "я"=>"ya",
+            "Ж"=>"ZH", "Ц"=>"TS", "Ч"=>"CH", "Ш"=>"SH",
+            "Щ"=>"SHCH","Ь"=>"", "Ю"=>"YU", "Я"=>"YA",
+            "ї"=>"i", "Ї"=>"Yi", "є"=>"ie", "Є"=>"Ye"
+        );
+        // Multi characters:
+        $rez = array();
+        foreach ($arrr as $key => $ar) {
+            $rez[$key] = $ar;
+        }
+        $string = strtr($string, $rez);
+        
+        // Further aliasing:
         $string = preg_replace("`\[.*\]`U", "", $string);
         $string = preg_replace('`&(amp;)?#?[a-z0-9]+;`i', '-', $string);
-        $string = htmlentities($string, ENT_COMPAT, 'utf-8');
+        $string = htmlentities($string, ENT_COMPAT);
         $string = preg_replace("`&([a-z])(acute|uml|circ|grave|ring|cedil|slash|tilde|caron|lig|quot|rsquo);`i","\\1", $string);
         $string = preg_replace(array("`[^a-z0-9]`i","`[-]+`") , "-", $string);        
         return strtolower(trim($string, '-'));
