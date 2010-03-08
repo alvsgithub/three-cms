@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Feb 15, 2010 at 07:01 PM
+-- Generation Time: Mar 08, 2010 at 09:20 PM
 -- Server version: 5.1.36
 -- PHP Version: 5.3.0
 
@@ -40,19 +40,19 @@ CREATE TABLE IF NOT EXISTS `three_content` (
 --
 
 INSERT INTO `three_content` (`id`, `id_content`, `id_template`, `name`, `alias`, `order`) VALUES
-(54, 52, 5, 'Value 2', 'value-2', 2),
+(54, 52, 5, 'Value 2', 'value-2', 1),
 (52, 0, 6, 'Core Values', 'core-values', 2),
-(53, 52, 5, 'Value 1', 'value-1', 1),
+(53, 52, 5, 'Value 1', 'value-1', 0),
 (50, 0, 1, 'Home', 'home', 0),
 (51, 0, 1, 'What is Three CMS', 'what-is-three-cms', 1),
-(55, 52, 5, 'Value 3', 'value-3', 3),
+(55, 52, 5, 'Value 3', 'value-3', 2),
 (56, 0, 7, 'News', 'news', 3),
 (57, 56, 8, 'New CMS', 'new-cms', 1),
 (58, 56, 8, 'Public news item', 'public-news-item', 2),
 (59, 56, 8, 'Alleen voor groep B', 'alleen-voor-groep-b', 3),
 (60, 0, 1, 'Example page', 'example-page', 4),
-(61, 0, 1, 'Example page', 'example-page-1', 5),
-(62, 61, 1, 'Subpage', 'subpage', 6);
+(61, 0, 1, 'Example page', 'example-page-1', 6),
+(62, 61, 1, 'Subpage', 'subpage', 0);
 
 -- --------------------------------------------------------
 
@@ -69,15 +69,16 @@ CREATE TABLE IF NOT EXISTS `three_dashboard` (
   `count` int(11) NOT NULL,
   `column` enum('left','right') NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=6 ;
 
 --
 -- Dumping data for table `three_dashboard`
 --
 
 INSERT INTO `three_dashboard` (`id`, `name`, `type`, `source`, `headers`, `count`, `column`) VALUES
-(1, 'News items', 'from_parent', '56', 'header,date,bestaat_niet,12', 2, 'right'),
-(4, 'Core Values', 'from_template', '5', 'parent.name,name', 2, 'left');
+(1, 'News items', 'from_parent', '56', 'header,date,bestaat_niet,12', 10, 'left'),
+(4, 'Core Values', 'from_template', '5', 'parent.name,name', 10, 'left'),
+(5, 'Statistics', 'from_addon', 'stats', '', 0, 'right');
 
 -- --------------------------------------------------------
 
@@ -268,35 +269,35 @@ CREATE TABLE IF NOT EXISTS `three_ranks` (
   `ranks` tinyint(1) NOT NULL,
   `configuration` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
 
 --
 -- Dumping data for table `three_ranks`
 --
 
 INSERT INTO `three_ranks` (`id`, `name`, `system`, `users`, `ranks`, `configuration`) VALUES
-(1, 'Administrator', 1, 1, 1, 1);
+(1, 'Administrator', 1, 1, 1, 1),
+(2, 'Editor', 0, 0, 0, 0);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `three_ranks_modules`
+-- Table structure for table `three_ranks_addons`
 --
 
-CREATE TABLE IF NOT EXISTS `three_ranks_modules` (
+CREATE TABLE IF NOT EXISTS `three_ranks_addons` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `id_rank` int(11) NOT NULL,
-  `module` tinytext NOT NULL,
+  `addon` tinytext NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=7 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=10 ;
 
 --
--- Dumping data for table `three_ranks_modules`
+-- Dumping data for table `three_ranks_addons`
 --
 
-INSERT INTO `three_ranks_modules` (`id`, `id_rank`, `module`) VALUES
-(6, 1, 'webusers'),
-(5, 1, 'export');
+INSERT INTO `three_ranks_addons` (`id`, `id_rank`, `addon`) VALUES
+(9, 1, 'webusers');
 
 -- --------------------------------------------------------
 
@@ -321,6 +322,63 @@ INSERT INTO `three_settings` (`id`, `name`, `value`) VALUES
 (3, 'site_name', 'Three Test Site'),
 (4, 'base_url', 'http://localhost/three/'),
 (5, 'date_format', '%m/%d/%Y');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `three_stats`
+--
+
+CREATE TABLE IF NOT EXISTS `three_stats` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `ip` tinytext,
+  `date` date DEFAULT NULL,
+  `views` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+
+--
+-- Dumping data for table `three_stats`
+--
+
+INSERT INTO `three_stats` (`id`, `ip`, `date`, `views`) VALUES
+(1, '127.0.0.1', '2010-02-25', 39);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `three_stats_pages`
+--
+
+CREATE TABLE IF NOT EXISTS `three_stats_pages` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` tinytext,
+  `url` tinytext,
+  `date` date DEFAULT NULL,
+  `views` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=24 ;
+
+--
+-- Dumping data for table `three_stats_pages`
+--
+
+INSERT INTO `three_stats_pages` (`id`, `name`, `url`, `date`, `views`) VALUES
+(15, 'Core Values', 'localhost/three/index.php/en/core-values/value-1', '2010-02-25', 1),
+(14, 'Home', 'localhost/three/index.php/en', '2010-02-25', 1),
+(13, 'Example page', 'localhost/three/index.php/nl/example-page-1', '2010-02-25', 1),
+(12, 'Home', 'localhost/three/index.php/nl/home', '2010-02-25', 2),
+(11, 'What is Three CMS', 'localhost/three/index.php/nl/what-is-three-cms', '2010-02-25', 2),
+(10, 'Core Values', 'localhost/three/index.php/nl/core-values', '2010-02-25', 3),
+(9, 'Example page', 'localhost/three/index.php/nl/example-page', '2010-02-25', 2),
+(16, 'Example page', 'localhost/three/index.php/en/example-page', '2010-02-25', 1),
+(17, 'News', 'localhost/three/index.php/en/news', '2010-02-25', 1),
+(18, 'News', 'localhost/three/index.php/en/news/new-cms', '2010-02-25', 1),
+(19, 'Home', 'localhost/three/index.php/nl', '2010-02-25', 1),
+(20, 'News', 'localhost/three/index.php/nl/news', '2010-02-25', 4),
+(21, 'News', 'localhost/three/index.php/nl/news/new-cms', '2010-02-25', 3),
+(22, 'News', 'localhost/three/index.php/nl/news/public-news-item', '2010-02-25', 1),
+(23, 'Home', 'localhost/three/', '2010-02-28', 3);
 
 -- --------------------------------------------------------
 
@@ -393,7 +451,7 @@ CREATE TABLE IF NOT EXISTS `three_templates_ranks` (
   `move` tinyint(1) NOT NULL,
   `delete` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=27 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=42 ;
 
 --
 -- Dumping data for table `three_templates_ranks`
@@ -406,7 +464,12 @@ INSERT INTO `three_templates_ranks` (`id`, `id_template`, `id_rank`, `visible`, 
 (11, 5, 1, 1, 1, 1, 1, 1, 1),
 (15, 6, 1, 1, 1, 1, 1, 1, 1),
 (14, 7, 1, 1, 1, 1, 1, 1, 1),
-(13, 8, 1, 1, 1, 1, 1, 1, 1);
+(13, 8, 1, 1, 1, 1, 1, 1, 1),
+(41, 8, 2, 1, 1, 1, 1, 1, 1),
+(40, 7, 2, 1, 0, 1, 0, 0, 0),
+(39, 6, 2, 1, 0, 1, 0, 0, 0),
+(38, 5, 2, 1, 1, 1, 1, 1, 1),
+(37, 1, 2, 1, 0, 1, 0, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -442,9 +505,9 @@ CREATE TABLE IF NOT EXISTS `three_values` (
   `id_content` int(11) NOT NULL,
   `id_option` int(11) NOT NULL,
   `id_language` int(11) NOT NULL,
-  `value` text NOT NULL,
+  `value` text CHARACTER SET latin1 NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=411 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=411 ;
 
 --
 -- Dumping data for table `three_values`
@@ -564,9 +627,9 @@ INSERT INTO `three_values` (`id`, `id_content`, `id_option`, `id_language`, `val
 (391, 61, 6, 1, ''),
 (392, 62, 1, 1, 'Subpage'),
 (393, 62, 1, 2, ''),
-(394, 62, 8, 1, ''),
+(394, 62, 8, 1, 'Bla bla\r\nSome russian: ??????? ????'),
 (395, 62, 8, 2, ''),
-(396, 62, 7, 1, '0'),
+(396, 62, 7, 1, '1'),
 (397, 62, 2, 1, ''),
 (398, 62, 2, 2, ''),
 (399, 62, 3, 1, ''),
