@@ -26,6 +26,7 @@ class Admin extends Controller
 		$this->load->helper('stringencrypter');
 		$this->load->helper('strptime'); // For strptime() on Windows servers
 		$this->load->helper('module');
+		$this->load->helper('str2url');
 		
 		// Load dbforge (in case some modules need it)
 		// $this->load->dbforge();
