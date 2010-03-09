@@ -761,6 +761,7 @@ class AdminModel extends Model
     {
         // First translate the cyrillic characters:
         // Single characters:
+        /*
         $string = strtr($string, "абвгдеёзийклмнопрстуфхъыэ_",
                                  "abvgdeeziyklmnoprstufh'iei");
         $string = strtr($string, "АБВГДЕЁЗИЙКЛМНОПРСТУФХЪЫЭ_",
@@ -784,8 +785,11 @@ class AdminModel extends Model
         $string = preg_replace('`&(amp;)?#?[a-z0-9]+;`i', '-', $string);
         $string = htmlentities($string, ENT_COMPAT);
         $string = preg_replace("`&([a-z])(acute|uml|circ|grave|ring|cedil|slash|tilde|caron|lig|quot|rsquo);`i","\\1", $string);
-        $string = preg_replace(array("`[^a-z0-9]`i","`[-]+`") , "-", $string);        
+        $string = preg_replace(array("`[^a-z0-9]`i","`[-]+`") , "-", $string);
+        
         return strtolower(trim($string, '-'));
+        */
+        return str2url($string);
     }
     
     /**
