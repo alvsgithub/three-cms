@@ -59,7 +59,6 @@
 					<th><?php echo $lang->line('system_template_ranks'); ?>:</th>
 					<td class="templateRanks">
 						<?php
-							// print_r($ranks);
 							function chk($val)
 							{
 								if($val==1) {
@@ -70,11 +69,6 @@
 							}
 							
 							foreach($ranks as $rank) {
-								/*
-								$checked  = $rank['allowed'] ? ' checked="checked"' : '';
-								$readonly = $rank['id']==1 ? ' disabled="disabled"' : '';
-								echo '<label class="allowed"><input type="checkbox" name="allow_rank_'.$rank['id'].'" '.$checked.$readonly.' /> '.$rank['name'].'</label>';
-								*/
 								$a = $rank['allowed'];
 								echo '<strong>'.$rank['name'].':</strong><br />';
 								echo '<label><input type="checkbox" name="visible_'.$rank['id'].'" '.  chk($a['visible']).' /> '.  $lang->line('action_visible').' </label>';

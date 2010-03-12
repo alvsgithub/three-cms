@@ -271,7 +271,6 @@ class AdminModel extends Model
         foreach($query->result() as $result) {
             $value = '';
             if($id!=0) {
-                // $sql = 'SELECT `value` FROM `locales_values` WHERE `id_language`='.$result->id.' AND `id_locale`='.$id.';';
                 $this->db->select('value');
                 $this->db->where('id_language', $result->id);
                 $this->db->where('id_locale', $id);
@@ -486,16 +485,6 @@ class AdminModel extends Model
                     'id_template'       => $id,
                     'id_child_template' => $item['id']
                 );
-            /*
-            ,
-                'visible'           => $item['allowed']['visible'],
-                'add'               => $item['allowed']['add'],
-                'modify'            => $item['allowed']['modify'],
-                'duplicate'         => $item['allowed']['duplicate'],
-                'move'              => $item['allowed']['move'],
-                'delete'            => $item['allowed']['delete']
-            );
-            */
                 $this->db->insert('templates_allowed_children', $data);
             }
         }
@@ -755,40 +744,11 @@ class AdminModel extends Model
     /**
      * Create an alias
      * @param   $string string  The string to create the alias from
-     * @reurn   string          The alias
+     * @return  string          The alias
      */
     function makeAlias($string)
     {
-        // First translate the cyrillic characters:
-        // Single characters:
-        /*
-        $string = strtr($string, "абвгдеёзийклмнопрстуфхъыэ_",
-                                 "abvgdeeziyklmnoprstufh'iei");
-        $string = strtr($string, "АБВГДЕЁЗИЙКЛМНОПРСТУФХЪЫЭ_",
-                                 "ABVGDEEZIYKLMNOPRSTUFH'IEI");
-        $arrr = array(
-            "ж"=>"zh", "ц"=>"ts", "ч"=>"ch", "ш"=>"sh",
-            "щ"=>"shch","ь"=>"", "ю"=>"yu", "я"=>"ya",
-            "Ж"=>"ZH", "Ц"=>"TS", "Ч"=>"CH", "Ш"=>"SH",
-            "Щ"=>"SHCH","Ь"=>"", "Ю"=>"YU", "Я"=>"YA",
-            "ї"=>"i", "Ї"=>"Yi", "є"=>"ie", "Є"=>"Ye"
-        );
-        // Multi characters:
-        $rez = array();
-        foreach ($arrr as $key => $ar) {
-            $rez[$key] = $ar;
-        }
-        $string = strtr($string, $rez);
-        
-        // Further aliasing:
-        $string = preg_replace("`\[.*\]`U", "", $string);
-        $string = preg_replace('`&(amp;)?#?[a-z0-9]+;`i', '-', $string);
-        $string = htmlentities($string, ENT_COMPAT);
-        $string = preg_replace("`&([a-z])(acute|uml|circ|grave|ring|cedil|slash|tilde|caron|lig|quot|rsquo);`i","\\1", $string);
-        $string = preg_replace(array("`[^a-z0-9]`i","`[-]+`") , "-", $string);
-        
-        return strtolower(trim($string, '-'));
-        */
+        // TODO: Perhaps strip the makeAlias-function? since it's redundant now
         return str2url($string);
     }
     
@@ -1104,39 +1064,6 @@ class AdminModel extends Model
     }
     
     /**
-     * Get a list of modules
-     * @return  array       A 2-dimensional array with modules [[name, path]]
-     */
-    /*
-    function getModules()
-    {
-        if(!isset($this->modules)) {
-            $modules = array();
-            // Modules get auto-detected according to the folders found in the modules-directory
-            $folders = glob('assets/modules/*', GLOB_ONLYDIR);            
-            if($folders != false) {
-                foreach($folders as $folder) {            
-                    if(file_exists($folder.'/name.php')) {
-                        include_once($folder.'/name.php');                
-                        if(isset($info)) {                    
-                            // This is a valid module. Add it to the list
-                            $info['alias']  = $this->makeAlias($info['name']);
-                            $info['path']   = $folder;
-                            $a = explode('/', $folder);
-                            $info['folder'] = $a[count($a)-1];
-                            array_push($modules, $info);
-                            unset($info);
-                        }
-                    }
-                }
-            }
-            $this->modules = $modules;            
-        }
-        return $this->modules;
-    }
-                                           */
-            
-    /**
      * Save the link between ranks and modules
      * @param   $idRank     int     The ID of the rank
      * @param   $addons    array   An array with the names of the modules
@@ -1286,7 +1213,6 @@ class AdminModel extends Model
             $query = $this->db->get();
             foreach($query->result() as $result) {
                 // Add ID and name to the newHeaders:
-                // array_push($newHeaders, array('name'=>$result->name, 'description'=>ucfirst($result->name)));
                 $currentContent = array(
                     'id'=>$result->id,
                     'name'=>$result->name,
@@ -1345,10 +1271,7 @@ class AdminModel extends Model
                             $currentContent['headers'][$header['name']] = $currentContentResult[0]->value;
                             // TODO: If the option is of the type 'date', convert the timestamp to the date
                         }                        
-                        
                     } else {
-                    
-                    // if(isset($header['id'])) {
                         $this->db->select('value');
                         $this->db->where('id_content', $result->id);
                         $this->db->where('id_language', $settings['default_language']);
@@ -1356,7 +1279,6 @@ class AdminModel extends Model
                         $currentContentQuery = $this->db->get('values');
                         $currentContentResult = $currentContentQuery->result();                    
                         $currentContent['headers'][$header['name']] = $currentContentResult[0]->value;
-                    // }
                     }
                 }
                 array_push($content, $currentContent);
@@ -1366,7 +1288,6 @@ class AdminModel extends Model
             $add = array();
             // At the moment, it is only possible to add content if the type is from_parent
             if($item['type']=='from_parent') {
-                // $add['templates'] = $this->getChildTemplates($item['source']);
                 $add['templates'] = $this->getAvailableTemplates($item['source'], true);                
             }
             $item['headers'] = $newHeaders;

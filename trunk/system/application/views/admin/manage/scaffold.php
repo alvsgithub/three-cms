@@ -1,3 +1,6 @@
+<?php
+	// TODO: Is scaffold still used? Can't this be deleted?
+?>
 <div id="content">
 	<div id="innerContent">
         <h1><?php echo $title; ?></h1>

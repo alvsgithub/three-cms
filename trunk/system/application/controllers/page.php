@@ -73,31 +73,8 @@ class Page extends Controller
 					}
 				} else {
 					// If there are more parameters, get the ID of the last page:
-					// What about:
-					// website.com/about-us/mission			= single page
-					// website.com/news/2009/new-building	= single page? single content?
-					// website.com/news/2009                = single page? or the news page with as parameter '2009'?
-					/*
-						Possible solution:
-						- news/2009/new-building : Does this page exist? If yes, load it, if not:
-						- news/2009 : Does this page exist? if yes, load it with as parameter 'new-building', if not:
-						- news : Does this page exist? if yes, load it with the parameters 2009,new-building, if not:
-						- Load root document with the parameters news,2009,new-building
-						
-						Possible solution #2:
-						- Add an option to templates if they should be treated as 'page' or as 'content'.
-						  Because news/2009/new-building would probably be a newsitem with the alias 'new-building',
-						  But it should load the news-page with this URL. The flow could look like this:
-						  news(page) / 2009(parameter) / new-building(content)
-						  So the system checks new-building and sees it's of type content, so it looks at it's parent:
-						  2009, but this is a parameter. So then it looks at the next parent. This is news and it's a
-						  page. So the system loads the news-page with the parameters 2009 and new-building.
-						  
-						  (i've chosen solution #2)
-					*/
 					// AJAX functionality:
 					// website.com/alias/new-building    : Load only the content with the alias new-building.
-					
 					if($parameters[0]=='alias') {
 						// AJAX Functionality : Load the chunk:
 						$id = !is_numeric($parameters[1]) ? $this->PageModel->getPageId($parameters[1]) : intval($parameters[1]);

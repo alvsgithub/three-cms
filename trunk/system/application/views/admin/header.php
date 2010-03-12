@@ -25,21 +25,6 @@
     </head>
     <body>
         <div id="body">
-			<?php
-				// Quick function to show the module-links:
-				/*
-				function moduleLink($current, $modules, $allowedModules) {
-					foreach($modules as $module) {
-						if(in_array(strtolower($module['name']), $allowedModules)) {
-							if($module['menuposition'] == $current) {
-								echo '<li><a href="'.site_url(array('admin', 'module', $module['alias'])).'">'.$module['menu'].'</a></li>';
-							}
-						}
-					}
-				}
-				*/
-				// End Quick function
-			?>
             <div id="navigation">
                 <ul>
                     <li><a class="dashboard" href="<?php echo site_url(array('admin')); ?>"><?php echo $lang->line('menu_dashboard'); ?></a></li>
@@ -52,7 +37,6 @@
                             <li><a href="<?php echo site_url(array('admin', 'settings')); ?>"><?php echo $lang->line('menu_site_settings'); ?></a></li>
 							<?php
 								$addons->executeHook('AppendSubNavigation', array('parent'=>'configuration', 'allowedAddons'=>$allowedAddons));
-								/* moduleLink('configuration', $modules, $allowedModules); */
 							?>
                         </ul>
                     </li>
@@ -79,7 +63,6 @@
                             ?>
 							<?php
 								$addons->executeHook('AppendSubNavigation', array('parent'=>'users', 'allowedAddons'=>$allowedAddons));
-								/* moduleLink('users', $modules, $allowedModules); */
 							?>
                         </ul>
                     </li>
@@ -98,15 +81,11 @@
                             <li><a href="<?php echo site_url(array('admin', 'manage', 'dashboard'));   ?>"><?php echo $lang->line('menu_dashboard'); ?></a></li>
 							<?php								
 								$addons->executeHook('AppendSubNavigation', array('parent'=>'system', 'allowedAddons'=>$allowedAddons));
-								/* moduleLink('system', $modules, $allowedModules); */
 							?>
                         </ul>
                     </li>
 					<?php
-						/* moduleLink('root', $modules, $allowedModules); */
-						$addons->executeHook('AppendMainNavigation', array('allowedAddons'=>$allowedAddons));
-					?>
-                    <?php
+							$addons->executeHook('AppendMainNavigation', array('allowedAddons'=>$allowedAddons));
                         }
                     ?>
                     <li class="logout"><a class="logout" href="<?php echo site_url(array('admin', 'logout')); ?>"><?php echo $lang->line('menu_logout'); ?></a></li>
@@ -116,4 +95,3 @@
 				<img src="<?php echo base_url(); ?>system/application/views/admin/images/ajax-loader.gif" width="128" height="15" />
 				<p><?php echo $lang->line('default_one_moment'); ?></p>
 			</div>
-

@@ -22,8 +22,7 @@
 						<td>'.$user['rank'].'</td>
 						<td>
 							<a href="'.site_url(array('admin','users','edit', $user['id'])).'" class="edit">'.$lang->line('action_modify').'</a>
-							';
-							// <a href="'.site_url(array('admin','users','duplicate', $user['id'])).'" class="duplicate">'.$lang->line('action_duplicate').'</a>
+				';
 				echo '
 							<a href="'.site_url(array('admin','users','delete', $user['id'])).'" class="delete">'.$lang->line('action_delete').'</a>
 						</td>

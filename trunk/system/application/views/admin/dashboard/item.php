@@ -34,9 +34,6 @@
 			// What kind of add-buttons can be shown by 'from_template'?
 			// Add new item to... ? or none? In case of a blog, maybe 100 add-buttons will be shown :-S
 			//
-			/*
-			echo '<tr><td class="add" colspan="'.$colspan.'"><a href="#">add new</a></td></tr>';
-			*/
 			$count = 0;
 			if(isset($item['add']['templates'])) {
 				foreach($item['add']['templates'] as $template) {				

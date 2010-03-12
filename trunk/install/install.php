@@ -49,7 +49,6 @@
 		// recursive function to copy all subdirectories and contents: 
 		if(is_dir($dirsource)) {
 			$dir_handle = opendir($dirsource);
-			// mkdir($dirdest."/".$dirsource, 0750); 
 			while($file = readdir($dir_handle)) { 
 				if($file != "." && $file != "..") { 
 					if(!is_dir($dirsource."/".$file)) {

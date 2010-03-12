@@ -28,9 +28,6 @@ class Admin extends Controller
 		$this->load->helper('module');
 		$this->load->helper('str2url');
 		
-		// Load dbforge (in case some modules need it)
-		// $this->load->dbforge();
-		
         // Load the Language Class:
         $this->lang->load('admin');
         
@@ -504,16 +501,8 @@ class Admin extends Controller
 					// Save the language-entries:
 					$locales = $this->AdminModel->getLocaleValues($id);
 					for($i=0; $i < count($locales); $i++) {						
-						// $locales[$i]['value'] = $this->makeSafe($_POST['language_'.$locales[$i]['id']]);
 						$locales[$i]['value'] = $this->makeSafe($this->input->post('language_'.$locales[$i]['id']));
-						
-						// TODO: Weird issue: when the makeSafe()-function is used, an empty string returns when characters like ä or é are present. But when saving regular content, the makeSafe()-function works just fine.
-						// $locales[$i]['value'] = htmlentities($this->input->post('language_'.$locales[$i]['id']), ENT_QUOTES, 'UTF-8');
-						// echo htmlentities($this->input->post('language_'.$locales[$i]['id']), ENT_QUOTES, 'ISO-8859-15');
 					}
-					
-					// print_r($locales);
-					// die();
 					
 					$this->AdminModel->saveLocaleValues($id, $locales);
 					redirect(site_url(array('admin', 'manage', 'locales')));					
@@ -754,7 +743,6 @@ class Admin extends Controller
 	 */
 	function content()
 	{
-		// TODO: If content is added, saved and saved again, it gets stored as a new item again
 		if(!isset($_POST['ajax'])) {
 			$this->showHeader();
 		}
@@ -773,15 +761,7 @@ class Admin extends Controller
 					$contentData['id_template'] = $idTemplate;
 					$contentData['name']        = $this->makeSafe($this->input->post('name'));
 					$contentData['alias']       = $this->input->post('alias');
-					// $contentData['order']		= $this->input->post('order');
 					if(empty($contentData['name'])) { $contentData['name'] = 'Untitled'; }
-					// Is not needed anymore since this is done in the tree:
-					// Check if the parent is not a descendant of this content and if the parent is not itself:
-					/*
-					if(!$this->AdminModel->checkDescendant($idContent, $idParent) && $idContent != $idParent) {
-						$contentData['id_content']  = $idParent;		// id_content is the parent of this content
-					}
-					*/
 					// Get the values:
 					for($item=0; $item<count($contentData['content']); $item++) {
 						if($contentData['content'][$item]['multilanguage']==1) {
@@ -828,19 +808,7 @@ class Admin extends Controller
 											// Format date to timestamp:											
 											$value = isset($_POST[$name]) ? $this->makeSafe($this->input->post($name)) : '';
 											$time  = strptime($value, $this->settings['date_format']);
-											/*
-												[tm_sec] => 0
-												[tm_min] => 0
-												[tm_hour] => 0
-												[tm_mday] => 3
-												[tm_mon] => 2
-												[tm_year] => 99
-												[tm_wday] => 3
-												[tm_yday] => 61
-												[unparsed] => 
-											*/
 											$value = mktime(12, 0, 0, $time['tm_mon']+1, $time['tm_mday'], 1900 + $time['tm_year']);
-											// $value = implode('-', $time);
 											break;
 										}										
 										default:
@@ -862,18 +830,6 @@ class Admin extends Controller
 					// All the values are retreived, now save the data:
 					$this->AddonModel->executeHook('PreSaveContent', array('idContent'=>$idContent, 'contentData'=>$contentData));
 					$idContent = $this->AdminModel->saveContentData($idContent, $contentData);
-					
-					// Execute external module-commands:
-					/*
-					$modules   = $this->AdminModel->getModules();
-					foreach($modules as $module) {
-						$moduleName = strtolower($module['name']);
-						$path = 'system/application/modules/'.$moduleName.'/'.$moduleName.'.content.save.php';
-						if(file_exists($path)) {			
-							include_once($path);			
-						}
-					}
-					*/
 					$this->AddonModel->executeHook('PostSaveContent', array('idContent'=>$idContent, 'contentData'=>$contentData));
 					
 					// See if this action was send using ajax:
@@ -896,12 +852,10 @@ class Admin extends Controller
 						$data = array(
 							'lang'=>$this->lang,
 							'contentData'=>$contentData,
-							// 'templates'=>$this->AdminModel->getTableData('templates', 'id,name,templatefile'),
 							'templates'=>$this->AdminModel->getAvailableTemplates($id, true),
 							'title'=>$this->lang->line('title_add_content'),
 							'allowedTemplates'=>$this->AdminModel->getAllowedTemplates($this->rank),
 							'settings'=>$this->settings,
-							/* 'modules'=>$this->AdminModel->getModules() */
 							'addons'=>$this->AddonModel
 						);
 						$this->load->view('admin/content/add_edit.php', $data);
@@ -916,12 +870,10 @@ class Admin extends Controller
 						$data = array(
 							'lang'=>$this->lang,
 							'contentData'=>$contentData,
-							// 'templates'=>$this->AdminModel->getTableData('templates', 'id,name,templatefile'),
 							'templates'=>$this->AdminModel->getAvailableTemplates($id),
 							'title'=>$this->lang->line('title_modify_content'),
 							'allowedTemplates'=>$this->AdminModel->getAllowedTemplates($this->rank),
 							'settings'=>$this->settings,
-							/* 'modules'=>$this->AdminModel->getModules() */
 							'addons'=>$this->AddonModel
 						);
 						$this->load->view('admin/content/add_edit.php', $data);
@@ -997,7 +949,6 @@ class Admin extends Controller
 		$this->showTree();
 		$data = array(
 			'lang'=>$this->lang,
-			// 'tree'=>$this->AdminModel->getTree(),
 			'settings'=>$this->AdminModel->getSettings(),
 			'languages'=>$this->AdminModel->getLanguages()
 		);
@@ -1025,11 +976,10 @@ class Admin extends Controller
 	 */
 	function showHeader()
     {
-		// TODO: Filter addons according to the addons which this rank is allowed to see:
+		// TODO: Filter addons according to the addons which this rank is allowed to see: (is this done?)
         $data = array(
             'lang'=>$this->lang,
 			'rank'=>$this->AdminModel->getRank($this->rank),
-			/* 'modules'=>$this->AdminModel->getModules(), */
 			'allowedAddons'=>$this->AdminModel->getRankAddons($this->rank),
 			'addons'=>$this->AddonModel
         );		
@@ -1268,7 +1218,6 @@ class Admin extends Controller
 				case 'add' :
 					{
 						$data['rank']    = $this->AdminModel->getData('ranks', 0);
-						/* $data['modules'] = $this->AdminModel->getModules(); */
 						$data['addons']  = $this->AddonModel;
 						$data['title']   = $this->lang->line('ranks_add');
 						$data['templates'] = $this->AdminModel->getTemplateRights(0);
@@ -1280,7 +1229,6 @@ class Admin extends Controller
 						$id = $this->uri->segment(4);
 						if($id!=false) {
 							$data['rank']    = $this->AdminModel->getData('ranks', $id);
-							// $data['modules'] = $this->AdminModel->getModules();
 							$data['addons']  = $this->AddonModel;
 							$data['title']   = $this->lang->line('ranks_edit');
 							$data['templates'] = $this->AdminModel->getTemplateRights($id);
@@ -1374,32 +1322,12 @@ class Admin extends Controller
 					array_push($parameters, $this->uri->segment($i));
 				}
 			}
-			// TODO: Optimize this?
-			// $modules = $this->AdminModel->getModules();
-			/*
-			foreach($modules as $module) {				
-				if($module['alias']==$alias) {
-					// Create dataobject:
-					$data = array(
-						'info'=>$module,
-						'parameters'=>$parameters,
-						'settings'=>$this->AdminModel->getSettings()
-					);
-					$this->load->view('admin/modules/top.php');
-					$this->load->view('../../../assets/modules/'.$module['folder'].'/'.$module['file'], $data);
-					$this->load->view('admin/modules/bottom.php');
-				}
-			}
-			*/
 			
 			// Execute the hooks:
-			// $this->load->view('admin/modules/top.php');
 			ob_start();
 			$this->AddonModel->executeHook('ModuleScreen', array('alias'=>$alias, 'parameters'=>$parameters));
 			$content = ob_get_clean();
-			// echo $content;
 			$this->load->view('admin/modules/content.php', array('content'=>$content));
-			// $this->load->view('admin/modules/bottom.php');
 		} else {
 			// TODO: Show 'module not found'-screen
 			
