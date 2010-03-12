@@ -41,19 +41,7 @@
 					</td>
 				</tr>
 				<?php
-				// Parent and order are not needed anymore since this is done in the tree:
-				/*
-				<tr>
-					<th><?php echo $lang->line('content_parent'); ?>:</th>
-					<td><input readonly="readonly" class="small" type="text" name="parent" value="<?php echo $contentData['id_content']; ?>" /> <a href="#" class="selectParent">Select parent <span></span></a></td>
-				</tr>
-				<tr>
-					<th><?php echo $lang->line('content_order'); ?>:</th>
-					<td><input class="small" type="text" name="order" value="<?php echo $contentData['order']; ?>" /> <a href="#" class="orderSmaller">&laquo;</a> <a href="#" class="orderBigger">&raquo;</a></td>
-				</tr>
-				*/
-				?>
-				<?php
+					// TODO: Delete language flags
 					// Only show the language picker if:
 					// - there is more than one language AND
 					// - there are any options AND
@@ -100,27 +88,6 @@
 					<td colspan="2">&nbsp;</td>
 				</tr>
 				<?php
-					// See if there are any modules to execute here:
-					/*
-					$moduleFound = false;
-					foreach($modules as $module) {
-						$moduleName = strtolower($module['name']);
-						$path = $module['path'].'/'.$moduleName.'.content.edit.php';
-						if(file_exists($path)) {
-							include_once($path);
-							$moduleFound = true;
-						}
-					}
-					if($moduleFound) {
-						// Add an extra delimiter:
-						echo '
-							<tr class="delimiter">
-								<td colspan="2">&nbsp;</td>
-							</tr>
-						';
-					}
-					*/
-					
 					// Addons:
 					$ok = $addons->executeHook('ContentBelowOptions', array('lang'=>$lang, 'contentData'=>$contentData, 'templates'=>$templates, 'title'=>$title, 'allowedTemplates'=>$allowedTemplates, 'settings'=>$settings));
 					if($ok) {
@@ -151,4 +118,3 @@
 		</form>
 	</div>
 </div>
-	

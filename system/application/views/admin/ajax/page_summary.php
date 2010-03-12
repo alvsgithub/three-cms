@@ -38,8 +38,6 @@
 					// Only show the allowed actions:					
 					if($allowedActions['modify'])    { echo '<a href="'.site_url(array('admin', 'content', 'edit', $content['id'])),'" class="edit" title="'.$modify.'">'.$modify.'</a>'; }
 					if($allowedActions['duplicate']) { echo '<a href="'.site_url(array('admin', 'content', 'duplicate', $content['id'])).'" class="duplicate" title="'.$duplicate.'">'.$duplicate.'</a>'; }
-					// Move button is not needed anymore, since moving is done in the tree:
-					// if($allowedActions['move'])      { echo '<a href="'.site_url(array('admin', 'content', 'move', $content['id'])).'" class="move" title="'.$move.'">'.$move.'</a>'; }
 					if($allowedActions['delete'])    { echo '<a href="'.site_url(array('admin', 'content', 'delete', $content['id'])).'" class="delete" title="'.$delete.'">'.$delete.'</a>'; }
 				?>
 				<input name="id" type="hidden" value="<?php echo $content['id']; ?>" />

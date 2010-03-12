@@ -1,7 +1,4 @@
 <div id="content">
-	<!--
-		Add content to the root
-	-->
 	<div id="innerContent">
 		<h1><?php echo $lang->line('title_add_content'); ?></h1>
 		<table>

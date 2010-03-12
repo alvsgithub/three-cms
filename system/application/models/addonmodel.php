@@ -35,24 +35,26 @@ class AddonModel extends Model
 		
 		// Lookup addons:
 		$folders = glob('assets/addons/*', GLOB_ONLYDIR);
-		foreach($folders as $folder) {
-			$path = $folder.'/addon.php';
-			if(file_exists($path)) {
-				$a = explode('/', $folder);
-				$folderName = $a[count($a)-1];
-				require_once($path);
-				$objectName = ucfirst($folderName);
-				$object     = new $objectName;
-				$object->init();
-				$hooks      = $object->getHooks();
-				array_push($this->addons, array($folderName, $object, $hooks));
-				// Setup the hooks:
-				foreach($hooks as $hook) {
-					// Set a referece to the object:
-					if(!isset($this->hooks[$hook['hook']])) {
-						$this->hooks[$hook['hook']] = array(array($object, $hook['callback']));
-					} else {						
-						array_push($this->hooks[$hook['hook']], array($object, $hook['callback']));
+		if($folders != false) {
+			foreach($folders as $folder) {
+				$path = $folder.'/addon.php';
+				if(file_exists($path)) {
+					$a = explode('/', $folder);
+					$folderName = $a[count($a)-1];
+					require_once($path);
+					$objectName = ucfirst($folderName);
+					$object     = new $objectName;
+					$object->init();
+					$hooks      = $object->getHooks();
+					array_push($this->addons, array($folderName, $object, $hooks));
+					// Setup the hooks:
+					foreach($hooks as $hook) {
+						// Set a referece to the object:
+						if(!isset($this->hooks[$hook['hook']])) {
+							$this->hooks[$hook['hook']] = array(array($object, $hook['callback']));
+						} else {						
+							array_push($this->hooks[$hook['hook']], array($object, $hook['callback']));
+						}
 					}
 				}
 			}

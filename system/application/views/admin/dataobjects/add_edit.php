@@ -18,7 +18,6 @@
 							$optionString = '';
 							$first = true;							
 							foreach($options as $option) {
-								// echo '<div class="option"><span class="name">'.$option['name'].'</span><span class="options"><span class="moveUp">Move Up</span><span class="moveDown">Move Down</span><span class="remove">Remove</span></span></div>';
 								// Options get loaded with an AJAX Call
 								if(!$first) { $optionString.='-'; }
 								$optionString.=$option['id'];

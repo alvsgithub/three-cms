@@ -4,7 +4,7 @@
  *  DataModel
  *  ---------------------------------------------------------------------------
  *  The DataModel is used by the website to load and format data that can be 
- *  used by the website. *  
+ *  used by the website.
  *  ---------------------------------------------------------------------------
  *  Author:     Giel Berkers
  *  E-mail:     giel.berkers@gmail.com
@@ -30,6 +30,7 @@ class DataModel extends Model
 	
 	// The following parameters don't get set until a certain first function call
 	// This makes the dataModel load faster in case the parameter is not used.
+	// TODO: Is this still done? can it be deleted?
 	var $parentsArray  = array();	// A 2-dimensional array holding the parents
 	var $childrenArray = array();	// A 2-dimensional array holding the children
 	
@@ -57,6 +58,13 @@ class DataModel extends Model
 	
 	function load($idContent, $idLanguage)
 	{
+		// TODO: Caching
+		// Caching is done by checking if there is a datafile: cache/data.idcontent.idlanguage.php
+		// The datafile is nothing more than the options-array and some other variables. If the file
+		// does not exist, execute the queries needed and create the datafile, otherwise just
+		// include the file.
+		// If the content gets edited, the datafile gets deleted
+		
 		// Default settings:
 		$this->idContent 	= $idContent;
 		$this->idLanguage	= $idLanguage;
@@ -73,7 +81,6 @@ class DataModel extends Model
 		// Some default options:
 		$this->options['idContent']   = $idContent;
 		$this->options['idLanguage']  = $idLanguage;
-		// $this->options['url']         = $this->getUrl();
 		$this->options['alias']       = $info[0]['alias'];
 		$this->options['contentName'] = $info[0]['name'];
 		$this->options['order']       = $info[0]['order'];
@@ -139,149 +146,78 @@ class DataModel extends Model
 	 */
 	function children($idContent = null, $options = null, $limit = null, $orderby = null)
 	{
+		// TODO: Make Query Active Record Style
 		$idContent = $idContent !== null ? $idContent : $this->idContent;
-		//if(isset($this->childrenArray[$idContent])) {
-		//	$children = $this->childrenArray[$idContent];
-		// } else {
-			// Retrieve the children of this data object:
-			$children = array();
-			$pf = $this->db->dbprefix;				
-			$sql = 'SELECT DISTINCT `a`.`id` FROM (`'.$pf.'content` a ';
-			$firstWhere = true;
-			$where      = '';
-			// $this->db->distinct();
-			// $this->db->select('a.id');
-			// $this->db->where('a.`id_content`', $idContent, false);
-			// $this->db->from('content a');
-			if($options != null) {
-				// Create an associated array:
-				if(is_string($options)) {
-					$options = $this->stringToAssocArray($options);
-				}
-				// Adjust the query:
-				$sql .= ', `'.$pf.'options` b, `'.$pf.'values` c) ';
-				// $this->db->from('options b');
-				// $this->db->from('values c');
-				foreach($options as $key=>$value) {
-					if($firstWhere) {
-						$firstWhere = false;
-						$where .= 'WHERE b.`name` = \''.$key.'\' ';						
-					} else {
-						$where .= 'AND b.`name` = \''.$key.'\' ';						
-					}
-					$where .= 'AND c.`id_option` = b.`id` ';
-					$where .= 'AND c.`value` = \''.$value.'\' ';
-					$where .= 'AND c.`id_content` = a.`id` ';
-					
-					// $this->db->where('b.`name`', '\''.$key.'\'', false);
-					// $this->db->where('c.`id_option`', 'b.`id`', false);
-					// $this->db->where('c.`value`', '\''.$value.'\'', false);
-					// $this->db->where('c.`id_content`', 'a.`id`', false);
-				}
-			} else {
-				$sql .= ') ';
+		// Retrieve the children of this data object:
+		$children = array();
+		$pf = $this->db->dbprefix;				
+		$sql = 'SELECT DISTINCT `a`.`id` FROM (`'.$pf.'content` a ';
+		$firstWhere = true;
+		$where      = '';
+		if($options != null) {
+			// Create an associated array:
+			if(is_string($options)) {
+				$options = $this->stringToAssocArray($options);
 			}
-			if($orderby != null) {
-				// Order by given options:
-				$orderby   = explode(' ', $orderby);
-				$item      = $orderby[0];
-				$direction = isset($orderby[1]) ? strtolower($orderby[1]) : 'asc';				
-				if($direction != 'asc' && $direction != 'desc') {
-					$direction = 'asc';
-				}
-				$sql .= 'JOIN (`'.$pf.'values`, `'.$pf.'options`) ON (`'.$pf.'values`.`id_content` = `a`.`id` AND `'.$pf.'values`.`id_option` = `'.$pf.'options`.`id` AND `'.$pf.'options`.`name` = \''.$item.'\') ';
-				$orderby = ' ORDER BY `'.$pf.'values`.`value` '.strtoupper($direction).' ';
-				
-				/*
-				$this->db->from('options d');
-				$this->db->from('values e');
-				$this->db->where('d.`name`', '\''.$item.'\'', false);
-				$this->db->where('e.`id_option`', 'd.`id`', false);
-				$this->db->order_by('e.`value`', $direction);
-				*/
-				
-				/*
-					SELECT DISTINCT `a`.`id` FROM
-						(`demo_content` a, `demo_options` b, `demo_values` c)
-					JOIN (`demo_values`, `demo_options`) ON
-						(`demo_values`.`id_content` = `a`.`id` AND
-						`demo_values`.`id_option` = `demo_options`.`id` AND
-						`demo_options`.`name` = 'date')
-					WHERE a.`id_content` =3 AND b.`name` ='published'
-					AND c.`id_option` =b.`id` AND c.`value` ='1'
-					AND c.`id_content` =a.`id` ORDER BY `demo_values`.`value` desc
-				*/
-				
-				// $pf = $this->db->dbprefix;				
-				// $this->db->join('(`'.$pf.'values`, `'.$pf.'options`)', '(`'.$pf.'values`.`id_content` = `a`.`id` AND `'.$pf.'values`.`id_option` = `'.$pf.'options`.`id` AND `'.$pf.'options`.`name` = \''.$item.'\')');
-				// $this->db->where('JOIN (`'.$pf.'values`, `'.$pf.'options`) ON (`'.$pf.'values`.`id_content` = `a`.`id` AND `'.$pf.'values`.`id_option` = `'.$pf.'options`.`id` AND `'.$pf.'options`.`name` = \''.$item.'\')');
-				
-				// $this->db->join('options', 'values.id_option = options.id');
-				
-				// $this->db->where('values.id_option', 'options.id');
-				// $this->db->where('options.name', $item);
-				// $this->db->join('options', 'options.name = '.$item.'');
-				// $this->db->order_by('values.value', 'desc');
-			} else {
-				// Order by internal order-parameter:
-				// $this->db->order_by('a.order', 'asc');
-				$orderby = ' ORDER BY a.`order` ASC ';
-			}
-			
-			if($firstWhere) {
-				$where .= 'WHERE a.`id_content` = '.$idContent.' ';
-				$firstWhere = false;
-			} else {
-				$where .= 'AND a.`id_content` = '.$idContent.' ';
-			}
-			
-			$sql .= $where.$orderby;
-			
-			if($limit!=null) {
-				if(is_string($limit)) {					
-					$limit = $this->stringToAssocArray($limit);
-				}
-				if(count($limit)==1) {
-					// $this->db->limit($limit[0]);
-					$sql .= 'LIMIT '.$limit[0];
+			// Adjust the query:
+			$sql .= ', `'.$pf.'options` b, `'.$pf.'values` c) ';
+			foreach($options as $key=>$value) {
+				if($firstWhere) {
+					$firstWhere = false;
+					$where .= 'WHERE b.`name` = \''.$key.'\' ';						
 				} else {
-					// $this->db->limit($limit[0], $limit[1]);
-					$sql .= 'LIMIT '.$limit[1].', '.$limit[0];
+					$where .= 'AND b.`name` = \''.$key.'\' ';						
 				}
+				$where .= 'AND c.`id_option` = b.`id` ';
+				$where .= 'AND c.`value` = \''.$value.'\' ';
+				$where .= 'AND c.`id_content` = a.`id` ';
 			}
-			
-			$sql .= ';';
-			
-			$query = $this->db->query($sql);			
-			// echo $this->db->last_query();
-			foreach($query->result() as $result) {
-				$dataObject = new DataModel();
-				$dataObject->load($result->id, $this->idLanguage);
-				array_push($children, $dataObject);
-			}
-			// Store for optimization:
-			// $this->childrenArray[$idContent] = $children;
-		// }
-		
-		// TODO: Order by:
-		/*
+		} else {
+			$sql .= ') ';
+		}
 		if($orderby != null) {
+			// Order by given options:
 			$orderby   = explode(' ', $orderby);
 			$item      = $orderby[0];
-			$direction = isset($orderby[1]) ? strtolower($orderby[1]) : 'asc';
-			if($direction != 'asc' || $direction != 'desc') {
+			$direction = isset($orderby[1]) ? strtolower($orderby[1]) : 'asc';				
+			if($direction != 'asc' && $direction != 'desc') {
 				$direction = 'asc';
 			}
-			// Multisort:
-			function _inline_usort_callback($a, $b) {
-				if ($a->options['date'] == $b->optons['date']) {
-					return 0;
-				}
-			    return ($a->options['date'] < $b->options['date']) ? -1 : 1;
-			}			
-			usort($children, "_inline_usort_callback");
+			$sql .= 'JOIN (`'.$pf.'values`, `'.$pf.'options`) ON (`'.$pf.'values`.`id_content` = `a`.`id` AND `'.$pf.'values`.`id_option` = `'.$pf.'options`.`id` AND `'.$pf.'options`.`name` = \''.$item.'\') ';
+			$orderby = ' ORDER BY `'.$pf.'values`.`value` '.strtoupper($direction).' ';
+		} else {
+			// Order by internal order-parameter:
+			$orderby = ' ORDER BY a.`order` ASC ';
 		}
-		*/
+		
+		if($firstWhere) {
+			$where .= 'WHERE a.`id_content` = '.$idContent.' ';
+			$firstWhere = false;
+		} else {
+			$where .= 'AND a.`id_content` = '.$idContent.' ';
+		}
+		
+		$sql .= $where.$orderby;
+		
+		if($limit!=null) {
+			if(is_string($limit)) {					
+				$limit = $this->stringToAssocArray($limit);
+			}
+			if(count($limit)==1) {
+				$sql .= 'LIMIT '.$limit[0];
+			} else {
+				$sql .= 'LIMIT '.$limit[1].', '.$limit[0];
+			}
+		}
+		
+		$sql .= ';';
+		
+		$query = $this->db->query($sql);			
+		foreach($query->result() as $result) {
+			$dataObject = new DataModel();
+			$dataObject->load($result->id, $this->idLanguage);
+			array_push($children, $dataObject);
+		}
 		
 		return $children;
 	}
@@ -535,12 +471,6 @@ class DataModel extends Model
 	{
 		$locales = array();
 		$idLanguage = $idLanguage !== null ? $idLanguage : $this->idLanguage;
-		/*
-		$this->db->select('name','value');
-		$this->db->where('id_language', $idLanguage);
-		$this->db->join('locales_values', 'locales.id = locales_values.id_locale');
-		*/
-		
 		// TODO: Make this query active-record-style:
 		$pf = $this->db->dbprefix;
 		$sql = 'SELECT A.`name`, B.`value` FROM
@@ -570,23 +500,6 @@ class DataModel extends Model
 	}
 	
 	/**
-	 * Execute a function from a module
-	 * @param	$name		string	The name of the module
-	 * @param	$function	string	The name of the function to execute
-	 */
-	/*
-	function module($name)
-	{
-		$path = 'system/application/modules/'.$name.'/'.$name.'.frontend.php';
-		if(file_exists($path)) {			
-			require_once($path);			
-			eval("\$object = new ".ucfirst($name)."();");
-			return $object;
-		}		
-	}
-	*/
-	
-	/**
 	 * Render this datamodel according to it's template
 	 * @param	$display	boolean		Display the page (true) or return it as a string (false)
 	 * @return	string					Empty string on success or a string with the content if display is false
@@ -610,7 +523,6 @@ class DataModel extends Model
 		$smarty->cache_lifetime	= SMARTY_CACHE_LIFETIME;
 		
 		// Assign the options:
-		// $smarty->assign($this->options);
 		foreach($this->options as $key=>$value) {
 			$smarty->assign($key, $value);
 		}
@@ -630,43 +542,6 @@ class DataModel extends Model
 		
 		// Assign the contentObjects:
 		$smarty->assign('contentObjects', $this->contentObjects);
-		
-		// Assign modules:
-		// Modules get auto-detected according to the folders found in the modules-directory
-		/*
-        $folders = glob('assets/modules/*', GLOB_ONLYDIR);
-		if($folders != false) {
-			foreach($folders as $folder) {
-				$a = explode('/', $folder);
-				$folderName = $a[count($a)-1];
-				$path = $folder.'/'.$folderName.'.frontend.php';
-				if(file_exists($path)) {
-					require_once($path);			
-					$objectName = ucfirst($folderName);
-					$object = new $objectName;
-					$smarty->assign($folderName, $object);
-				}
-			}
-		}
-		
-		// Assign plugins:
-		// Plugins are the same as modules, only they exist of one file and are only available on the frontend:
-		$folders = glob('assets/plugins/*', GLOB_ONLYDIR);
-		if($folders != false) {
-			foreach($folders as $folder) {
-				$a = explode('/', $folder);
-				$folderName = $a[count($a)-1];
-				$path = $folder.'/'.$folderName.'.php';
-				if(file_exists($path)) {
-					require_once($path);
-					$objectName = ucfirst($folderName);
-					$object = new $objectName;
-					$smarty->assign($folderName, $object);
-				}
-			}
-		}
-		*/
-		
 		
 		// Assign the addons:		
 		foreach($this->AddonModel->addons as $addon) {

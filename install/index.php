@@ -104,13 +104,6 @@
 					</div>
 				</div>
 				<div id="step5">
-					<!--
-						Select setup:
-						- Empty, complete blank database
-						- Default website template, with a default page-template (with header, summary and content) (default)
-						- Sample site, multilingual with default pages and a news example
-						- Sample blog, with default pages and a blog example
-					-->				
 					<h1>Select setup</h1>
 					<p>There are different types of predefined installations available, please select the one which you would want to install:</p>
 					<label><input type="radio" name="setup" value="1" /> Empty installation</label>

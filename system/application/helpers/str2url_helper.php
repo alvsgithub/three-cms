@@ -42,9 +42,6 @@ if (!function_exists('str2url'))
     {
         $str = rus2translit($str);
         $str = strtolower($str);
-		/*
-        $str = preg_replace('/[^-a-z0-9_]+/u', '-', $str);
-		*/
 		$str = html_entity_decode($str, ENT_COMPAT);
         $str = preg_replace("`\[.*\]`U", "", $str);
         $str = preg_replace('`&(amp;)?#?[a-z0-9]+;`i', '-', $str);
@@ -56,7 +53,6 @@ if (!function_exists('str2url'))
         return $str;
     }
 }
-
 
 /* End of file str2url_helper.php */
 /* Location: ./application/helpers/str2url_helper.php */

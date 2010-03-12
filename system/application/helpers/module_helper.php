@@ -1,4 +1,6 @@
 <?php
+	// TODO: Is this file still needed since there is a new addon structure?
+
 	/**
 	 * Create a hyperlink-url to use in a module
 	 * @param	$array	array	An array with parameters (where the first parameter is most commonly the name of the module)
