@@ -297,6 +297,13 @@ class AdminModel extends Model
      */
     function saveLocaleValues($id, $locales)
     {
+        // Delete the cached files:
+        $files = glob('system/cache/data.locales.*');
+        if($files != false) {
+            foreach($files as $file) {
+                unlink($file);
+            }
+        }
         // First delete the current values:
         $this->db->where('id_locale', $id);
         $this->db->delete('locales_values');
@@ -759,12 +766,39 @@ class AdminModel extends Model
     function getSettings()
     {
         if(!isset($this->settings)) {
+            /*
             $this->settings = array();
             $this->db->select('name,value');
             $query = $this->db->get('settings');
             foreach($query->result() as $setting) {
                 $this->settings[$setting->name] = $setting->value;
             }
+            */
+            // Caching:
+            $cacheFile = 'system/cache/data.settings.php';
+            if(file_exists($cacheFile)) {
+                include($cacheFile);
+            } else {
+                $cacheStr = '<?php'."\n\t".'$settings = array('."\n";		// For caching
+                $first    = true;
+                $settings = array();
+                $this->db->select('name,value');
+                $query = $this->db->get('settings');
+                foreach($query->result() as $setting) {
+                    $settings[$setting->name] = $setting->value;
+                    if(!$first) {
+                        $cacheStr.=','."\n";
+                    }
+                    $first = false;
+                    $cacheStr.= "\t\t".'\''.$setting->name.'\'=>\''.addslashes($setting->value).'\'';
+                }
+                // Save cache file:			
+                $cacheStr.= "\n"."\t".');'."\n".'?>';
+                $handle = fopen($cacheFile, 'w');
+                fwrite($handle, $cacheStr);
+                fclose($handle);
+            }
+            $this->settings = $settings;
         }
         return $this->settings;
     }
@@ -775,6 +809,12 @@ class AdminModel extends Model
      */
     function saveSettings($settings)
     {
+        // Delete the settings-file:
+        $cacheFile = 'system/cache/data.settings.php';
+        if(file_exists($cacheFile)) {
+            unlink($cacheFile);
+        }
+        // Store the new settings in the database:
         foreach($settings as $key=>$value) {
             $this->db->where('name', $key);
             $this->db->from('settings');
@@ -1344,7 +1384,6 @@ class AdminModel extends Model
             $this->db->update('content', array('order'=>$current));
             $current++;
         }
-    }
-    
+    }    
 }
 ?>

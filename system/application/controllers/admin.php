@@ -503,7 +503,6 @@ class Admin extends Controller
 					for($i=0; $i < count($locales); $i++) {						
 						$locales[$i]['value'] = $this->makeSafe($this->input->post('language_'.$locales[$i]['id']));
 					}
-					
 					$this->AdminModel->saveLocaleValues($id, $locales);
 					redirect(site_url(array('admin', 'manage', 'locales')));					
 					break;
