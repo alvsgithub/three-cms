@@ -595,6 +595,14 @@ class AdminModel extends Model
      */
     function saveContentData($idContent, $contentData)
     {
+        // Clear cache:
+        $files = glob('system/cache/data.'.$idContent.'.*');
+        if($files != false) {
+            foreach($files as $file) {
+                unlink($file);
+            }
+        }
+        
         // TODO: Check if required fields name and template are filled in.
         
         // If there is no alias set, create one automaticly:
