@@ -1,6 +1,6 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-$config['version'] = "beta 4";
+$config['version'] = "beta 5";
 
 /*
 |--------------------------------------------------------------------------

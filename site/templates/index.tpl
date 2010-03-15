@@ -21,6 +21,9 @@
 				{/if}
 				<h2>Tree:</h2>				
 				{include file="tree.tpl" id='0'}
+				<h2>Random page:</h2>
+				{assign var='page' value=$randompage->fromTemplate(5, $this->idLanguage)}
+				{$page->render()}
 			</div>
 			<div id="footer">
 				<p>&copy; {$smarty.now|date_format:"%Y"} | Powered by Three CMS</p>
