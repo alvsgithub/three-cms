@@ -58,83 +58,105 @@ class DataModel extends Model
 	
 	function load($idContent, $idLanguage)
 	{
+		// Default settings:
+		$this->idContent  = $idContent;
+		$this->idLanguage = $idLanguage;
+		$this->settings   = $this->getSettings();
 		// TODO: Caching
 		// Caching is done by checking if there is a datafile: cache/data.idcontent.idlanguage.php
 		// The datafile is nothing more than the options-array and some other variables. If the file
 		// does not exist, execute the queries needed and create the datafile, otherwise just
 		// include the file.
 		// If the content gets edited, the datafile gets deleted
-		
-		// Default settings:
-		$this->idContent 	= $idContent;
-		$this->idLanguage	= $idLanguage;
-		$this->options		= array();
-		
-		$this->settings     = $this->getSettings();
-		
-		// Default settings:
-		$this->db->select('name,alias,order');
-		$this->db->where('id', $idContent);
-		$query = $this->db->get('content');
-		$info  = $query->result_array();
-		
-		// Some default options:
-		$this->options['idContent']   = $idContent;
-		$this->options['idLanguage']  = $idLanguage;
-		$this->options['alias']       = $info[0]['alias'];
-		$this->options['contentName'] = $info[0]['name'];
-		$this->options['order']       = $info[0]['order'];
-		
-		// Killer Query to do the magic:
-		// What it does: It selects the options that belong to the object of this content,
-		// and it retrieves the objects correct values according to the given language, or
-		// if the object isn't multilanguage, it returns it's defaults language value.
-		$pf = $this->db->dbprefix;
-		$sql = 'SELECT C.`type`, C.`name`, D.`value` FROM
-			`'.$pf.'content` A,
-			`'.$pf.'dataobjects_options` B,
-			`'.$pf.'options` C,
-			`'.$pf.'values` D,
-			`'.$pf.'templates` E		
-				WHERE
-			A.`id`              = '.$idContent.' AND
-			A.`id_template`     = E.`id` AND
-			E.`id_dataobject`   = B.`id_dataobject` AND
-			C.`id`              = B.`id_option` AND
-			D.`id_content`      = '.$idContent.' AND
-			D.`id_option`       = B.`id_option` AND
-			D.`id_language`     = IF(C.`multilanguage` = 1, '.$idLanguage.', '.$this->settings['default_language'].');
-		';
-		$query = $this->db->query($sql);
-		
-		// Fill the dataObject with the values:
-		foreach($query->result() as $result) {
-			// Execute Hook to allow to modify the data:
-			// Note that here the result-parameter is a pointer to the $result-object. This is because the executeHook()-function cannot return values, only true or false.
-			$this->AddonModel->executeHook('ModifyOptionValue', array('result'=>&$result, 'dataObject'=>$this));
-			// If type is rich_text, replace id:-links with the correct URL:
-			if($result->type=='rich_text') {
-				$value = $result->value;
-				preg_match_all('/href="id:(.*)"/', $value, $matches);
-				for($i=0; $i<count($matches[0]); $i++) {
-					$value = str_replace($matches[0][$i], 'href="'.$this->getUrl($matches[1][$i]).'"', $value);
+		$cacheFile = 'system/cache/data.'.$idContent.'.'.$idLanguage.'.php';
+		if(file_exists($cacheFile)) {
+			include($cacheFile);
+			$this->options      = $options;
+			$this->templateFile = $templateFile;
+		} else {		
+			$this->options = array();
+			
+			// Default settings:
+			$this->db->select('name,alias,order');
+			$this->db->where('id', $idContent);
+			$query = $this->db->get('content');
+			$info  = $query->result_array();
+			
+			// Some default options:
+			$this->options['idContent']   = $idContent;
+			$this->options['idLanguage']  = $idLanguage;
+			$this->options['alias']       = $info[0]['alias'];
+			$this->options['contentName'] = $info[0]['name'];
+			$this->options['order']       = $info[0]['order'];
+			
+			// Killer Query to do the magic:
+			// What it does: It selects the options that belong to the object of this content,
+			// and it retrieves the objects correct values according to the given language, or
+			// if the object isn't multilanguage, it returns it's defaults language value.
+			$pf = $this->db->dbprefix;
+			$sql = 'SELECT C.`type`, C.`name`, D.`value` FROM
+				`'.$pf.'content` A,
+				`'.$pf.'dataobjects_options` B,
+				`'.$pf.'options` C,
+				`'.$pf.'values` D,
+				`'.$pf.'templates` E		
+					WHERE
+				A.`id`              = '.$idContent.' AND
+				A.`id_template`     = E.`id` AND
+				E.`id_dataobject`   = B.`id_dataobject` AND
+				C.`id`              = B.`id_option` AND
+				D.`id_content`      = '.$idContent.' AND
+				D.`id_option`       = B.`id_option` AND
+				D.`id_language`     = IF(C.`multilanguage` = 1, '.$idLanguage.', '.$this->settings['default_language'].');
+			';
+			$query = $this->db->query($sql);
+			
+			// Fill the dataObject with the values:
+			foreach($query->result() as $result) {
+				// Execute Hook to allow to modify the data:
+				// Note that here the result-parameter is a pointer to the $result-object. This is because the executeHook()-function cannot return values, only true or false.
+				$this->AddonModel->executeHook('ModifyOptionValue', array('result'=>&$result, 'dataObject'=>$this));
+				// If type is rich_text, replace id:-links with the correct URL:
+				if($result->type=='rich_text') {
+					$value = $result->value;
+					preg_match_all('/href="id:(.*)"/', $value, $matches);
+					for($i=0; $i<count($matches[0]); $i++) {
+						$value = str_replace($matches[0][$i], 'href="'.$this->getUrl($matches[1][$i]).'"', $value);
+					}
+					$this->options[$result->name] = $value;
+				} else {		
+					$this->options[$result->name] = $result->value;
 				}
-				$this->options[$result->name] = $value;
-			} else {		
-				$this->options[$result->name] = $result->value;
 			}
+			
+			// Retrieve the template file:
+			$sql = 'SELECT B.`templatefile` FROM
+				`'.$pf.'content` A,
+				`'.$pf.'templates` B
+					WHERE
+				A.`id_template` = B.`id` AND
+				A.`id` = '.$idContent.';
+			';
+			$query = $this->db->query($sql);
+			$this->templateFile = $query->row()->templatefile;
+			
+			// Save the cache file:
+			$cacheStr = '<?php'."\n";
+			// The options:
+			$cacheStr.= "\t".'$options = array('."\n";
+			$first = true;
+			foreach($this->options as $key=>$value) {
+				if(!$first) { $cacheStr.=','."\n"; }
+				$first = false;
+				$cacheStr.= "\t\t".'\''.$key.'\'=>\''.addslashes($value).'\'';
+			}
+			$cacheStr.= "\n\t".');'."\n";
+			$cacheStr.= "\t".'$templateFile = \''.$this->templateFile.'\';'."\n";
+			$cacheStr.= '?>';
+			$handle = fopen($cacheFile, 'w');
+			fwrite($handle, $cacheStr);
+			fclose($handle);
 		}
-		
-		// Retrieve the template file:
-		$sql = 'SELECT B.`templatefile` FROM
-			`'.$pf.'content` A,
-			`'.$pf.'templates` B
-				WHERE
-			A.`id_template` = B.`id` AND
-			A.`id` = '.$idContent.';
-		';
-		$query = $this->db->query($sql);
-		$this->templateFile = $query->row()->templatefile;
 	}
 	
 	/**
@@ -453,12 +475,30 @@ class DataModel extends Model
      */
     function getSettings()
     {
-        $settings = array();
-        $this->db->select('name,value');
-        $query = $this->db->get('settings');
-        foreach($query->result() as $setting) {
-            $settings[$setting->name] = $setting->value;
-        }
+        // Caching:
+		$cacheFile = 'system/cache/data.settings.php';
+		if(file_exists($cacheFile)) {
+			include($cacheFile);
+		} else {
+			$cacheStr = '<?php'."\n\t".'$settings = array('."\n";		// For caching
+			$first    = true;
+			$settings = array();
+			$this->db->select('name,value');
+			$query = $this->db->get('settings');
+			foreach($query->result() as $setting) {
+				$settings[$setting->name] = $setting->value;
+				if(!$first) {
+					$cacheStr.=','."\n";
+				}
+				$first = false;
+				$cacheStr.= "\t\t".'\''.$setting->name.'\'=>\''.addslashes($setting->value).'\'';
+			}
+			// Save cache file:			
+			$cacheStr.= "\n"."\t".');'."\n".'?>';
+			$handle = fopen($cacheFile, 'w');
+			fwrite($handle, $cacheStr);
+			fclose($handle);
+		}
         return $settings;
     }
 	
@@ -469,19 +509,37 @@ class DataModel extends Model
 	 */
 	function getLocales($idLanguage = null)
 	{
-		$locales = array();
 		$idLanguage = $idLanguage !== null ? $idLanguage : $this->idLanguage;
-		// TODO: Make this query active-record-style:
-		$pf = $this->db->dbprefix;
-		$sql = 'SELECT A.`name`, B.`value` FROM
-			`'.$pf.'locales` A,
-			`'.$pf.'locales_values` B
-				WHERE
-			B.`id_language` = '.$idLanguage.' AND
-			B.`id_locale`   = A.`id`';		
-		$query = $this->db->query($sql);
-		foreach($query->result() as $locale) {
-			$locales[$locale->name] = $locale->value;
+		// Caching:
+		$cacheFile = 'system/cache/data.locales.'.$idLanguage.'.php';
+		if(file_exists($cacheFile)) {
+			include($cacheFile);
+		} else {
+			$cacheStr = '<?php'."\n\t".'$locales = array('."\n";		// For caching
+			$first    = true;
+			$locales = array();
+			// TODO: Make this query active-record-style:
+			$pf = $this->db->dbprefix;
+			$sql = 'SELECT A.`name`, B.`value` FROM
+				`'.$pf.'locales` A,
+				`'.$pf.'locales_values` B
+					WHERE
+				B.`id_language` = '.$idLanguage.' AND
+				B.`id_locale`   = A.`id`';		
+			$query = $this->db->query($sql);
+			foreach($query->result() as $locale) {
+				$locales[$locale->name] = $locale->value;
+				if(!$first) {
+					$cacheStr.=','."\n";
+				}
+				$first = false;
+				$cacheStr.= "\t\t".'\''.$locale->name.'\'=>\''.addslashes($locale->value).'\'';
+			}
+			// Save cache file:			
+			$cacheStr.= "\n"."\t".');'."\n".'?>';
+			$handle = fopen($cacheFile, 'w');
+			fwrite($handle, $cacheStr);
+			fclose($handle);
 		}
 		return $locales;
 	}
@@ -552,7 +610,7 @@ class DataModel extends Model
 		}
 		
 		// Render the page:
-		if($display) {
+		if($display) {			
 			$smarty->display($this->templateFile);
 			return '';
 		} else {
