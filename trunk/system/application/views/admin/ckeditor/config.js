@@ -23,5 +23,7 @@ CKEDITOR.editorConfig = function( config )
 		['JustifyLeft','JustifyCenter','JustifyRight','JustifyBlock'],
 		['Format'],
 		['Maximize', 'ShowBlocks','-','About']
-	];
+	];	
 };
+
+CKEDITOR.plugins.load('pgrfilemanager');
