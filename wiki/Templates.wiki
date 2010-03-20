@@ -102,13 +102,14 @@ A data object also has some functions to use:
 
 === children() ===
 
-*`function children($idContent = null, $options = null, $limit = null)`*
+*`function children($idContent = null, $options = null, $limit = null, $orderby = null)`*
 
 Get the children of this dataModel.
 
 *$idContent:* The ID of the parent to get the children from. If ID is set to null (default), the current dataobjects' ID is used<br />
 *$options:* An associated array with options to use as filter. Because Smarty doesn't natively accept arrays, arrays should be formatted as a string. See the below examples how this works.<br />
-*$limit:* An array with one ore two values for the limit-options
+*$limit:* An array with one ore two values for the limit-options<br />
+*$orderby:* An array to order by 0=name of the item, 1=asc or desc
 
 This function returns an array with dataModels.
 
