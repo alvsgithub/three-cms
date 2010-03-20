@@ -148,7 +148,7 @@ class DataModel extends Model
 			foreach($this->options as $key=>$value) {
 				if(!$first) { $cacheStr.=','."\n"; }
 				$first = false;
-				$cacheStr.= "\t\t".'\''.$key.'\'=>\''.addslashes($value).'\'';
+				$cacheStr.= "\t\t".'\''.$key.'\'=>\''.str_replace('\'', '\\\'', $value).'\'';
 			}
 			$cacheStr.= "\n\t".');'."\n";
 			$cacheStr.= "\t".'$templateFile = \''.$this->templateFile.'\';'."\n";
@@ -164,6 +164,7 @@ class DataModel extends Model
 	 * @param	$idContent	int		The ID of the parent to get the children from. If ID is set to null (default), the current dataobjects' ID is used
 	 * @param	$options	array	An array with options to use as filter
 	 * @param	$limit		array	An array with one ore two values for the limit-options
+	 * @param	$orderby	string	A string to order by: 'optionName asc/desc'. example: 'myDate asc'
 	 * @return	array		An array with dataModels
 	 */
 	function children($idContent = null, $options = null, $limit = null, $orderby = null)
@@ -491,7 +492,7 @@ class DataModel extends Model
 					$cacheStr.=','."\n";
 				}
 				$first = false;
-				$cacheStr.= "\t\t".'\''.$setting->name.'\'=>\''.addslashes($setting->value).'\'';
+				$cacheStr.= "\t\t".'\''.$setting->name.'\'=>\''.str_replace('\'', '\\\'', $setting->value).'\'';
 			}
 			// Save cache file:			
 			$cacheStr.= "\n"."\t".');'."\n".'?>';
@@ -533,7 +534,7 @@ class DataModel extends Model
 					$cacheStr.=','."\n";
 				}
 				$first = false;
-				$cacheStr.= "\t\t".'\''.$locale->name.'\'=>\''.addslashes($locale->value).'\'';
+				$cacheStr.= "\t\t".'\''.$locale->name.'\'=>\''.str_replace('\'', '\\\'', $locale->value).'\'';
 			}
 			// Save cache file:			
 			$cacheStr.= "\n"."\t".');'."\n".'?>';

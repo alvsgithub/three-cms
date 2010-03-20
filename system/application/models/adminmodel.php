@@ -798,7 +798,7 @@ class AdminModel extends Model
                         $cacheStr.=','."\n";
                     }
                     $first = false;
-                    $cacheStr.= "\t\t".'\''.$setting->name.'\'=>\''.addslashes($setting->value).'\'';
+                    $cacheStr.= "\t\t".'\''.$setting->name.'\'=>\''.str_replace('\'', '\\\'', $setting->value).'\'';
                 }
                 // Save cache file:			
                 $cacheStr.= "\n"."\t".');'."\n".'?>';
@@ -1308,7 +1308,7 @@ class AdminModel extends Model
                                 $optionQuery  = $this->db->get('options');
                                 $optionResult = $optionQuery->result();
                                 $idOption = $optionResult[0]->id;
-                            }
+                            }                            
                             // Get the value:
                             $this->db->select('value');
                             $this->db->where('id_content', $parentID);
@@ -1317,7 +1317,14 @@ class AdminModel extends Model
                             $currentContentQuery = $this->db->get('values');
                             $currentContentResult = $currentContentQuery->result();                    
                             $currentContent['headers'][$header['name']] = $currentContentResult[0]->value;
-                            // TODO: If the option is of the type 'date', convert the timestamp to the date
+                            // If the option is of the type 'date', convert the timestamp to the date
+                            $this->db->select('type');
+                            $this->db->where('id', $idOption);
+                            $optionTypeQuery  = $this->db->get('options');
+                            $optionTypeResult = $optionTypeQuery->result();
+                            if($optionTypeResult[0]->type == 'date') {
+                                $currentContent['headers'][$header['name']] = $value = strftime($settings['date_format'],$currentContentResult[0]->value);
+                            }
                         }                        
                     } else {
                         $this->db->select('value');
@@ -1327,6 +1334,14 @@ class AdminModel extends Model
                         $currentContentQuery = $this->db->get('values');
                         $currentContentResult = $currentContentQuery->result();                    
                         $currentContent['headers'][$header['name']] = $currentContentResult[0]->value;
+                        // If the option is of the type 'date', convert the timestamp to the date
+                        $this->db->select('type');
+                        $this->db->where('id', $header['id']);
+                        $optionTypeQuery  = $this->db->get('options');
+                        $optionTypeResult = $optionTypeQuery->result();
+                        if($optionTypeResult[0]->type == 'date') {
+                            $currentContent['headers'][$header['name']] = $value = strftime($settings['date_format'],$currentContentResult[0]->value);
+                        }
                     }
                 }
                 array_push($content, $currentContent);
