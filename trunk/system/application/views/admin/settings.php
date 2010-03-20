@@ -26,6 +26,10 @@
 					<th>Base URL:</th>
 					<td><input type="text" name="base_url" value="<?php settingValue($settings, 'base_url'); ?>" /></td>
 				</tr>
+				<tr>
+					<th>Assets path:</th>
+					<td><input type="text" name="assets_path" value="<?php settingValue($settings, 'assets_path'); ?>" /></td>
+				</tr>
 				<tr class="delimiter">
 					<td colspan="2">&nbsp;</td>
 				</tr>
