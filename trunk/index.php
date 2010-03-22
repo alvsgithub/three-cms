@@ -2,11 +2,25 @@
 /**
  * Three CMS: See if the config file exists, if not, run the install:
  */
-if(!file_exists('system/application/config/config.php')) {
-	if(file_exists('./install/index.php')) {
-		header('Location: ./install/');
+	if(!file_exists('system/application/config/config.php')) {
+		if(file_exists('./install/index.php')) {
+			header('Location: ./install/');
+		}
 	}
-}
+
+/**
+ * Three CMS: Set ROOT_PATH and BASE_URL:
+ */
+	$rootURL = 'http';
+	if(isset($_SERVER['HTTPS'])) {
+		if($_SERVER["HTTPS"] == "on") { $rootURL .= "s"; }
+	}
+	$rootURL .= '://'.$_SERVER['HTTP_HOST'].'/';
+	$rootPath = dirname($_SERVER['SCRIPT_FILENAME']).'/';
+	// Remove double slashes but leave http:// intact:
+	$baseURL    = preg_replace('#(http:|https:)|//#', '\\1/', $rootURL.str_replace($_SERVER['DOCUMENT_ROOT'], '', $rootPath));
+	define('BASE_URL', $baseURL);
+	define('ROOT_PATH', $rootPath);
 
 /*
 |---------------------------------------------------------------

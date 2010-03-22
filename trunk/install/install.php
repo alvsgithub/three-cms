@@ -119,7 +119,7 @@
 		'dbprefix'=>$dbPrefix
 	);
 	
-	// TODO: Make sure to write this file on the correct location:
+	// Make sure to write this file on the correct location:
 	parseFile('files/config.php', '../system/application/config/config.php', $parameters);
 	parseFile('files/database.php', '../system/application/config/database.php', $parameters);
 	
