@@ -51,7 +51,7 @@
                 'default' => 0
             )
         );
-        // $this->load->dbforge(); // TODO: this function now loads in the admin controller, but it should be able to load at runtime.
+        
         $this->dbforge->add_field($fields);
         $this->dbforge->add_key('id', true);
         $this->dbforge->create_table('webusers', true);
