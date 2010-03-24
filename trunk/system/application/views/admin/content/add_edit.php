@@ -46,6 +46,7 @@
 					// - there is more than one language AND
 					// - there are any options AND
 					// - any of the options are multilingual:
+					$languagesString = '';
 					if(count($contentData['languages']) > 1 && count($contentData['content']) > 0) {
 				?>
 				<tr class="delimiter hideIfNotMultilingual">
@@ -55,16 +56,18 @@
 					<th><?php echo $lang->line('content_language'); ?>:</th>
 					<td>
 						<?php							
-							$languagesString = '';
 							$first = true;
 							foreach($contentData['languages'] as $language) {								
+								/*
 								if(file_exists(BASEPATH.'application/views/admin/images/lang/'.$language['code'].'.png')) {
 									$style = 'style="background-image: url('.base_url().'system/application/views/admin/images/lang/'.$language['code'].'.png); padding-left: 25px;"';
 								} else {
 									$style = '';
 								}
+								*/
 								// Show the language link:
-								echo '<a '.$style.' href="#" class="switchLanguage l_'.$language['id'].'">'.$language['name'].'</a>';
+								// echo '<a '.$style.' href="#" class="switchLanguage l_'.$language['id'].'">'.$language['name'].'</a>';
+								echo '<a href="#" class="switchLanguage l_'.$language['id'].'">'.$language['name'].'</a>';
 								if(!$first) {
 									$languagesString .= ',';
 								}
