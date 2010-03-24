@@ -188,9 +188,23 @@
 	// Login:
 	$lang['login_title']				= 'Login';
 	$lang['login_username']				= 'Username';
+	$lang['login_email']				= 'E-mail address';
 	$lang['login_password']				= 'Password';
 	$lang['login_submit_button']		= 'Login';
+	$lang['login_send_button']			= 'Send';
 	$lang['login_error']				= 'You entered the wrong username and/or password!';
+	$lang['login_forgot']				= 'Did you forgot your password?';
+	$lang['login_forgot_instructions']	= 'Please enter your e-mail address below and the login instructions will be sent to your e-mail address';
+	$lang['login_mail_subject']			= 'New password request for [[WEBSITE]]';
+	$lang['login_mail_message']			= "Someone (probably you) requested a new password for [[WEBSITE]].\n\nTo confirm that it was you who made this request please click on the following link:\n[[URL]]\n\nIf it wasn't you who made this request or simply don't want to change your password you can simply delete this e-mail. Your password will not be reset.";
+	$lang['login_new_password']			= 'Your new password';
+	$lang['login_new_password_text']	= 'Your new password is:[[PASSWORD]]Please make sure to write it down and keep it in a safe place because this is the only time your password will be shown. You can change your password after you login.';
+	$lang['login_new_password_fail']	= 'Something went wrong while trying to reset your password. Your URL is probably incorrect. If you tried copy-pasting the URL please make sure there are no additional characters that may have been included accidentily. If the problem persists, please contact your system administrator.';
+	$lang['login_continue']				= 'Continue to login';
+	$lang['login_request_title']		= 'New password request';
+	$lang['login_request']				= 'An e-mail has been sent to the e-mail address you supplied. Please follow the instructions in this e-mail to reset your password.';
+	$lang['login_request_mailfail']		= 'There could be no user found with the e-mail address you supplied.';
+	$lang['login_request_fail']			= 'Something went wrong while trying to send the e-mail request. Please contact your system adminstrator.';
 	
 	// Messages:
 	$lang['message_users_using_rank']	= 'You cannot delete this rank! There are still users using it!';

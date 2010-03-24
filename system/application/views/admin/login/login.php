@@ -26,6 +26,18 @@
                     echo '<p class="error">'.$lang->line('login_error').'</p>';
                 }
             ?>
+            <p class="password"><a href="#"><?php echo $lang->line('login_forgot'); ?></a></p>
+            <div class="forgot_password">
+                <p><?php echo $lang->line('login_forgot_instructions'); ?></p>
+                <form method="post" action="<?php echo site_url(array('admin', 'login')); ?>">
+                    <!-- Username: -->                
+                    <label for="email"><?php echo $lang->line('login_email'); ?>:</label>
+                    <input type="text" name="email" id="email" class="inputField" />
+                    <!-- Submit: -->
+                    <input type="hidden" name="loginforgot" value="true" />
+                    <input type="submit" class="submit" value="<?php echo $lang->line('login_send_button'); ?>" />
+                </form>
+            </div>
         </div>
     </body>
 </html>

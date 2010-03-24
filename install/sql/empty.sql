@@ -44,7 +44,7 @@ CREATE TABLE IF NOT EXISTS `[[PREFIX]]templates_allowed_children` (`id` int(11) 
 CREATE TABLE IF NOT EXISTS `[[PREFIX]]templates_ranks` (`id` int(11) NOT NULL AUTO_INCREMENT, `id_template` int(11) NOT NULL, `id_rank` int(11) NOT NULL, `visible` tinyint(1) NOT NULL, `add` tinyint(1) NOT NULL, `modify` tinyint(1) NOT NULL, `duplicate` tinyint(1) NOT NULL, `move` tinyint(1) NOT NULL, `delete` tinyint(1) NOT NULL, PRIMARY KEY (`id`));
 
 -- Users (+default admin user)
-CREATE TABLE IF NOT EXISTS `[[PREFIX]]users` (`id` int(11) NOT NULL AUTO_INCREMENT, `username` tinytext NOT NULL, `password` tinytext NOT NULL, `name` tinytext NOT NULL, `email` tinytext NOT NULL, `id_rank` int(11) NOT NULL, PRIMARY KEY (`id`));
+CREATE TABLE IF NOT EXISTS `[[PREFIX]]users` (`id` int(11) NOT NULL AUTO_INCREMENT, `username` tinytext NOT NULL, `password` tinytext NOT NULL, `name` tinytext NOT NULL, `email` tinytext NOT NULL, `id_rank` int(11) NOT NULL, `resetkey` tinytext NOT NULL, PRIMARY KEY (`id`));
 INSERT INTO `[[PREFIX]]users` (`id`, `username`, `password`, `name`, `email`, `id_rank`) VALUES (1, '[[ADMINUSER]]', '[[ADMINPASS]]', 'Administrator', '[[ADMINEMAIL]]', 1);
 
 -- Values:

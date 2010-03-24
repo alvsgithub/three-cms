@@ -1339,8 +1339,8 @@ class AdminModel extends Model
                         $this->db->where('id', $header['id']);
                         $optionTypeQuery  = $this->db->get('options');
                         $optionTypeResult = $optionTypeQuery->result();
-                        if($optionTypeResult[0]->type == 'date') {
-                            $currentContent['headers'][$header['name']] = $value = strftime($settings['date_format'],$currentContentResult[0]->value);
+                        if($optionTypeResult[0]->type == 'date') {                            
+                            $currentContent['headers'][$header['name']] = $value = strftime($settings['date_format'], intval($currentContentResult[0]->value));
                         }
                     }
                 }
@@ -1407,6 +1407,64 @@ class AdminModel extends Model
             $this->db->update('content', array('order'=>$current));
             $current++;
         }
-    }    
+    }
+    
+    /**
+     * Prepare a password reset
+     * @param   $email  string  The e-mail address of the user to reset the password from
+     * @return  int             1=no user found; 2=e-mail could not be sent; 3=e-mail sent (ok)
+     */
+    function preparePasswordReset($email)
+    {
+        $this->db->select('id');
+        $this->db->where('email', $email);        
+        $query = $this->db->get('users');
+        if($query->num_rows==0) {
+            return 1;   // No user found
+        } else {
+            $result   = $query->result();
+            $resetKey = md5(md5(rand(100000, 999999), true));
+            $this->db->where('id', $result[0]->id);
+            $this->db->update('users', array('resetKey'=>$resetKey));
+            // Prepare mail:
+            $settings = $this->getSettings();
+            $url      = BASE_URL.'index.php/admin/'.$result[0]->id.'/'.$resetKey;
+            $url      = '<a href="'.$url.'">'.$url.'</a>';
+            $message  = str_replace(array('[[WEBSITE]]', '[[URL]]'), array($settings['site_name'], $url), $this->lang->line('login_mail_message'));
+            $subject  = str_replace('[[WEBSITE]]', $settings['site_name'], $this->lang->line('login_mail_subject'));
+            $ok = @mail($email, $this->lang->line('login_mail_subject'), $message);
+            if($ok) {
+                return 3;
+            } else {
+                return 2;
+            }
+        }
+    }
+    
+    /**
+     * Reset a password
+     * @param   $id_user    int     The ID of the user
+     * @param   $resetKey   string  The reset key to confirm that this user followed the link in the e-mail
+     * @return  mixed               The new password or false on no match
+     */
+    function resetPassword($id_user, $resetKey)
+    {
+        $this->db->where('resetkey', $resetKey);
+        $this->db->where('id', $id_user);
+        $query = $this->db->get('users');
+        if($query->num_rows==1) {
+            // Generate new password:
+            $password = '';
+            $chars    = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            for($i=0; $i<8; $i++) {
+                $password .= substr($chars, rand(0, 61), 1);
+            }
+            $this->db->where('id', $id_user);
+            $this->db->update('users', array('password'=>md5($password), 'resetkey'=>''));
+            return $password;
+        } else {
+            return false;
+        }
+    }
 }
 ?>

@@ -26,7 +26,7 @@ class Admin extends Controller
 		$this->load->helper('stringencrypter');
 		$this->load->helper('strptime'); // For strptime() on Windows servers
 		$this->load->helper('module');
-		$this->load->helper('str2url');
+		$this->load->helper('str2url');		
 		
         // Load the Language Class:
         $this->lang->load('admin');
@@ -82,23 +82,60 @@ class Admin extends Controller
 	function login()
 	{
 		$error = false;
-		if(isset($_POST['login'])) {
-			$username = $this->input->post('username');
-			$password = md5($this->input->post('password'));
-			$info     = $this->AdminModel->checkLogin($username, $password);
-			if($info==false) {
-				$error = true;
-				sleep(3);	// Sleep 3 seconds (security)
-			} else {
-				$this->session->set_userdata(array('loggedIn'=>true, 'rank'=>$info['id_rank']));
-				redirect(site_url('admin'));
+		if(isset($_POST['email'])) {
+			// Forgot login:
+			$ok = $this->loginforgot();
+			switch($ok){
+				case 1:
+					$text = $this->lang->line('login_request_mailfail');
+					break;
+				case 2:
+					$text = $this->lang->line('login_request_fail');
+					break;
+				case 3:
+					$text = $this->lang->line('login_request');
+					break;				
 			}
+			$data = array(
+				'text'=>$text,
+				'lang'=>$this->lang
+			);
+			$this->load->view('admin/login/requestsent.php', $data);
+		} elseif($this->uri->segment(3)!=false && $this->uri->segment(4)!=false) {
+			// See if there is a resetkey in the URL:
+			// URL= admin/loginforgot/[id]/[resetKey]
+			$id_user  = $this->uri->segment(3);
+			$resetKey = $this->uri->segment(4);
+			$password = $this->AdminModel->resetPassword($id_user, $resetKey);
+			if($password!=false) {
+				$text = str_replace('[[PASSWORD]]', '<strong>'.$password.'</strong>', $this->lang->line('login_new_password_text'));
+			} else {
+				$text = $this->lang->line('login_new_password_fail');
+			}
+			$data = array(
+				'lang'=>$this->lang,
+				'text'=>$text
+			);
+			$this->load->view('admin/login/newpassword.php', $data);
+		} else {
+			if(isset($_POST['login'])) {
+				$username = $this->input->post('username');
+				$password = md5($this->input->post('password'));
+				$info     = $this->AdminModel->checkLogin($username, $password);
+				if($info==false) {
+					$error = true;
+					sleep(3);	// Sleep 3 seconds (security)
+				} else {
+					$this->session->set_userdata(array('loggedIn'=>true, 'rank'=>$info['id_rank']));
+					redirect(site_url('admin'));
+				}
+			}
+			$data = array(
+				'lang'=>$this->lang,
+				'error'=>$error
+			);
+			$this->load->view('admin/login/login.php', $data);
 		}
-		$data = array(
-			'lang'=>$this->lang,
-			'error'=>$error
-		);
-		$this->load->view('admin/login.php', $data);
 	}
 	
 	/**
@@ -108,6 +145,21 @@ class Admin extends Controller
 	{
 		$this->session->sess_destroy();
 		redirect(site_url('admin'));
+	}
+	
+	/**
+	 * Function to reset the password
+	 */
+	function loginforgot()
+	{
+		/*
+		  On a password reset, a mail gets send to the user.
+		  If the user clicks on the link in this mail, the password gets resetted.
+		*/
+		if($this->input->post('email')!=false) {
+			// There was a post using the form
+			return $this->AdminModel->preparePasswordReset($this->input->post('email'));
+		}
 	}
 	
 	/**
