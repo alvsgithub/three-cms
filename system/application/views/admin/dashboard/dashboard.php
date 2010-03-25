@@ -1,4 +1,5 @@
 <div id="content">
+	<script type="text/javascript" src="<?php echo BASE_URL; ?>system/application/views/admin/js/dashboard.js"></script>
 	<div id="innerContent">
 		<h1>Dashboard</h1>
 		<?php

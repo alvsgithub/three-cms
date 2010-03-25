@@ -12,8 +12,8 @@
 #jstree-marker { background-image:url("icons.png"); }
 /* DEFAULT, HOVER, CLICKED, LOADING STATES */
 .tree-default li a, .tree-default li span { border-radius:3px; -moz-border-radius:3px; -webkit-border-radius:3px; }
-.tree-default li a:hover, .tree-default li a.hover, .tree-default li span { background: #e7f4f9; border:1px solid #d8f0fa; padding:0px 3px 0px 3px; }
-.tree-default li a.clicked, .tree-default li a.clicked:hover, .tree-default li span.clicked { background: #beebff; border:1px solid #99defd; padding:0px 3px 0px 3px; }
+.tree-default li a:hover, .tree-default li a.hover, .tree-default li span { /* background: #e7f4f9; border:1px solid #d8f0fa; padding:0px 3px 0px 3px; */ background: #333; color: #fff; }
+.tree-default li a.clicked, .tree-default li a.clicked:hover, .tree-default li span.clicked { /* background: #beebff; border:1px solid #99defd; padding:0px 3px 0px 3px; */ background: #333; color: #fff; }
 /* ICONS */
 .tree-default ins { background-image:url("icons.png"); background-position:0 0; background-repeat:no-repeat; }
 .tree-default ul li a.loading ins { background-image:url("throbber.gif") !important; background-position:0 0 !important; } /* UL is added to make selector stronger */

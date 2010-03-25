@@ -1,7 +1,8 @@
 <div id="content">
 	<div id="innerContent">
+		<script type="text/javascript" src="<?php echo BASE_URL; ?>system/application/views/admin/js/items.js"></script>
         <h1><?php echo $lang->line('ranks_title'); ?></h1>
-		<table>
+		<table class="items">
 			<tr>
 				<th>ID</th>
 				<th><?php echo $lang->line('ranks_name'); ?></th>

@@ -13,8 +13,8 @@ $config['version'] = "beta 5";
 |	http://example.com/
 |
 */
-// TODO: Get this from the database:
-$config['base_url']	= "http://localhost/three/";
+// This parameter is set in index.php:
+$config['base_url']	= BASE_URL; 
 
 /*
 |--------------------------------------------------------------------------
