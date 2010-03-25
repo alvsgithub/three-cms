@@ -41,7 +41,6 @@
 					</td>
 				</tr>
 				<?php
-					// TODO: Delete language flags
 					// Only show the language picker if:
 					// - there is more than one language AND
 					// - there are any options AND

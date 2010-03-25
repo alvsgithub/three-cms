@@ -16,9 +16,6 @@
  *
  */
 
-// TODO: Changing of templates (what happens with the options?)
-// TODO: Changing of templates: Reload the page (other content type)
-
 class AdminModel extends Model
 {
     var $modules;           // Modules var for caching

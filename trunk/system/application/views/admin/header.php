@@ -12,7 +12,9 @@
 		<script type="text/javascript" src="<?php echo base_url(); ?>system/application/views/admin/js/jquery.dynDateTime.min.js"></script>
 		<script type="text/javascript" src="<?php echo base_url(); ?>system/application/views/admin/js/calendar-en.js"></script>
 		<script type="text/javascript" src="<?php echo base_url(); ?>system/application/views/admin/js/jquery.timeentry.min.js"></script>
+		<!--
 		<script type="text/javascript" src="<?php echo base_url(); ?>system/application/views/admin/js/jquery.color.js"></script>
+		-->
 		<script type="text/javascript" src="<?php echo base_url(); ?>system/application/views/admin/js/jquery.tree.js"></script>
         <script type="text/javascript" src="<?php echo base_url(); ?>system/application/views/admin/ckeditor/ckeditor.js"></script>
         <script type="text/javascript">

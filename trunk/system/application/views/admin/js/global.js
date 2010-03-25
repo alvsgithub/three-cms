@@ -25,23 +25,6 @@ $(function(){
 		return false;
 	});
 	
-	// Li-hover:
-	$("#navigation>ul>li").hover(function(){
-		$(this).addClass("hover");
-	}, function(){
-		$(this).removeClass("hover");
-	});
-	
-	// Modules:
-	$(".module ul.tabMenu a").click(function(){
-		$(".module .tab").hide();
-		$(".module .tabMenu a").removeClass("active");
-		$(".module #" + $(this).attr("rel")).show();
-		$(this).addClass("active");		
-		return false;
-	});
-	$(".module ul.tabMenu li:first a").click();
-	
 	// jsTree:
 	// When a node is moved, it may only be placed in another node which allows it's template				
 	$("#treeContainer").tree({

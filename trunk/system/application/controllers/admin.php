@@ -25,7 +25,7 @@ class Admin extends Controller
 		$this->load->helper('url');		
 		$this->load->helper('stringencrypter');
 		$this->load->helper('strptime'); // For strptime() on Windows servers
-		$this->load->helper('module');
+		// $this->load->helper('module');
 		$this->load->helper('str2url');		
 		
         // Load the Language Class:
@@ -35,7 +35,7 @@ class Admin extends Controller
         $this->loggedIn = $this->session->userdata('loggedIn');
 		if(!$this->loggedIn) {
 			if($this->uri->segment(2)!='login') {
-				redirect(site_url(array('admin', 'login')));		// TODO: In case of an AJAX call the whole site must be refreshed
+				redirect(site_url(array('admin', 'login')));		
 			}
         }
 		
@@ -1027,7 +1027,6 @@ class Admin extends Controller
 	 */
 	function showHeader()
     {
-		// TODO: Filter addons according to the addons which this rank is allowed to see: (is this done?)
         $data = array(
             'lang'=>$this->lang,
 			'rank'=>$this->AdminModel->getRank($this->rank),
@@ -1380,8 +1379,8 @@ class Admin extends Controller
 			$content = ob_get_clean();
 			$this->load->view('admin/modules/content.php', array('content'=>$content));
 		} else {
-			// TODO: Show 'module not found'-screen
-			
+			// Show 'addon not found'-screen
+			$this->load->view('admin/modules/notfound.php', array('lang'=>$this->lang));
 		}
 		// Show the footer:
 		$this->showFooter();

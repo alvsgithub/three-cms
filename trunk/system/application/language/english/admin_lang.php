@@ -212,4 +212,8 @@
 	$lang['message_delete_admin']		= 'You cannot delete the administrators user!';
 	$lang['message_empty_password']		= 'User not saved: Password cannot be empty for a new user!';
 	$lang['message_passwords_no_match']	= 'User not saved: Supplied passwords do not match!';
+	
+	// Addons:
+	$lang['addon_notfound_title']		= 'Addon not found';
+	$lang['addon_notfound'] 			= 'The addon you requested could not be found!';
 ?>

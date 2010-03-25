@@ -1,5 +1,6 @@
 <div id="content">
 	<div id="innerContent">
+		<script type="text/javascript" src="<?php echo BASE_URL; ?>system/application/views/admin/js/items.js"></script>
         <h1><?php echo $title; ?></h1>
         <p class="description"><?php echo $description; ?></p>
         <table class="items">

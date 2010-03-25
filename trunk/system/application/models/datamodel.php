@@ -62,7 +62,7 @@ class DataModel extends Model
 		$this->idContent  = $idContent;
 		$this->idLanguage = $idLanguage;
 		$this->settings   = $this->getSettings();
-		// TODO: Caching
+		// Caching:
 		// Caching is done by checking if there is a datafile: cache/data.idcontent.idlanguage.php
 		// The datafile is nothing more than the options-array and some other variables. If the file
 		// does not exist, execute the queries needed and create the datafile, otherwise just
@@ -306,7 +306,7 @@ class DataModel extends Model
 				}
 			}
 		}
-		// TODO: Filter by optionConditions
+		// TODO: Filter by optionConditions <- ???
 		$query = $this->db->get('content');
 		foreach($query->result() as $result) {
 			$child = array(

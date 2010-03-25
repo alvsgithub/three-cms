@@ -14,7 +14,7 @@
 
 <!-- Tab for users: -->
 <div class="tab" id="usersTab">
-    <table>
+    <table class="items">
         <tr>
             <th>ID</th>
             <th>Name</th>
@@ -38,15 +38,15 @@
                     <td>'.$result->username.'</td>
                     <td>'.$blocked.'</td>
                     <td>
-                        <a href="'.moduleCreateLink(array("webusers", "edituser", $result->id)).'" class="edit" title="Edit this user">Edit</a>
-                        <a href="'.moduleCreateLink(array("webusers", "deleteuser", $result->id)).'" class="delete" title="Delete this user">Delete</a>
+                        <a href="'.$this->createLink(array("webusers", "edituser", $result->id)).'" class="edit" title="Edit this user">Edit</a>
+                        <a href="'.$this->createLink(array("webusers", "deleteuser", $result->id)).'" class="delete" title="Delete this user">Delete</a>
                     </td>
                 </tr>
             ';
         }
     ?>
     </table>
-    <p><a href="<?php echo moduleCreateLink(array("webusers", "adduser")); ?>" class="button">Add a new webuser</a></p>
+    <p><a href="<?php echo $this->createLink(array("webusers", "adduser")); ?>" class="button">Add a new webuser</a></p>
 </div>
 
 
@@ -76,7 +76,7 @@
             
             $users = array();
             foreach($userQuery->result() as $userResult) {
-                array_push($users, '<a href="'.moduleCreateLink(array("webusers", "edituser", $userResult->id)).'">'.$userResult->username.'</a>');
+                array_push($users, '<a href="'.$this->createLink(array("webusers", "edituser", $userResult->id)).'">'.$userResult->username.'</a>');
             }
             $usersString = implode(', ', $users);
             echo '
@@ -85,15 +85,15 @@
                     <td>'.$result->name.'</td>
                     <td>'.$usersString.'</td>
                     <td>
-                        <a href="'.moduleCreateLink(array("webusers", "editgroup", $result->id)).'" class="edit" title="Edit this group">Edit</a>
-                        <a href="'.moduleCreateLink(array("webusers", "deletegroup", $result->id)).'" class="delete" title="Delete this group">Delete</a>
+                        <a href="'.$this->createLink(array("webusers", "editgroup", $result->id)).'" class="edit" title="Edit this group">Edit</a>
+                        <a href="'.$this->createLink(array("webusers", "deletegroup", $result->id)).'" class="delete" title="Delete this group">Delete</a>
                     </td>
                 </tr>
             ';
         }
         ?>
     </table>
-    <p><a href="<?php echo moduleCreateLink(array("webusers", "addgroup")); ?>" class="button">Add a new group</a></p>
+    <p><a href="<?php echo $this->createLink(array("webusers", "addgroup")); ?>" class="button">Add a new group</a></p>
 </div>
 
 
@@ -173,6 +173,6 @@
             }
         }
         // Redirect:
-        redirect(moduleCreateLink(array('webusers')));
+        redirect($this->createLink(array('webusers')));
     }
 ?>
