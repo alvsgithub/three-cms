@@ -72,6 +72,15 @@ td.templateRanks label { margin-right: 10px; cursor: pointer; }
 td.templateRanks label:hover { background: #FFE87F; }
 */
 
+td.content_actions a { margin-right: 1em; background-repeat: no-repeat; padding-left: 20px; color: #00f; }
+td.content_actions a:hover { background-color: #eee; }
+td.content_actions a.edit      { background-image: url(../images/icons/icon-edit.png); }
+td.content_actions a.duplicate { background-image: url(../images/icons/icon-copy.png); }
+td.content_actions a.delete    { background-image: url(../images/icons/icon-delete.png); }
+
+/* Error: */
+tr.error, td.error { background: #f00; color: #fff; }
+
 /* Tooltip: */
 span.tooltip { float: right; display: block; padding: 0 3px; border: 1px solid #0084ff; font-size: 0.8em; margin-left: 10px; cursor: help; }
 span.tooltipContent { position: absolute; color: #999; background: #fff; border: 1px solid #999; padding: 5px; font-size: 0.8em; right: 0; width: 200px; display: none; }
@@ -93,7 +102,12 @@ a.selectParent { padding: 3px; background: #ccc; color: #fff; text-shadow: #0000
 }
 a.selectParent span { color: #000; text-shadow: none; font-style: italic; font-size: 0.8em; }
 
-a.add { outline: none; background: #359 url(../images/icons/icon-new.png) 7px 7px no-repeat; font-size: 1.6em; color: #fff; text-decoration: none; padding: 5px; padding-left: 30px; font-weight: bold; text-shadow: #000000 0 0 5px; }
+a.add { outline: none; background: #ccc url(../images/icons/icon-new.png) 7px 7px no-repeat; font-size: 1.6em; color: #fff; text-decoration: none; padding: 5px; padding-left: 30px; font-weight: bold; text-shadow: #000000 0 0 5px;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+}
+a.add:hover { background-color: #333; }
 a.addContent { display: block; width: auto; background: url(../images/icons/icon-add.png) no-repeat; color: #359; text-decoration: none; padding: 2px 0 2px 20px; text-indent: 0; }
 a.addContent:hover { color: #333; background-color: #eee; }
 a.switchLanguage { margin-right: 1em; }
@@ -153,6 +167,7 @@ img.loading { position: relative; top: 3px; left: 3px; display: none; }
 #dashboard .left { width: 49%; float: left; min-height: 1px; margin-right: 1%; }
 #dashboard .right { width: 49%; float: left; min-height: 1px; margin-left: 1%; }
 #dashboard .item { padding: 0; }
+#dashboard a { color: #00f; }
 #innerContent tr.hover { background: #eef; cursor: pointer; }
 
 /* Modules: */

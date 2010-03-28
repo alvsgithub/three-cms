@@ -1,6 +1,6 @@
 $(function(){
 	// Items table:
-	$("table.items tr").hover(function(){
+	$("table.items tr:has(a)").hover(function(){
 		$(this).addClass("hover");
 	}, function(){
 		$(this).removeClass("hover");
