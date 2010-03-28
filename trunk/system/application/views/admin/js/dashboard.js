@@ -1,6 +1,6 @@
 $(function(){
 	// Dashboard:
-	$("#dashboard .item tr").hover(function(){
+	$("#dashboard .item tr:has(a)").hover(function(){
 		$(this).addClass("hover");
 	}, function(){
 		$(this).removeClass("hover");

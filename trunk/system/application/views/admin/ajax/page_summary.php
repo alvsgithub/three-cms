@@ -46,7 +46,8 @@
 		<?php
 			}
 			// See if this user may add new content:
-			if($allowedActions['add']) {
+			// Wrong logic: 'add' in this case applies to the current templates, not to the allowed child templates
+			// if($allowedActions['add']) {
 				// See if there are child templates that can be added to this object:			
 				$templates = array();
 				foreach($childTemplates as $template) {
@@ -72,7 +73,7 @@
 		</tr>
 		<?php
 				}
-			}
+			// }
 		?>
 	</table>
 </div>

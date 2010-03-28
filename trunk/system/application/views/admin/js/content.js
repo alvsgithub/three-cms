@@ -51,9 +51,9 @@ $(function(){
 			}
 		});
 		$("input.required, textarea.required", this).each(function(){			
-			$(this).removeClass("error");
+			$(this).parent().parent().removeClass("error");
 			if($(this).val()=='') {
-				$(this).addClass("error");
+				$(this).parent().parent().addClass("error");
 				ok = false;
 			}
 		});

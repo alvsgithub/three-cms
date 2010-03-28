@@ -63,6 +63,7 @@ class AdminModel extends Model
             $this->db->select('move,modify,visible');
             $this->db->from('templates_ranks');
             $this->db->where('id_rank', $idRank);
+            $this->db->where('id_template', $result->id_template);
             $rankQuery  = $this->db->get();
             $rankResult = $rankQuery->result();
             $item['move']    = $rankResult[0]->move;

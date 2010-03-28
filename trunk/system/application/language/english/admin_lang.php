@@ -74,6 +74,9 @@
 	$lang['dialog_no_folder']			= 'Please select a folder to perform this action.';
 	$lang['dialog_change_template']     = 'Are you sure you want to change the template of this page? All changes you have made to this template after the last time you saved will be lost!';
 	$lang['dialog_required']			= 'Some required fields are left empty!';
+	$lang['dialog_tree_invalid_move']	= 'You cannot place this item here!';
+	$lang['dialog_tree_not_movable']	= 'This item is not movable!';
+	$lang['dialog_tree_no_edit']		= 'You are not allowed to edit this content';
 	
 	// Options:
 	$lang['option_small_text']			= 'Small Text';

@@ -21,7 +21,10 @@
             var baseURL              = '<?php echo base_url(); ?>';
             var dialog_delete        = '<?php echo $lang->line('dialog_delete'); ?>';
             var dialog_delete_tree   = '<?php echo $lang->line('dialog_delete_tree'); ?>';
-            var dialog_option_exists = '<?php echo $lang->line('dialog_option_exists'); ?>';            
+            var dialog_option_exists = '<?php echo $lang->line('dialog_option_exists'); ?>';
+			var dialog_tree_invalid_move = '<?php echo $lang->line('dialog_tree_invalid_move'); ?>';
+			var dialog_tree_not_movable  = '<?php echo $lang->line('dialog_tree_not_movable'); ?>';
+			var dialog_tree_no_edit      = '<?php echo $lang->line('dialog_tree_no_edit'); ?>'; 
         </script>
         <script type="text/javascript" src="<?php echo base_url(); ?>system/application/views/admin/js/global.js"></script>
     </head>

@@ -54,11 +54,11 @@ $(function(){
 					if(in_array(current, allowed)) {
 						return true;
 					} else {
-						alert('You cannot place this item here!');
+						alert(dialog_tree_invalid_move);
 						return false;
 					}
 				} else {
-					alert('This item is not movable!');
+					alert(dialog_tree_not_movable);
 					return false;
 				}
 			},
@@ -100,10 +100,13 @@ $(function(){
 			},
 			ondblclk: function(node) {
 				// Modify:
+				// Check if the user is allowed to edit this:				
 				$("#loading").show();
 				if($("var.modify:first", node).text()=='1') {
 					id = $("var.id:first", node).text();
 					window.location = baseURL + 'index.php/admin/content/edit/' + id;
+				} else {
+					alert(dialog_tree_no_edit);
 				}
 			},
 			onclose: function(node) {
