@@ -31,8 +31,33 @@ THE SOFTWARE.
 
 //path to root directory 
 //i.e. if your gallery dir is http://www.mypage.com/gallery, type PGRFileManagerConfig::$rootPath = '/gallery'  
-// TODO: Make this dynamic:
-PGRFileManagerConfig::$rootPath = 'three/assets';
+
+// Make this dynamic:
+$rootURL = 'http';
+if(isset($_SERVER['HTTPS'])) {
+	if($_SERVER["HTTPS"] == "on") { $rootURL .= "s"; }
+}
+$rootURL .= '://'.$_SERVER['HTTP_HOST'].'/';
+$rootPath = dirname($_SERVER['SCRIPT_FILENAME']).'/';
+// Remove double slashes but leave http:// intact:
+$baseURL    = preg_replace('#(http:|https:)|//#', '\\1/', $rootURL.str_replace($_SERVER['DOCUMENT_ROOT'], '', $rootPath));
+define('BASE_URL', $baseURL);
+define('ROOT_PATH', $rootPath);
+
+$path = str_replace('system/application/views/admin/ckeditor/plugins/pgrfilemanager/php/', '', BASE_URL);
+if($path==BASE_URL) {
+	$path = str_replace('system/application/views/admin/ckeditor/plugins/pgrfilemanager/', '', BASE_URL);
+}
+$a    = explode('/', $path);
+array_shift($a); // http:/
+array_shift($a); // /
+array_shift($a); // hostname.com/
+$path = '/'.implode('/', $a).'assets';
+// Done making this dynamic!
+
+
+PGRFileManagerConfig::$rootPath = $path; // '/three/assets';
+
 // PGRFileManagerConfig::$rootDir = '../../../../../../../../assets';
 
 //Max file upload size in bytes
