@@ -27,7 +27,6 @@ include_once dirname(__FILE__) . '/config.php';
 include_once dirname(__FILE__) . '/../myconfig.php';
 PGRFileManagerConfig::$rootDir = $_SERVER['DOCUMENT_ROOT'] . PGRFileManagerConfig::$rootPath;
 
-
 $PGRUploaderDescription = 'all files';
 //For fckeditor
 if (isset($_GET['type'])) {

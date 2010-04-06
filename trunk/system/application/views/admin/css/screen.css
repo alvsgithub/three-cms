@@ -32,7 +32,7 @@ html { background: #fff; font-family: Georgia, serif; font-size: 62.5%; }
 #innerContent { padding: 20px; }
 #innerContent table { border-collapse: collapse; font-size: 1.4em; width: 100%; margin-bottom: 10px; }
 #innerContent th, #innerContent td { text-align: left; vertical-align: top; border-bottom: 1px solid #ccc; padding: 5px 0; }
-#innerContent th { padding-right: 2em; border-right: 1px solid #ccc; color: #666; padding-left: 5px; }
+#innerContent th { padding-right: 5px; border-right: 1px solid #ccc; color: #666; padding-left: 5px; }
 #innerContent tr.option th { color: #000; background: #eee; }
 #innerContent td { padding-left: 5px; }
 
@@ -48,29 +48,6 @@ h2 { font-size: 2em; }
 h3 { font-size: 1.6em; color: #000; }
 
 p.description { font-size: 1.6em; color: #999; font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif; margin-bottom: .5em; line-height: 1.6em; font-style: italic; }
-/*
-table { width: 100%; border-collapse: collapse; font-size: 1.4em; margin-bottom: 1em; }
-th { text-align: left; color: #fff; background: #359; padding: 5px; vertical-align: top; font-weight: normal; color: #0084ff; background: #eee; border: 1px outset #ccc; }
-th.actions { width: 56px; }
-td { border: 1px solid #ccc; padding: 5px; vertical-align: top; }
-tr.delimiter td { height: 10px; padding: 0; font-size: 1px; border-left: none; border-right: none; }
-tr.option th { background: #A6D0E7; border: 1px solid #fff; }
-a.edit, a.duplicate, a.delete, a.move    { display: inline-block; width: 16px; height: 16px; text-indent: -1000em; outline: none; }
-table a.edit      { background: url(../images/icons/icon-edit.png); }
-table a.duplicate { background: url(../images/icons/icon-copy.png); }
-table a.delete    { background: url(../images/icons/icon-delete.png); }
-table a.move      { background: url(../images/icons/icon-move.png); }
-table a.move.inactive { background-color: #eee; border-color: #ccc; }
-td.content_actions a { text-indent: 0; padding: 5px; padding-left: 26px; width: auto; background-position: 5px 5px; background-repeat: no-repeat; margin-right: 5px; background-color: #ccc; color: #fff; font-weight: bold; text-shadow: #000000 0 0 3px; text-decoration: none; border: 1px solid #999;
-	-moz-border-radius: 5px;
-	-webkit-border-radius: 5px;
-	border-radius: 5px;
-}
-tr.alias { display: none; }
-a.showAlias { color: #888; font-size: 0.8em; }
-td.templateRanks label { margin-right: 10px; cursor: pointer; }
-td.templateRanks label:hover { background: #FFE87F; }
-*/
 
 td.content_actions a { margin-right: 1em; background-repeat: no-repeat; padding-left: 20px; color: #00f; }
 td.content_actions a:hover { background-color: #eee; }
@@ -83,7 +60,7 @@ tr.error, td.error { background: #f00; color: #fff; }
 
 /* Tooltip: */
 span.tooltip { float: right; display: block; padding: 0 3px; border: 1px solid #0084ff; font-size: 0.8em; margin-left: 10px; cursor: help; }
-span.tooltipContent { position: absolute; color: #999; background: #fff; border: 1px solid #999; padding: 5px; font-size: 0.8em; right: 0; width: 200px; display: none; }
+span.tooltipContent { position: absolute; color: #999; background: #fff; border: 1px solid #999; padding: 5px; font-size: 0.8em; right: 0; width: 200px; display: none; font-weight: normal; font-style: italic; }
 
 /* Datepicker: */
 input.datePicker { background: url(calendar.png) 283px 0 no-repeat; }

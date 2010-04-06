@@ -28,6 +28,8 @@ include_once 'utils.php';
 //get dir from post
 $directory = realpath(PGRFileManagerConfig::$rootDir); 
 
+
+
 //check if dir exist
 if (!is_dir($directory)) PGRFileManagerUtils::sendError("Can't find root directory");
 
