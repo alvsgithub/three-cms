@@ -145,3 +145,12 @@ Convert a timestamp to a date by using Smarty's date_format-modifier:
 {{{
 <p class="date">{$date|date_format:"%d/%m/%Y"}</p>
 }}}
+
+== Show content before a horizontal rule ==
+
+This is ideal for scenario's where you want to display the first piece of an article, followed by a read-more-button. In the backend, you can use a horizontal rule as the seperator.
+
+{{{
+{assign var="shortContent" value="<hr />"|explode:$content}
+{$shortContent[0]}
+}}}
