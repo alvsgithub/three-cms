@@ -154,3 +154,9 @@ This is ideal for scenario's where you want to display the first piece of an art
 {assign var="shortContent" value="<hr />"|explode:$content}
 {$shortContent[0]}
 }}}
+
+To hide the horizontal rule from being shown in the full article use:
+
+{{{
+{$content|replace:"<hr />":""}
+}}}
