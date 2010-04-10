@@ -138,3 +138,10 @@ This example uses the `$parameters`-variable to check which page to show.
   </div>
 {/if}
 }}}
+
+== Format date ==
+
+Convert a timestamp to a date by using Smarty's date_format-modifier:
+{{{
+<p class="date">{$date|date_format:"%d/%m/%Y"}</p>
+}}}
