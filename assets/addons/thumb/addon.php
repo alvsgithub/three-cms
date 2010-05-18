@@ -2,7 +2,7 @@
 /*
 	Thumb addon for Three
 	---------------------------------------------------------------------------
-	Version:	0.1
+	Version:	0.2
 	Author:		Giel Berkers
 	Website:	http://www.gielberkers.com
 	---------------------------------------------------------------------------
@@ -22,7 +22,11 @@
 	
 	Example in template (where $image is the path to the image):
 	
-	<img src="{$thumb->get($image, 60, 40)}" alt="thumb" width="60" height="40" />	
+	<img src="{$thumb->get($image, 60, 40)}" alt="thumb" width="60" height="40" />
+	---------------------------------------------------------------------------
+	Changelog:
+	
+	v0.2	Added support for absolute paths
 */
 class Thumb extends AddonBaseModel
 {
@@ -52,6 +56,14 @@ class Thumb extends AddonBaseModel
 	 * @param	$quality	int		The quality (0-100)
 	 */
 	function get($file, $width=100, $height=100, $quality=80) {
+		// Remove first slash (if any):
+		if(substr($file, 0, 1)=='/') {
+			$absolute = true;
+			$file     = substr($file, 1, strlen($file)-1);
+		} else {
+			$absolute = false;
+		}
+		
 		$a         = explode('/', $file);
 		$fileName  = $a[count($a)-1];
 		
@@ -147,7 +159,11 @@ class Thumb extends AddonBaseModel
 			imagedestroy($image);	
 			ini_restore('memory_limit');
 		}
-		return $cachefile;		
+		if($absolute) {
+			return '/'.$cachefile;
+		} else {
+			return $cachefile;
+		}
 	}
 }
 ?>

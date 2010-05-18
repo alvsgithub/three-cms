@@ -77,7 +77,7 @@ class DataModel extends Model
 			$this->options = array();
 			
 			// Default settings:
-			$this->db->select('name,alias,order');
+			$this->db->select('name,alias,order,id_content,id_template');
 			$this->db->where('id', $idContent);
 			$query = $this->db->get('content');
 			$info  = $query->result_array();
@@ -85,6 +85,8 @@ class DataModel extends Model
 			// Some default options:
 			$this->options['idContent']   = $idContent;
 			$this->options['idLanguage']  = $idLanguage;
+			$this->options['idParent']    = $info[0]['id_content'];
+			$this->options['idTemplate']  = $info[0]['id_template'];
 			$this->options['alias']       = $info[0]['alias'];
 			$this->options['contentName'] = $info[0]['name'];
 			$this->options['order']       = $info[0]['order'];
@@ -171,10 +173,43 @@ class DataModel extends Model
 	{
 		// TODO: Make Query Active Record Style
 		$idContent = $idContent !== null ? $idContent : $this->idContent;
+		$depth     = 0;
+		$parentIDs = array();
+		
+		if(!is_numeric($idContent)) {
+			// $idContent is a string, now special restrictions apply:
+			// examples:
+			// 4>		: Get the children of the CHILDREN of id=4
+			// 4,8		: Get the children of id=4 and id=8
+			// TODO: 4>>		: Get the children of the CHILDREN of the CHILDREN of id=4
+			// TODO: 4t2		: Get the children of id=4 with template=2
+			// TODO: 4>t2		: Get the children of the children of id=4 with template=2
+			// Regular expression:
+			$a = explode(",", $idContent);
+			if(count($a)==1) {
+				$a = explode(">", $idContent);
+				$idContent = $a[0];
+				// $depth     = count($a)-1;
+				$depth = 1;
+				$fromAlias = 'd0';
+			} else {
+				$fromAlias = 'a';
+				$parentIDs = $a;
+				$idContent = $a[0];
+				array_shift($parentIDs);
+			}
+		} else {
+			$fromAlias = 'a';
+		}
 		// Retrieve the children of this data object:
 		$children = array();
 		$pf = $this->db->dbprefix;				
-		$sql = 'SELECT DISTINCT `a`.`id` FROM (`'.$pf.'content` a ';
+		$sql = 'SELECT DISTINCT `'.$fromAlias.'`.`id` FROM (`'.$pf.'content` a ';
+		if($depth > 0) {
+			for($i=0; $i<$depth; $i++) {
+				$sql .= ', `'.$pf.'content` d'.$i;
+			}
+		}
 		$firstWhere = true;
 		$where      = '';
 		if($options != null) {
@@ -185,15 +220,36 @@ class DataModel extends Model
 			// Adjust the query:
 			$sql .= ', `'.$pf.'options` b, `'.$pf.'values` c) ';
 			foreach($options as $key=>$value) {
-				if($firstWhere) {
-					$firstWhere = false;
-					$where .= 'WHERE b.`name` = \''.$key.'\' ';						
+				// See if there is an operator present:
+				// >,<,>=,<=,!=
+				if(preg_match('/(>=|<=|>|<|\!=|=>)/', $value)==1) {
+					$operator = preg_replace('/(.*)(>=|<=|>|<|\!=|=>)(.*)/', '\\2', $value);
 				} else {
-					$where .= 'AND b.`name` = \''.$key.'\' ';						
+					$operator = '=';
 				}
-				$where .= 'AND c.`id_option` = b.`id` ';
-				$where .= 'AND c.`value` = \''.$value.'\' ';
-				$where .= 'AND c.`id_content` = a.`id` ';
+				if($operator != '=') {
+					$a = explode($operator, $value);
+					$key = $a[0];
+					$value = $a[1];
+				}
+				if($key == 'name' || $key == 'order') {
+					if($firstWhere) {
+						$firstWhere = false;					
+						$where .= 'WHERE a.`'.$key.'` = \''.$value.'\' ';						
+					} else {
+						$where .= 'AND a.`'.$key.'` = \''.$value.'\' ';						
+					}
+				} else {
+					if($firstWhere) {
+						$firstWhere = false;					
+						$where .= 'WHERE b.`name` = \''.$key.'\' ';						
+					} else {
+						$where .= 'AND b.`name` = \''.$key.'\' ';						
+					}
+					$where .= 'AND c.`id_option` = b.`id` ';
+					$where .= 'AND c.`value` '.$operator.' \''.$value.'\' ';
+					$where .= 'AND c.`id_content` = '.$fromAlias.'.`id` ';
+				}
 			}
 		} else {
 			$sql .= ') ';
@@ -206,8 +262,12 @@ class DataModel extends Model
 			if($direction != 'asc' && $direction != 'desc') {
 				$direction = 'asc';
 			}
-			$sql .= 'JOIN (`'.$pf.'values`, `'.$pf.'options`) ON (`'.$pf.'values`.`id_content` = `a`.`id` AND `'.$pf.'values`.`id_option` = `'.$pf.'options`.`id` AND `'.$pf.'options`.`name` = \''.$item.'\') ';
-			$orderby = ' ORDER BY `'.$pf.'values`.`value` '.strtoupper($direction).' ';
+			if($item == 'name' || $item == 'order') {
+				$orderby = ' ORDER BY a.`'.$item.'` '.$direction.' ';
+			} else {
+				$sql .= 'JOIN (`'.$pf.'values`, `'.$pf.'options`) ON (`'.$pf.'values`.`id_content` = `'.$fromAlias.'`.`id` AND `'.$pf.'values`.`id_option` = `'.$pf.'options`.`id` AND `'.$pf.'options`.`name` = \''.$item.'\') ';
+				$orderby = ' ORDER BY `'.$pf.'values`.`value` '.strtoupper($direction).' ';
+			}
 		} else {
 			// Order by internal order-parameter:
 			$orderby = ' ORDER BY a.`order` ASC ';
@@ -218,6 +278,18 @@ class DataModel extends Model
 			$firstWhere = false;
 		} else {
 			$where .= 'AND a.`id_content` = '.$idContent.' ';
+		}
+		
+		if(count($parentIDs) > 0) {
+			foreach($parentIDs as $pID) {
+				$where .= 'OR a.`id_content` = '.$pID.' ';
+			}
+		}
+		
+		if($depth > 0) {
+			for($i=0; $i<$depth; $i++) {
+				$where .= 'AND d'.$i.'.`id_content` = a.`id`';
+			}
 		}
 		
 		$sql .= $where.$orderby;
@@ -234,6 +306,7 @@ class DataModel extends Model
 		}
 		
 		$sql .= ';';
+		// echo $sql;
 		
 		$query = $this->db->query($sql);			
 		foreach($query->result() as $result) {
@@ -315,6 +388,7 @@ class DataModel extends Model
 			);
 			array_push($tree, $child);
 		}
+		// print_r($tree);
 		return $tree;
 	}
 	
@@ -353,6 +427,20 @@ class DataModel extends Model
 		$query = $this->db->get('content');
 		$result = $query->result();		
 		return $result[0]->alias;
+	}
+	
+	/**
+	 * Get the id of a given content alias
+	 * @param	$alias	string		The alias of the content to get the id from
+	 * @return	int					The id
+	 */
+	function getId($alias)
+	{
+		$this->db->select('id');
+		$this->db->where('alias', $alias);
+		$query = $this->db->get('content');
+		$result = $query->result();		
+		return $result[0]->id;
 	}
 	
 	/**
@@ -544,6 +632,25 @@ class DataModel extends Model
 		}
 		return $locales;
 	}
+	
+	/**
+	 * Count the amount of records in a database with certain conditions
+	 * @param	$where	string	Condition to check for (can be template, parent)
+	 * @param	$value	string	The value to check the condition with
+	 * @return	int				The number of matches found
+	 */
+	/*
+	function count($where, $value)
+	{
+		if($where == 'template') { $where = 'id_template'; }
+		if($where == 'parent')   { $where = 'id_content'; }
+		$pf = $this->db->dbprefix;
+		$sql = 'SELECT COUNT(*) AS `total` FROM `'.$pf.'content` WHERE `'.$where.'` = \''.$value.'\';';
+		$query = $this->db->query($sql);
+		$result = $query->result();
+		return $result[0]->total;
+	}
+	*/
 	
 	/**
 	 * Create a new data object with the given parameters
